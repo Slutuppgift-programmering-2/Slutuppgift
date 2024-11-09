@@ -45,4 +45,23 @@ To make the changes in the ListViewControl reflect in the GraphViewControl, part
 1. **Two-Way Binding** is set up for the `Name` property in `ListViewControl``.
 2. **Property Change Notification** is implemented for the `Name` property in the `CityNode` model. This will ensure that when a property changes in the model, all views bound to that property are updated.
 
+### **Summary**
+Changes on the  locations names in the ListViewControl will be reflected in the GraphViewControl by setting up two-way binding and implementing property change notification.
 
+### **Next Requirements**
+- **Change the distance** between two cities in the ListViewControl.
+- **Add a new route** to the list of routes in the ListViewControl.
+- **Remove a route** from the list of routes in the ListViewControl.
+- **Load routes from a file** and display them in the ListViewControl.
+- **Use X and Y coordinates** to represent the position of cities in the GraphViewControl.
+- **X and Y coordinates** should be editable in the ListViewControl.
+- X and Y coordinates should be updated in the GraphViewControl when changed in the ListViewControl.
+- X and Y coordinates should be validated to ensure they are within the bounds of the GraphViewControl.
+- X and Y coordinates should be saved to a file when changed in the ListViewControl.
+- X and Y are windows coordinates and should be derived from the city GPS coordinates when loaded from a file.
+- Map the window coordinates to GPS coordinates when saving to a file.
+- Find the shortest route between two cities in the GraphViewControl.
+- Find cycles in the GraphViewControl.
+- Find the shortest cycle in the GraphViewControl.
+- Draw the shortest route between two cities in the GraphViewControl with chosen color.
+- 
