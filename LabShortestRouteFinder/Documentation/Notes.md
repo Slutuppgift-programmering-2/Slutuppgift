@@ -29,7 +29,7 @@ Now, both `RouteViewModel` and `GraphViewModel` will be constructed with a refer
 ### Initialize and Bind ViewModels in `MainViewModel`
 In `MainViewModel`, you will initialize both `RouteViewModel` and `GraphViewModel` and bind them to the shared data.
 
-## **Summary**
+## **Summary base structure**
 - **Centralized Data**: `MainViewModel` holds the shared data (`Cities` and `Routes`).
 - **Separate ViewModels**: `RouteViewModel` and `GraphViewModel` access the shared data by referencing `MainViewModel`.
 - **Data Synchronization**: Updates in `MainViewModel` collections are automatically reflected in both views due to `ObservableCollection` and change notification mechanisms.
@@ -38,3 +38,11 @@ In `MainViewModel`, you will initialize both `RouteViewModel` and `GraphViewMode
 - **Bind both ViewModels to MainViewModel**
 - **RouteViewModel and GraphViewModel Interaction**
 - **Initialize and Bind ViewModels in MainViewModel**
+
+### Make Changes on the list reflect in the Graph.
+To make the changes in the ListViewControl reflect in the GraphViewControl, particularly when changing the name of the start position, you’ll need to ensure that:
+
+1. **Two-Way Binding** is set up for the `Name` property in `ListViewControl``.
+2. **Property Change Notification** is implemented for the `Name` property in the `CityNode` model. This will ensure that when a property changes in the model, all views bound to that property are updated.
+
+

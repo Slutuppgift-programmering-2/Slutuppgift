@@ -9,7 +9,20 @@ namespace LabShortestRouteFinder.Model
 {
     public class CityNode : INotifyPropertyChanged
     {
-        public required string Name { get; set; }
+        private string _name;
+        public required string Name
+        {
+            get => _name;
+            set
+            {
+                if (_name != value)
+                {
+                    _name = value;
+                    OnPropertyChanged(nameof(Name));
+                }
+            }
+        }
+
         public double X { get; set; }
         public double Y { get; set; }   
 
