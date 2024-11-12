@@ -1,0 +1,77 @@
+[
+  {
+    "Start": "A",
+    "Destination": "B",
+    "Distance": 5
+  },
+  {
+    "Start": "A",
+    "Destination": "C",
+    "Distance": 10
+  },
+  {
+    "Start": "B",
+    "Destination": "D",
+    "Distance": 3
+  },
+  {
+    "Start": "C",
+    "Destination": "D",
+    "Distance": 7
+  },
+  {
+    "Start": "D",
+    "Destination": "E",
+    "Distance": 6
+  },
+  {
+    "Start": "E",
+    "Destination": "F",
+    "Distance": 2
+  },
+  {
+    "Start": "F",
+    "Destination": "G",
+    "Distance": 8
+  },
+  {
+    "Start": "G",
+    "Destination": "H",
+    "Distance": 4
+  },
+  {
+    "Start": "H",
+    "Destination": "I",
+    "Distance": 9
+  },
+  {
+    "Start": "I",
+    "Destination": "J",
+    "Distance": 3
+  },
+  {
+    "Start": "J",
+    "Destination": "K",
+    "Distance": 5
+  },
+  {
+    "Start": "K",
+    "Destination": "L",
+    "Distance": 7
+  },
+  {
+    "Start": "L",
+    "Destination": "M",
+    "Distance": 6
+  },
+  {
+    "Start": "M",
+    "Destination": "N",
+    "Distance": 4
+  },
+  {
+    "Start": "N",
+    "Destination": "O",
+    "Distance": 2
+  }
+]
