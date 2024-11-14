@@ -29,6 +29,8 @@ namespace LabShortestRouteFinder.View
             MainViewModel = new MainViewModel();
             RouteViewModel = new RouteViewModel(MainViewModel);
             GraphViewModel = new GraphViewModel(MainViewModel);
+
+            DataContext = MainViewModel;
         }
 
         private void OnNavigationSelectionChanged(object sender, SelectionChangedEventArgs e)

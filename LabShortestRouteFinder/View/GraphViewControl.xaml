@@ -2,23 +2,34 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:LabShortestRouteFinder.ViewModel"
-             xmlns:converters="clr-namespace:LabShortestRouteFinder.Converters">
-    <!--<UserControl.DataContext>
-        <vm:GraphViewModel />
-    </UserControl.DataContext>-->
+             xmlns:converters="clr-namespace:LabShortestRouteFinder.Converters" 
+             xmlns:view="clr-namespace:LabShortestRouteFinder.View">
     
+    <!--<view:ListViewControl DataContext="{Binding RouteViewModel, RelativeSource={RelativeSource AncestorType=Window}}" />-->
     <UserControl.Resources>
         <converters:YPositionConverter x:Key="YPositionConverter"/>
     </UserControl.Resources>
 
-    <Canvas>
+    <Canvas Width="800" Height="600">
         <!-- Draw routes between nodes -->
         <ItemsControl ItemsSource="{Binding Routes}">
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Line X1="{Binding Start.X}" Y1="{Binding Start.Y}"
-                          X2="{Binding Destination.X}" Y2="{Binding Destination.Y}"
-                          Stroke="Gray" StrokeThickness="1"/>
+                    <Canvas>
+                        <!-- Route as a line -->
+                        <Line X1="{Binding Start.X}" Y1="{Binding Start.Y}"
+                              X2="{Binding Destination.X}" Y2="{Binding Destination.Y}"
+                              StrokeThickness="2">
+                            <Line.Stroke>
+                                <RadialGradientBrush GradientOrigin="0.5,0.5" Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+                                    <RadialGradientBrush.GradientStops>
+                                        <GradientStop Color="Red" Offset="0" />
+                                        <GradientStop Color="Blue" Offset="0.25" />
+                                    </RadialGradientBrush.GradientStops>
+                                </RadialGradientBrush>
+                            </Line.Stroke>
+                        </Line>
+                    </Canvas>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

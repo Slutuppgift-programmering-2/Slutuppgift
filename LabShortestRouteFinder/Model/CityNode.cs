@@ -23,8 +23,11 @@ namespace LabShortestRouteFinder.Model
             }
         }
 
-        public double X { get; set; }
-        public double Y { get; set; }   
+        public int X { get; set; }
+        public int Y { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName) =>

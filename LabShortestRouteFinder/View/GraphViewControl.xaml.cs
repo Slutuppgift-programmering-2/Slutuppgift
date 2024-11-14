@@ -11,12 +11,11 @@ namespace LabShortestRouteFinder.View
         public GraphViewControl()
         {
             InitializeComponent();
+        }
 
-            //// Set DataContext to GraphViewModel if not done in XAML
-            //if (DataContext == null)
-            //{
-            //    DataContext = new GraphViewModel();
-            //}
+        public GraphViewControl(MainViewModel mainViewModel)
+        {
+            InitializeComponent();
         }
     }
 }
