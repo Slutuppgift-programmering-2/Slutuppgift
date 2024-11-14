@@ -59,7 +59,6 @@ namespace LabShortestRouteFinder.ViewModel
             Routes.Add(new Route { Start = transformedCities[0], Destination = transformedCities[1], Distance = 474 });
             Routes.Add(new Route { Start = transformedCities[0], Destination = transformedCities[2], Distance = 617 });
             Routes.Add(new Route { Start = transformedCities[1], Destination = transformedCities[2], Distance = 259 });
-            Routes.Add(new Route { Start = cityA, Destination = cityB, Distance = 474 });
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
