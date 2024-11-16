@@ -14,9 +14,9 @@ namespace ShortestRouteFinder
         public MainWindow(List<City> cities, MainViewModel viewModel, MapControl mapControl)
         {
             InitializeComponent();
-            
+    
             Debug.WriteLine($"MainWindow constructor - Received {cities?.Count ?? 0} cities");
-            
+    
             this.viewModel = viewModel;
             this.mapControl = mapControl;
 
@@ -26,7 +26,7 @@ namespace ShortestRouteFinder
                 if (e.PropertyName == nameof(MainViewModel.CurrentPath))
                 {
                     Debug.WriteLine($"Path changed: {viewModel.CurrentPath?.Count ?? 0} cities");
-                    if (viewModel is { HasPath: true, CurrentPath: not null })
+                    if (viewModel.HasPath && viewModel.CurrentPath != null)
                     {
                         mapControl.DrawPath(viewModel.CurrentPath);
                     }
@@ -39,7 +39,7 @@ namespace ShortestRouteFinder
 
             DataContext = viewModel;
             MapContainer.Child = mapControl;
-            
+    
             Debug.WriteLine("MainWindow initialized");
         }
     }

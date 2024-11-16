@@ -6,6 +6,7 @@ using ShortestRouteFinder.Services;
 using ShortestRouteFinder.ViewModel;
 using ShortestRouteFinder.Controls;
 using System.Diagnostics;
+using ShortestRouteFinder.Converters;
 
 namespace ShortestRouteFinder
 {
@@ -27,28 +28,29 @@ namespace ShortestRouteFinder
 
         private void ConfigureServices(IServiceCollection services)
         {
-            // Load data
-            var cities = LoadCitiesData();
-            if (cities == null)
-            {
-                Shutdown();
-                return;
-            }
+          // Register configuration
+          var cities = LoadCitiesData();
+          if (cities == null)
+          {
+            Shutdown();
+            return;
+          }
+          services.AddSingleton(cities);
 
-            // Register configuration
-            services.AddSingleton(cities);
+          // Register services
+          services.AddSingleton<PathFinder>();
 
-            // Register services
-            services.AddSingleton<PathFinder>();
+          // Register view models
+          services.AddTransient<MainViewModel>();
 
-            // Register controls
-            services.AddTransient<MapControl>();
+          // Register controls
+          services.AddTransient<MapControl>();
 
-            // Register view models
-            services.AddTransient<MainViewModel>();
+          // Register windows
+          services.AddTransient<MainWindow>();
 
-            // Register windows
-            services.AddTransient<MainWindow>();
+          // Register converter
+          services.AddSingleton<NullToVisibilityConverter>();
         }
 
         private List<City>? LoadCitiesData()

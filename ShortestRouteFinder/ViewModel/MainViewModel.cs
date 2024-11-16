@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using ShortestRouteFinder.Models;
 using ShortestRouteFinder.Services;
+using ShortestRouteFinder.Controls;
 
 namespace ShortestRouteFinder.ViewModel
 {
@@ -93,10 +94,10 @@ namespace ShortestRouteFinder.ViewModel
         public RelayCommand FindPathCommand { get; }
         public RelayCommand ClearPathCommand { get; }
 
-        public MainViewModel(List<City> cities, double canvasWidth, double canvasHeight)
+        public MainViewModel(List<City> cities)
         {
             this.cities = cities ?? throw new ArgumentNullException(nameof(cities));
-            this.pathFinder = new PathFinder(cities, canvasWidth, canvasHeight);
+            this.pathFinder = new PathFinder(cities, MapControl.CANVAS_WIDTH, MapControl.CANVAS_HEIGHT);
             
             CityNames = new ObservableCollection<string>(
                 cities.Where(c => !string.IsNullOrEmpty(c.Name))
