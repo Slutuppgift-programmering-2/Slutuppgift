@@ -1,13 +1,7 @@
 ﻿<Window x:Class="ShortestRouteFinder.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ShortestRouteFinder"
-        mc:Ignorable="d"
-        Title="European Cities Pathfinder" 
-        Height="800" 
-        Width="1000">
+        Title="Shortest Route Finder" Height="800" Width="1000">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -39,46 +33,28 @@
                     Margin="5"
                     Padding="10,5"
                     Command="{Binding FindPathCommand}"/>
-            
-            <Button Content="Clear Path" 
-                    Margin="5"
-                    Padding="10,5"
-                    Command="{Binding ClearPathCommand}"/>
         </StackPanel>
 
-        <!-- Debug Information -->
-        <TextBlock Grid.Row="0"
-                   HorizontalAlignment="Right"
-                   VerticalAlignment="Center"
-                   Margin="5">
-            <Run Text="Cities loaded:"/>
-            <Run Text="{Binding CityNames.Count}"/>
-        </TextBlock>
+        <!-- Debug Info -->
+        <StackPanel Grid.Row="0" 
+                    HorizontalAlignment="Right" 
+                    Orientation="Horizontal"
+                    Margin="5">
+            <TextBlock>
+                <Run Text="Cities loaded: "/>
+                <Run Text="{Binding CityNames.Count, Mode=OneWay}"/>
+            </TextBlock>
+        </StackPanel>
 
-        <!-- Map Container -->
-        <Border x:Name="MapContainer" 
-                Grid.Row="1" 
+        <!-- Map Area -->
+        <Border Grid.Row="1" 
                 BorderBrush="Gray" 
                 BorderThickness="1" 
-                Margin="10"/>
+                Margin="10"
+                Background="White"
+                Name="MapContainer">
+            
+        </Border>
 
-        <!-- Debug Overlay -->
-        <TextBlock Grid.Row="1"
-                   Margin="15"
-                   VerticalAlignment="Top"
-                   HorizontalAlignment="Left"
-                   Panel.ZIndex="1">
-            <Run Text="Selected Start: "/>
-            <Run Text="{Binding SelectedStartCity}"/>
-            <LineBreak/>
-            <Run Text="Selected End: "/>
-            <Run Text="{Binding SelectedEndCity}"/>
-            <LineBreak/>
-            <Run Text="Has Path: "/>
-            <Run Text="{Binding HasPath}"/>
-            <LineBreak/>
-            <Run Text="Path Length: "/>
-            <Run Text="{Binding CurrentPath.Count}"/>
-        </TextBlock>
     </Grid>
 </Window>

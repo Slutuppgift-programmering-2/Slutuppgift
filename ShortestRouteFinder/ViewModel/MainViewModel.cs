@@ -1,5 +1,8 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using ShortestRouteFinder.Models;
@@ -9,26 +12,25 @@ namespace ShortestRouteFinder.ViewModel
 {
     public class MainViewModel : INotifyPropertyChanged
     {
-        private readonly PathFinder _pathFinder;
-        private readonly List<City>? _cities;
+        private readonly PathFinder pathFinder;
+        private readonly List<City> cities;
 
-        private string? _selectedStartCity;
-        private string? _selectedEndCity;
-        private List<string?>? _currentPath;
-        private double _currentDistance;
-        private bool _hasPath;
-        private const double Tolerance = 0.03;
+        private string? selectedStartCity;
+        private string? selectedEndCity;
+        private List<string>? currentPath;
+        private double currentDistance;
+        private bool hasPath;
 
         public ObservableCollection<string> CityNames { get; }
 
         public string? SelectedStartCity
         {
-            get => _selectedStartCity;
+            get => selectedStartCity;
             set
             {
-                if (_selectedStartCity != value)
+                if (selectedStartCity != value)
                 {
-                    _selectedStartCity = value;
+                    selectedStartCity = value;
                     OnPropertyChanged();
                     FindPathCommand.RaiseCanExecuteChanged();
                 }
@@ -37,85 +39,99 @@ namespace ShortestRouteFinder.ViewModel
 
         public string? SelectedEndCity
         {
-            get => _selectedEndCity;
+            get => selectedEndCity;
             set
             {
-                if (_selectedEndCity != value)
+                if (selectedEndCity != value)
                 {
-                    _selectedEndCity = value;
+                    selectedEndCity = value;
                     OnPropertyChanged();
                     FindPathCommand.RaiseCanExecuteChanged();
                 }
             }
         }
 
-        public List<string?>? CurrentPath
+        public List<string>? CurrentPath
         {
-            get => _currentPath;
+            get => currentPath;
             private set
             {
-                if (_currentPath == value) return;
-                _currentPath = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public double CurrentDistance
-        {
-            get => _currentDistance;
-            private set
-            {
-                if (Math.Abs(_currentDistance - value) < Tolerance) return;
-                _currentDistance = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool HasPath
-        {
-            get => _hasPath;
-            set
-            {
-                if (_hasPath != value)
+                if (currentPath != value)
                 {
-                    _hasPath = value;
+                    currentPath = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        private RelayCommand FindPathCommand { get; }
+        public double CurrentDistance
+        {
+            get => currentDistance;
+            private set
+            {
+                if (currentDistance != value)
+                {
+                    currentDistance = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public bool HasPath
+        {
+            get => hasPath;
+            private set
+            {
+                if (hasPath != value)
+                {
+                    hasPath = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public RelayCommand FindPathCommand { get; }
         public RelayCommand ClearPathCommand { get; }
 
-        public MainViewModel(List<City>? cities, double canvasWidth, double canvasHeight)
+        public MainViewModel(List<City> cities, double canvasWidth, double canvasHeight)
         {
-            this._cities = cities;
-            this._pathFinder = new PathFinder(cities, canvasWidth, canvasHeight);
+            this.cities = cities ?? throw new ArgumentNullException(nameof(cities));
+            this.pathFinder = new PathFinder(cities, canvasWidth, canvasHeight);
             
-            // Initialize collections
-            CityNames = new ObservableCollection<string>(cities.Select(c => c.Name).OrderBy(n => n));
+            CityNames = new ObservableCollection<string>(
+                cities.Where(c => !string.IsNullOrEmpty(c.Name))
+                      .Select(c => c.Name!)
+                      .OrderBy(n => n));
 
-            // Initialize commands
             FindPathCommand = new RelayCommand(ExecuteFindPath, CanExecuteFindPath);
             ClearPathCommand = new RelayCommand(ExecuteClearPath, () => HasPath);
         }
 
         private bool CanExecuteFindPath()
         {
-            return !string.IsNullOrEmpty(SelectedStartCity) && 
-                   !string.IsNullOrEmpty(SelectedEndCity) && 
-                   SelectedStartCity != SelectedEndCity;
+            return !string.IsNullOrEmpty(selectedStartCity) && 
+                   !string.IsNullOrEmpty(selectedEndCity) && 
+                   selectedStartCity != selectedEndCity;
         }
 
         private void ExecuteFindPath()
         {
-            var (path, distance) = _pathFinder.FindShortestPath(SelectedStartCity, SelectedEndCity);
+            if (selectedStartCity == null || selectedEndCity == null) return;
+            
+            var (path, distance) = pathFinder.FindShortestPath(selectedStartCity, selectedEndCity);
             
             CurrentPath = path;
             CurrentDistance = distance;
-            HasPath = true;
+            HasPath = path != null && path.Count > 0;
 
-            ErrorMessage = null;
+            if (!HasPath)
+            {
+                ErrorMessage = "No path found between selected cities.";
+            }
+            else
+            {
+                ErrorMessage = null;
+            }
         }
 
         private void ExecuteClearPath()
@@ -126,15 +142,15 @@ namespace ShortestRouteFinder.ViewModel
             ErrorMessage = null;
         }
 
-        private string? _errorMessage;
+        private string? errorMessage;
         public string? ErrorMessage
         {
-            get => _errorMessage;
+            get => errorMessage;
             private set
             {
-                if (_errorMessage != value)
+                if (errorMessage != value)
                 {
-                    _errorMessage = value;
+                    errorMessage = value;
                     OnPropertyChanged();
                 }
             }
@@ -148,9 +164,16 @@ namespace ShortestRouteFinder.ViewModel
         }
     }
 
-    public class RelayCommand(Action execute, Func<bool>? canExecute = null) : ICommand
+    public class RelayCommand : ICommand
     {
-        private readonly Action _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+        private readonly Action execute;
+        private readonly Func<bool>? canExecute;
+
+        public RelayCommand(Action execute, Func<bool>? canExecute = null)
+        {
+            this.execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            this.canExecute = canExecute;
+        }
 
         public bool CanExecute(object? parameter)
         {
@@ -159,7 +182,7 @@ namespace ShortestRouteFinder.ViewModel
 
         public void Execute(object? parameter)
         {
-            _execute();
+            execute();
         }
 
         public event EventHandler? CanExecuteChanged;

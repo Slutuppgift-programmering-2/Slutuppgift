@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using ShortestRouteFinder.Models;
 using ShortestRouteFinder.Services;
 using ShortestRouteFinder.ViewModel;
 using ShortestRouteFinder.Controls;
-using ShortestRouteFinder.Converters;
+using System.Diagnostics;
 
 namespace ShortestRouteFinder
 {
-    public partial class App : Application
+    public partial class App
     {
         private IServiceProvider? ServiceProvider { get; set; }
 
@@ -30,32 +27,25 @@ namespace ShortestRouteFinder
 
         private void ConfigureServices(IServiceCollection services)
         {
+            // Load data
+            var cities = LoadCitiesData();
+            if (cities == null)
+            {
+                Shutdown();
+                return;
+            }
+
             // Register configuration
-            services.AddSingleton(LoadCitiesData());
+            services.AddSingleton(cities);
 
             // Register services
-            services.AddSingleton<PathFinder>(sp =>
-            {
-                var cities = sp.GetRequiredService<List<City>>();
-                return new PathFinder(cities, MapControl.CANVAS_WIDTH, MapControl.CANVAS_HEIGHT);
-            });
+            services.AddSingleton<PathFinder>();
 
             // Register controls
-            services.AddTransient<MapControl>(sp =>
-            {
-                var cities = sp.GetRequiredService<List<City>>();
-                return new MapControl(cities);
-            });
+            services.AddTransient<MapControl>();
 
             // Register view models
-            services.AddTransient<MainViewModel>(sp =>
-            {
-                var cities = sp.GetRequiredService<List<City>>();
-                return new MainViewModel(cities, MapControl.CANVAS_WIDTH, MapControl.CANVAS_HEIGHT);
-            });
-
-            // Register converter
-            services.AddSingleton<NullToVisibilityConverter>();
+            services.AddTransient<MainViewModel>();
 
             // Register windows
             services.AddTransient<MainWindow>();
@@ -65,40 +55,37 @@ namespace ShortestRouteFinder
         {
             try
             {
-                string jsonPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data", "cities.json");
-                if (File.Exists(jsonPath))
+                string jsonData = """
+                [
+                  {
+                    "Name": "Paris",
+                    "X": 0.48,
+                    "Y": 0.42,
+                    "Penalty": 0.3,
+                    "ConnectedTo": [ "London", "Brussels", "Frankfurt", "Lyon" ]
+                  },
+                  // ... your JSON data here ...
+                ]
+                """;
+
+                Debug.WriteLine("Loading cities data...");
+                var cities = JsonSerializer.Deserialize<List<City>>(jsonData);
+                Debug.WriteLine($"Loaded {cities?.Count ?? 0} cities");
+                
+                if (cities == null || cities.Count == 0)
                 {
-                    string jsonContent = File.ReadAllText(jsonPath);
-                    return JsonSerializer.Deserialize<List<City>>(jsonContent);
-                }
-                else
-                {
-                    MessageBox.Show("Cities data file not found. Please ensure 'cities.json' exists in the Data folder.",
-                                  "Data Loading Error",
-                                  MessageBoxButton.OK,
-                                  MessageBoxImage.Error);
-                    Shutdown();
+                    MessageBox.Show("No cities data was loaded.", "Data Loading Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return null;
                 }
+
+                return cities;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error loading cities data: {ex.Message}",
-                              "Data Loading Error",
-                              MessageBoxButton.OK,
-                              MessageBoxImage.Error);
-                Shutdown();
+                Debug.WriteLine($"Error loading cities: {ex}");
+                MessageBox.Show($"Error loading cities data: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 return null;
             }
-        }
-
-        private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
-        {
-            MessageBox.Show($"An unhandled exception occurred: {e.Exception.Message}",
-                          "Error",
-                          MessageBoxButton.OK,
-                          MessageBoxImage.Error);
-            e.Handled = true;
         }
     }
 }

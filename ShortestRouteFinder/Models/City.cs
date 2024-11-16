@@ -1,10 +1,13 @@
-namespace ShortestRouteFinder.Models;
+using System.Collections.Generic;
 
-public class City 
+namespace ShortestRouteFinder.Models
 {
-   public string? Name { get; set; }
-   public double X { get; set; }
-   public double Y { get; set; }
-   public double Penalty { get; set; }
-   public List<string?> ConnectedTo { get; set; }
+    public class City
+    {
+        public required string Name { get; set; }
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Penalty { get; set; }
+        public required List<string> ConnectedTo { get; set; } = [];
+    }
 }
