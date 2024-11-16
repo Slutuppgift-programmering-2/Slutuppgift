@@ -4,43 +4,42 @@ using ShortestRouteFinder.Controls;
 using ShortestRouteFinder.Models;
 using ShortestRouteFinder.ViewModel;
 
-namespace ShortestRouteFinder
-{
-    public partial class MainWindow : Window
-    {
-        private readonly MainViewModel viewModel;
-        private readonly MapControl mapControl;
+namespace ShortestRouteFinder;
 
-        public MainWindow(List<City> cities, MainViewModel viewModel, MapControl mapControl)
-        {
-            InitializeComponent();
+public partial class MainWindow : Window
+{
+    private readonly MainViewModel viewModel;
+    private readonly MapControl mapControl;
+
+    public MainWindow(List<City> cities, MainViewModel viewModel, MapControl mapControl)
+    {
+        InitializeComponent();
     
-            Debug.WriteLine($"MainWindow constructor - Received {cities?.Count ?? 0} cities");
+        Debug.WriteLine($"MainWindow constructor - Received {cities?.Count ?? 0} cities");
     
-            this.viewModel = viewModel;
-            this.mapControl = mapControl;
+        this.viewModel = viewModel;
+        this.mapControl = mapControl;
 
             
-            viewModel.PropertyChanged += (s, e) =>
+        viewModel.PropertyChanged += (s, e) =>
+        {
+            if (e.PropertyName == nameof(MainViewModel.CurrentPath))
             {
-                if (e.PropertyName == nameof(MainViewModel.CurrentPath))
+                Debug.WriteLine($"Path changed: {viewModel.CurrentPath?.Count ?? 0} cities");
+                if (viewModel.HasPath && viewModel.CurrentPath != null)
                 {
-                    Debug.WriteLine($"Path changed: {viewModel.CurrentPath?.Count ?? 0} cities");
-                    if (viewModel.HasPath && viewModel.CurrentPath != null)
-                    {
-                        mapControl.DrawPath(viewModel.CurrentPath);
-                    }
-                    else
-                    {
-                        mapControl.ClearPath();
-                    }
+                    mapControl.DrawPath(viewModel.CurrentPath);
                 }
-            };
+                else
+                {
+                    mapControl.ClearPath();
+                }
+            }
+        };
 
-            DataContext = viewModel;
-            MapContainer.Child = mapControl;
+        DataContext = viewModel;
+        MapContainer.Child = mapControl;
     
-            Debug.WriteLine("MainWindow initialized");
-        }
+        Debug.WriteLine("MainWindow initialized");
     }
 }
