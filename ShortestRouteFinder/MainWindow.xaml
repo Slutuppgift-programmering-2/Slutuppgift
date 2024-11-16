@@ -46,21 +46,39 @@
                     Command="{Binding ClearPathCommand}"/>
         </StackPanel>
 
-        <!-- Error Message -->
+        <!-- Debug Information -->
         <TextBlock Grid.Row="0"
-                   Text="{Binding ErrorMessage}"
-                   Foreground="Red"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Bottom"
-                   Margin="0,0,0,5"
-                   Visibility="{Binding ErrorMessage, Converter={StaticResource NullToVisibilityConverter}}"/>
+                   HorizontalAlignment="Right"
+                   VerticalAlignment="Center"
+                   Margin="5">
+            <Run Text="Cities loaded:"/>
+            <Run Text="{Binding CityNames.Count}"/>
+        </TextBlock>
 
         <!-- Map Container -->
-        <Border Grid.Row="1" 
+        <Border x:Name="MapContainer" 
+                Grid.Row="1" 
                 BorderBrush="Gray" 
                 BorderThickness="1" 
-                Margin="10">
-            <ContentPresenter Content="{Binding MapControl}"/>
-        </Border>
+                Margin="10"/>
+
+        <!-- Debug Overlay -->
+        <TextBlock Grid.Row="1"
+                   Margin="15"
+                   VerticalAlignment="Top"
+                   HorizontalAlignment="Left"
+                   Panel.ZIndex="1">
+            <Run Text="Selected Start: "/>
+            <Run Text="{Binding SelectedStartCity}"/>
+            <LineBreak/>
+            <Run Text="Selected End: "/>
+            <Run Text="{Binding SelectedEndCity}"/>
+            <LineBreak/>
+            <Run Text="Has Path: "/>
+            <Run Text="{Binding HasPath}"/>
+            <LineBreak/>
+            <Run Text="Path Length: "/>
+            <Run Text="{Binding CurrentPath.Count}"/>
+        </TextBlock>
     </Grid>
 </Window>

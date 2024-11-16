@@ -37,7 +37,7 @@ namespace ShortestRouteFinder
             services.AddSingleton<PathFinder>(sp =>
             {
                 var cities = sp.GetRequiredService<List<City>>();
-                return new PathFinder(cities, MapControl.CanvasWidth, MapControl.CanvasHeight);
+                return new PathFinder(cities, MapControl.CANVAS_WIDTH, MapControl.CANVAS_HEIGHT);
             });
 
             // Register controls
@@ -51,7 +51,7 @@ namespace ShortestRouteFinder
             services.AddTransient<MainViewModel>(sp =>
             {
                 var cities = sp.GetRequiredService<List<City>>();
-                return new MainViewModel(cities, MapControl.CanvasWidth, MapControl.CanvasHeight);
+                return new MainViewModel(cities, MapControl.CANVAS_WIDTH, MapControl.CANVAS_HEIGHT);
             });
 
             // Register converter
