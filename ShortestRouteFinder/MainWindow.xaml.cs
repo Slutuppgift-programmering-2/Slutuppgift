@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using ShortestRouteFinder.Controls;
@@ -12,13 +11,13 @@ namespace ShortestRouteFinder
     {
         private readonly MainViewModel _viewModel;
 
-        public MainWindow()
+        public MainWindow(List<City> cities)  // Cities injected via DI
         {
             InitializeComponent();
             
-            var cities = LoadCitiesData();
             var mapControl = new MapControl(cities);
             _viewModel = new MainViewModel(cities, MapControl.CanvasWidth, MapControl.CanvasHeight);
+            
             
             _viewModel.PropertyChanged += (s, e) =>
             {
@@ -40,12 +39,6 @@ namespace ShortestRouteFinder
             // Add the map control to the window
             var mapContainer = (Border?)FindName("MapContainer");
             if (mapContainer != null) mapContainer.Child = mapControl;
-        }
-
-        private List<City>? LoadCitiesData()
-        {
-            const string jsonData = "nodes.json";
-            return JsonSerializer.Deserialize<List<City>>(jsonData);
         }
     }
 }
