@@ -20,7 +20,7 @@ namespace ShortestRouteFinder
             this.viewModel = viewModel;
             this.mapControl = mapControl;
 
-            // Subscribe to path changes
+            
             viewModel.PropertyChanged += (s, e) =>
             {
                 if (e.PropertyName == nameof(MainViewModel.CurrentPath))
