@@ -1,37 +1,66 @@
-﻿<Window x:Class="ShortestRouteFinder.Views.MainWindow"
+﻿<Window x:Class="ShortestRouteFinder.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="clr-namespace:ShortestRouteFinder.ViewModel"
-        Title="Route Editor" Height="400" Width="400">
-    <Window.DataContext>
-        <vm:MainViewModel/>
-    </Window.DataContext>
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ShortestRouteFinder"
+        mc:Ignorable="d"
+        Title="European Cities Pathfinder" 
+        Height="800" 
+        Width="1000">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-    <StackPanel Margin="10">
-        <TextBlock Text="Rutter:" FontWeight="Bold" Margin="0,0,0,10"/>
-
-        <ListView ItemsSource="{Binding Routes}" SelectedItem="{Binding SelectedRoute}" Margin="0,0,0,10">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Start" DisplayMemberBinding="{Binding Start}" Width="100"/>
-                    <GridViewColumn Header="Destination" DisplayMemberBinding="{Binding Destination}" Width="100"/>
-                    <GridViewColumn Header="Distance" DisplayMemberBinding="{Binding Distance}" Width="100"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
-
-        <StackPanel Orientation="Vertical">
-            <TextBlock Text="Redigera vald rutt:" FontWeight="Bold" Margin="0,0,0,10"/>
-
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                <TextBlock Text="Start:" Width="80"/>
-                <TextBox Text="{Binding SelectedRoute.Start, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
-            </StackPanel>
-
-            <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                <TextBlock Text="Destination:" Width="80"/>
-                <TextBox Text="{Binding SelectedRoute.Destination, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
-            </StackPanel>
+        <!-- Controls Panel -->
+        <StackPanel Grid.Row="0" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Center"
+                    Margin="10">
+            <TextBlock Text="Start:" 
+                       VerticalAlignment="Center" 
+                       Margin="5"/>
+            <ComboBox Width="120" 
+                      Margin="5"
+                      ItemsSource="{Binding CityNames}"
+                      SelectedItem="{Binding SelectedStartCity}"/>
+            
+            <TextBlock Text="End:" 
+                       VerticalAlignment="Center" 
+                       Margin="5"/>
+            <ComboBox Width="120" 
+                      Margin="5"
+                      ItemsSource="{Binding CityNames}"
+                      SelectedItem="{Binding SelectedEndCity}"/>
+            
+            <Button Content="Find Shortest Path" 
+                    Margin="5"
+                    Padding="10,5"
+                    Command="{Binding FindPathCommand}"/>
+            
+            <Button Content="Clear Path" 
+                    Margin="5"
+                    Padding="10,5"
+                    Command="{Binding ClearPathCommand}"/>
         </StackPanel>
-    </StackPanel>
+
+        <!-- Error Message -->
+        <TextBlock Grid.Row="0"
+                   Text="{Binding ErrorMessage}"
+                   Foreground="Red"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Bottom"
+                   Margin="0,0,0,5"
+                   Visibility="{Binding ErrorMessage, Converter={StaticResource NullToVisibilityConverter}}"/>
+
+        <!-- Map Container -->
+        <Border Grid.Row="1" 
+                BorderBrush="Gray" 
+                BorderThickness="1" 
+                Margin="10">
+            <ContentPresenter Content="{Binding MapControl}"/>
+        </Border>
+    </Grid>
 </Window>
