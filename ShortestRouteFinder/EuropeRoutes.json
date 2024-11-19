@@ -1,0 +1,268 @@
+﻿[
+  {
+    "Name": "Paris",
+    "X": 0.488534951,
+    "Y": 2.3483915,
+    "Penalty": 0.3,
+    "ConnectedTo": [ "London", "Brussels", "Frankfurt", "Lyon" ]
+  },
+  {
+    "Name": "London",
+    "X": 51.4893335,
+    "Y": -0.1440551,
+    "Penalty": 0.4,
+    "ConnectedTo": [ "Paris", "Amsterdam", "Edinburgh" ]
+  },
+  {
+    "Name": "Amsterdam",
+    "X": 52.3730796,
+    "Y": 4.8924534,
+    "Penalty": 0.2,
+    "ConnectedTo": [ "London", "Brussels", "Berlin" ]
+  },
+  {
+    "Name": "Brussels",
+    "X": 50.8465573,
+    "Y": 4.351697,
+    "Penalty": 0.15,
+    "ConnectedTo": [ "Paris", "Amsterdam", "Frankfurt" ]
+  },
+  {
+    "Name": "Berlin",
+    "X": 52.510885,
+    "Y": 13.3989367,
+    "Penalty": 0.25,
+    "ConnectedTo": [ "Amsterdam", "Frankfurt", "Prague", "Warsaw" ]
+  },
+  {
+    "Name": "Frankfurt",
+    "X": 50.1106444,
+    "Y": 8.6820917,
+    "Penalty": 0.2,
+    "ConnectedTo": [ "Paris", "Brussels", "Berlin", "Munich" ]
+  },
+  {
+    "Name": "Munich",
+    "X": 48.1371079,
+    "Y": 11.5753822,
+    "Penalty": 0.2,
+    "ConnectedTo": [ "Frankfurt", "Prague", "Vienna", "Milan" ]
+  },
+  {
+    "Name": "Prague",
+    "X": 50.0596288,
+    "Y": 14.4464593,
+    "Penalty": 0.15,
+    "ConnectedTo": [ "Berlin", "Munich", "Vienna", "Warsaw" ]
+  },
+  {
+    "Name": "Vienna",
+    "X": 48.2083537,
+    "Y": 16.3725042,
+    "Penalty": 0.2,
+    "ConnectedTo": [ "Prague", "Munich", "Budapest", "Milan" ]
+  },
+  {
+    "Name": "Warsaw",
+    "X": 52.2319581,
+    "Y": 21.0067249,
+    "Penalty": 0.3,
+    "ConnectedTo": [ "Berlin", "Prague", "Budapest" ]
+  },
+  {
+    "Name": "Budapest",
+    "X": 47.4813896,
+    "Y": 19.1460941,
+    "Penalty": 0.25,
+    "ConnectedTo": [ "Vienna", "Warsaw", "Rome" ]
+  },
+  {
+    "Name": "Milan",
+    "X": 45.4641943,
+    "Y": 9.1896346,
+    "Penalty": 0.35,
+    "ConnectedTo": [ "Munich", "Vienna", "Rome", "Lyon" ]
+  },
+  {
+    "Name": "Rome",
+    "X": 41.8933203,
+    "Y": 12.4829321,
+    "Penalty": 0.4,
+    "ConnectedTo": [ "Milan", "Budapest", "Barcelona" ]
+  },
+  {
+    "Name": "Lyon",
+    "X": 45.7578137,
+    "Y": 4.8320114,
+    "Penalty": 0.2,
+    "ConnectedTo": [ "Paris", "Milan", "Barcelona" ]
+  },
+  {
+    "Name": "Barcelona",
+    "X": 41.3828939,
+    "Y": 2.1774322,
+    "Penalty": 0.3,
+    "ConnectedTo": [ "Lyon", "Rome", "Madrid" ]
+  },
+  {
+    "Name": "Madrid",
+    "X": 40.4167047,
+    "Y": -3.7035825,
+    "Penalty": 0.35,
+    "ConnectedTo": [ "Barcelona", "Lisbon" ]
+  },
+  {
+    "Name": "Lisbon",
+    "X": 38.7077507,
+    "Y": -9.1365919,
+    "Penalty": 0.25,
+    "ConnectedTo": [ "Madrid" ]
+  },
+  {
+    "Name": "Edinburgh",
+    "X": 55.9533456,
+    "Y": -3.1883749,
+    "Penalty": 0.3,
+    "ConnectedTo": [ "London" ]
+  },
+  {
+    "Name": "Zurich",
+    "X": 47.3744489,
+    "Y": 8.5410422,
+    "Penalty":,
+    "ConnectedTo": [ "" ]
+  },
+  {
+    "Name": "Hamburg",
+    "X": 53.550341,
+    "Y": 10.000654,
+    "Penalty":,
+    "ConnectedTo": [ "" ]
+  },
+  {
+    "Name": "Colonge",
+    "X": 47.0536982,
+    "Y": 4.2658721,
+    "Penalty":,
+    "ConnectedTo": [ "" ]
+  },
+  {
+    "Name": "Geneve",
+    "X": 46.2017559,
+    "Y": 6.1466014,
+    "Penalty":,
+    "ConnectedTo": [ "" ]
+  },
+  {
+    "Name": "Stockholm",
+    "X": 59.3251172,
+    "Y": 18.0710935,
+    "Penalty":,
+    "ConnectedTo": [ "" ]
+  },
+  {
+    "Name": "Dublin",
+    "X": 53.3493795,
+    "Y": -6.2605593,
+    "Penalty":,
+    "ConnectedTo": [ "" ]
+  },
+  {
+    "Name": "Copenhagen",
+    "X": 55.6867243,
+    "Y": 12.5700724,
+    "Penalty":,
+    "ConnectedTo": [ "" ]
+  },
+  {
+    "Name": "Florence",
+    "X": 44.8416271,
+    "Y": -0.4111791,
+    "Penalty":,
+    "ConnectedTo": [ "" ]
+  },
+  {
+    "Name": "Valencia",
+    "X": 39.4697065,
+    "Y": -0.3763353,
+    "Penalty":,
+    "ConnectedTo": [ "" ]
+  },
+  {
+    "Name": "Luxemburg",
+    "X": 53.6632275,
+    "Y": 7.9154987,
+    "Penalty":,
+    "ConnectedTo": [ "" ]
+  },
+  {
+    "Name": "Salzburg",
+    "X": 47.7981346,
+    "Y": 13.0464806,
+    "Penalty":,
+    "ConnectedTo": [ "" ]
+  },
+  {
+    "Name": "Marseille",
+    "X": 43.2961743,
+    "Y": 5.3699525,
+    "Penalty":,
+    "ConnectedTo": [ "" ]
+  },
+  {
+    "Name": "Nice",
+    "X": 43.7009358,
+    "Y": 7.2683912,
+    "Penalty":,
+    "ConnectedTo": [ "" ]
+  },
+  {
+    "Name": "Naples",
+    "X": 40.8358846,
+    "Y": 14.2487679,
+    "Penalty":,
+    "ConnectedTo": [ "" ]
+  },
+  {
+    "Name": "Seville",
+    "X": 48.7484639,
+    "Y": 2.3529208,
+    "Penalty":,
+    "ConnectedTo": [ "" ]
+  },
+  {
+    "Name": "Belfast",
+    "X": 54.596391,
+    "Y": -5.9301829,
+    "Penalty":,
+    "ConnectedTo": [ "" ]
+  },
+  {
+    "Name": "Venice",
+    "X": 45.4371908,
+    "Y": 12.3345898,
+    "Penalty":,
+    "ConnectedTo": [ "" ]
+  },
+  {
+    "Name": "Turin",
+    "X": 45.0677551,
+    "Y": 7.6824892,
+    "Penalty":,
+    "ConnectedTo": [ "" ]
+  },
+  {
+    "Name": "Manschester",
+    "X": 53.4794892,
+    "Y": -2.2451146,
+    "Penalty":,
+    "ConnectedTo": [ "" ]
+  },
+  {
+    "Name": "Malaga",
+    "X": 36.7213028,
+    "Y": -4.4216366,
+    "Penalty":,
+    "ConnectedTo": [ "" ]
+  },
+]
