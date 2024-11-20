@@ -72,6 +72,6 @@
   {
     "Start": "N",
     "Destination": "O",
-    "Distances": 2
+    "Distance": 2
   }
 ]
