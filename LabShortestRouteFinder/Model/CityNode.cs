@@ -10,6 +10,7 @@ namespace LabShortestRouteFinder.Model
     public class CityNode : INotifyPropertyChanged
     {
         private string _name;
+        private bool isPartOfCycle;
         public required string Name
         {
             get => _name;
@@ -27,6 +28,19 @@ namespace LabShortestRouteFinder.Model
         public int Y { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+
+        public bool IsPartOfCycle
+        {
+            get => isPartOfCycle;
+            set
+            {
+                if (isPartOfCycle != value)
+                {
+                    isPartOfCycle = value;
+                    OnPropertyChanged(nameof(IsPartOfCycle));
+                }
+            }
+        }
 
 
         public event PropertyChangedEventHandler? PropertyChanged;

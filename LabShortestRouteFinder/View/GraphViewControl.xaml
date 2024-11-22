@@ -5,7 +5,6 @@
              xmlns:converters="clr-namespace:LabShortestRouteFinder.Converters" 
              xmlns:view="clr-namespace:LabShortestRouteFinder.View">
     
-    <!--<view:ListViewControl DataContext="{Binding RouteViewModel, RelativeSource={RelativeSource AncestorType=Window}}" />-->
     <UserControl.Resources>
         <converters:YPositionConverter x:Key="YPositionConverter"/>
     </UserControl.Resources>
@@ -16,18 +15,29 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Canvas>
-                        <!-- Route as a line -->
                         <Line X1="{Binding Start.X}" Y1="{Binding Start.Y}"
                               X2="{Binding Destination.X}" Y2="{Binding Destination.Y}"
                               StrokeThickness="2">
-                            <Line.Stroke>
-                                <RadialGradientBrush GradientOrigin="0.5,0.5" Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
-                                    <RadialGradientBrush.GradientStops>
-                                        <GradientStop Color="Red" Offset="0" />
-                                        <GradientStop Color="Blue" Offset="0.25" />
-                                    </RadialGradientBrush.GradientStops>
-                                </RadialGradientBrush>
-                            </Line.Stroke>
+                            <Line.Style>
+                                <Style TargetType="Line">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsPartOfCycle}" Value="True">
+                                            <Setter Property="Stroke" Value="Red"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsPartOfCycle}" Value="False">
+                                            <Setter Property="Stroke">
+                                                <Setter.Value>
+                                                    <RadialGradientBrush GradientOrigin="0.5,0.5" Center="0.5,0.5" 
+                                                                        RadiusX="0.5" RadiusY="0.5">
+                                                        <GradientStop Color="Blue" Offset="0" />
+                                                        <GradientStop Color="LightBlue" Offset="0.25" />
+                                                    </RadialGradientBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Line.Style>
                         </Line>
                     </Canvas>
                 </DataTemplate>
@@ -39,13 +49,23 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Canvas>
-                        <!-- Node as a circle -->
-                        <Ellipse Width="20" Height="20" Fill="SkyBlue" Stroke="Black"
-                                 Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}"/>
-                        <!-- Node label -->
+                        <Ellipse Width="20" Height="20" Stroke="Black">
+                            <Ellipse.Style>
+                                <Style TargetType="Ellipse">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsPartOfCycle}" Value="True">
+                                            <Setter Property="Fill" Value="Pink"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsPartOfCycle}" Value="False">
+                                            <Setter Property="Fill" Value="SkyBlue"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Ellipse.Style>
+                        </Ellipse>
                         <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="12"
-                                   Canvas.Left="{Binding X}"
-                                   Canvas.Top="{Binding Y, Converter={StaticResource YPositionConverter}}" />
+                                 Canvas.Left="{Binding X}"
+                                 Canvas.Top="{Binding Y, Converter={StaticResource YPositionConverter}}" />
                     </Canvas>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

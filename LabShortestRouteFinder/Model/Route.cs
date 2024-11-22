@@ -13,5 +13,7 @@ namespace LabShortestRouteFinder.Model
         public required CityNode Start {  get; set; }
         public required CityNode Destination { get; set; }
         public int Distance { get; set; }
+
+        private bool isPartOfCycle { get; set; }
     }
 }
