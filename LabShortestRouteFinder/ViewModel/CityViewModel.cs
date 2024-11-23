@@ -1,20 +1,21 @@
 ﻿using LabShortestRouteFinder.Model;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace LabShortestRouteFinder.ViewModel
 {
-    public class GraphViewModel
+    public class CityViewModel
     {
         public ObservableCollection<CityNode> Cities { get; }
-        public ObservableCollection<Route> Routes { get; }
 
-        public GraphViewModel(MainViewModel mainViewModel)
+        public CityViewModel(MainViewModel mainViewModel)
         {
+            // Reference the shared Cities collection
             Cities = mainViewModel.Cities;
-            Routes = mainViewModel.Routes;
         }
-
-        
     }
 }
-

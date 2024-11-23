@@ -4,13 +4,13 @@
              xmlns:vm="clr-namespace:LabShortestRouteFinder.ViewModel"
              xmlns:converters="clr-namespace:LabShortestRouteFinder.Converters" 
              xmlns:view="clr-namespace:LabShortestRouteFinder.View">
-    
+
     <!--<view:ListViewControl DataContext="{Binding RouteViewModel, RelativeSource={RelativeSource AncestorType=Window}}" />-->
     <UserControl.Resources>
         <converters:YPositionConverter x:Key="YPositionConverter"/>
     </UserControl.Resources>
 
-    <Canvas Width="800" Height="600">
+    <Canvas Width="800" Height="600" Background="AliceBlue">
         <!-- Draw routes between nodes -->
         <ItemsControl ItemsSource="{Binding Routes}">
             <ItemsControl.ItemTemplate>
