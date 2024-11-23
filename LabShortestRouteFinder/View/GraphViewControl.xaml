@@ -10,7 +10,7 @@
         <converters:YPositionConverter x:Key="YPositionConverter"/>
     </UserControl.Resources>
 
-    <Canvas Width="800" Height="600" Background="AliceBlue">
+    <Canvas Width="1000" Height="800" Background="LimeGreen">
         <!-- Draw routes between nodes -->
         <ItemsControl ItemsSource="{Binding Routes}">
             <ItemsControl.ItemTemplate>

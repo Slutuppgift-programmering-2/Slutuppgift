@@ -43,24 +43,36 @@ namespace LabShortestRouteFinder.ViewModel
             // Deserialize the JSON content into a list of CityNode objects
             List<CityNode> cities = JsonSerializer.Deserialize<List<CityNode>>(jsonContent) ?? new List<CityNode>();
 
+            double windowWidth = 800;
+            double windowHeight = 600;
+            double minLongitude = cities.Min(x => x.Longitude);
+            double minLatitude = cities.Min(x => x.Latitude);
+            double maxLongitude = cities.Max(x => x.Longitude);
+            double maxLatitude = cities.Max(x => x.Latitude);
+
+            double scaleFactorX = windowWidth / (maxLongitude - minLongitude);
+            double scaleFactorY = windowHeight / (maxLatitude - minLatitude);
+
             foreach(var c in cities)
             {
+                c.X = (int)((c.Longitude - minLongitude) * scaleFactorX);
+                c.Y = (int)(windowHeight - ((c.Latitude - minLatitude) * scaleFactorY));
                 Cities.Add(c);
             }
 
             // Transform city coordinates
-            double minLat = 59.0;
-            double maxLat = 65.5;
-            double minLon = 13.0;
-            double maxLon = 20.5;
-            int windowWidth = 800;
-            int windowHeight = 600;
+            //double minLat = 59.0;
+            //double maxLat = 65.5;
+            //double minLon = 13.0;
+            //double maxLon = 20.5;
+            //int windowWidth = 800;
+            //int windowHeight = 600;
 
 
 
-            MapWin mapWin = new MapWin(minLat, maxLat, minLon, maxLon, windowWidth, windowHeight);
-            var transformer = new MapTransformer(mapWin);
-            var transformedCities = transformer.TransformCities(Cities);
+            //MapWin mapWin = new MapWin(minLat, maxLat, minLon, maxLon, windowWidth, windowHeight);
+            //var transformer = new MapTransformer(mapWin);
+            //var transformedCities = transformer.TransformCities(Cities);
 
             // Add routes
             //Routes.Add(new Route { Start = transformedCities[0], Destination = transformedCities[1], Distance = 474 });
