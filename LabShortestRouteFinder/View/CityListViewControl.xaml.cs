@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LabShortestRouteFinder.ViewModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,12 @@ namespace LabShortestRouteFinder.View
         public CityListViewControl()
         {
             InitializeComponent();
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            CityViewModel viewModel = (CityViewModel)DataContext;
+            viewModel.SaveCitiesToFile();
         }
     }
 }

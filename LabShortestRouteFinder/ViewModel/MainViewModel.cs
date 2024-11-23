@@ -20,8 +20,38 @@ namespace LabShortestRouteFinder.ViewModel
 
             // Load data and normalize
             //LoadData();
+            //NormalizeCoordinates();
+
+            // New method to read cities from a file
             LoadDataFromFile();
-            NormalizeCoordinates();
+        }
+
+        // New method to read cities from a json file. We also calculate X and Y so that they scale to the canvas size
+        private void LoadDataFromFile()
+        {
+            string jsonContent = File.ReadAllText("..\\net8.0-windows\\Resources\\cities.json");
+
+            // Deserialize the JSON content into a list of CityNode objects
+            List<CityNode> cities = JsonSerializer.Deserialize<List<CityNode>>(jsonContent) ?? new List<CityNode>();
+
+            double windowWidth = 800;
+            double windowHeight = 600;
+
+            // Min and Max for Sweden
+            double minLatitude = 55.0;
+            double maxLatitude = 69.0;
+            double minLongitude = 11.0;
+            double maxLongitude = 24.0;
+
+            double scaleFactorX = windowWidth / (maxLongitude - minLongitude);
+            double scaleFactorY = windowHeight / (maxLatitude - minLatitude);
+
+            foreach(var c in cities)
+            {
+                c.X = (int)Math.Round((c.Longitude - minLongitude) * scaleFactorX, 0);
+                c.Y = (int)Math.Round(windowHeight - ((c.Latitude - minLatitude) * scaleFactorY), 0);
+                Cities.Add(c);
+            }
         }
 
         private void NormalizeCoordinates()
@@ -34,50 +64,6 @@ namespace LabShortestRouteFinder.ViewModel
                 city.X = (city.X * 800) / maxX; // Normalize to Canvas width
                 city.Y = (city.Y * 600) / maxY; // Normalize to Canvas height
             }
-        }
-
-        private void LoadDataFromFile()
-        {
-            string jsonContent = File.ReadAllText("..\\net8.0-windows\\Resources\\cities.json");
-
-            // Deserialize the JSON content into a list of CityNode objects
-            List<CityNode> cities = JsonSerializer.Deserialize<List<CityNode>>(jsonContent) ?? new List<CityNode>();
-
-            double windowWidth = 800;
-            double windowHeight = 600;
-            double minLongitude = cities.Min(x => x.Longitude);
-            double minLatitude = cities.Min(x => x.Latitude);
-            double maxLongitude = cities.Max(x => x.Longitude);
-            double maxLatitude = cities.Max(x => x.Latitude);
-
-            double scaleFactorX = windowWidth / (maxLongitude - minLongitude);
-            double scaleFactorY = windowHeight / (maxLatitude - minLatitude);
-
-            foreach(var c in cities)
-            {
-                c.X = (int)((c.Longitude - minLongitude) * scaleFactorX);
-                c.Y = (int)(windowHeight - ((c.Latitude - minLatitude) * scaleFactorY));
-                Cities.Add(c);
-            }
-
-            // Transform city coordinates
-            //double minLat = 59.0;
-            //double maxLat = 65.5;
-            //double minLon = 13.0;
-            //double maxLon = 20.5;
-            //int windowWidth = 800;
-            //int windowHeight = 600;
-
-
-
-            //MapWin mapWin = new MapWin(minLat, maxLat, minLon, maxLon, windowWidth, windowHeight);
-            //var transformer = new MapTransformer(mapWin);
-            //var transformedCities = transformer.TransformCities(Cities);
-
-            // Add routes
-            //Routes.Add(new Route { Start = transformedCities[0], Destination = transformedCities[1], Distance = 474 });
-            //Routes.Add(new Route { Start = transformedCities[0], Destination = transformedCities[2], Distance = 617 });
-            //Routes.Add(new Route { Start = transformedCities[1], Destination = transformedCities[2], Distance = 259 });
         }
 
         private void LoadData()

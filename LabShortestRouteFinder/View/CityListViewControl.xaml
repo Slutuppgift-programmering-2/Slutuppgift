@@ -3,7 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              >
     <Grid>
-        <DataGrid ItemsSource="{Binding Cities}" AutoGenerateColumns="False" Margin="10" IsReadOnly="False">
+        <StackPanel Orientation="Vertical">
+            <Button Margin="10" Content="Save" Width="80" Click="SaveButton_Click" />
+
+            <DataGrid ItemsSource="{Binding Cities}" AutoGenerateColumns="False" Margin="10" IsReadOnly="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name, Mode=TwoWay}" />
                 <DataGridTextColumn Header="X" Binding="{Binding X, Mode=TwoWay}">
@@ -22,5 +25,6 @@
                 </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
+        </StackPanel>
     </Grid>
 </UserControl>
