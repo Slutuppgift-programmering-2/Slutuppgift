@@ -10,13 +10,17 @@ namespace LabShortestRouteFinder.ViewModel
         public ObservableCollection<Route> Routes { get; }
         
         private ObservableCollection<List<CityNode>> cycles;
+        private List<CityNode> shortestCycle;
+        
+        public double ShortestCycleDistance => shortestCycle != null ? CalculateCycleDistance(shortestCycle) : 0;
 
         public GraphViewModel(MainViewModel mainViewModel) 
         {
             Cities = mainViewModel.Cities;
             Routes = mainViewModel.Routes;
             cycles = new ObservableCollection<List<CityNode>>();
-            
+            Routes.CollectionChanged += (s, e) => FindCycles();
+
         }
 
         public ObservableCollection<List<CityNode>> Cycles
@@ -25,6 +29,16 @@ namespace LabShortestRouteFinder.ViewModel
             private set
             {
                 cycles = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public List<CityNode> ShortestCycle
+        {
+            get => shortestCycle;
+            private set
+            {
+                shortestCycle = value;
                 OnPropertyChanged();
             }
         }
@@ -47,6 +61,7 @@ namespace LabShortestRouteFinder.ViewModel
             }
             
             Cycles = _cycles;
+            FindShortestCycle();
             MarkCycles();
 
         }
@@ -82,6 +97,34 @@ namespace LabShortestRouteFinder.ViewModel
             
             recursionStack.Remove(current);
             currentPath.Pop();
+        }
+
+        private void FindShortestCycle()
+        {
+            if (!Cycles.Any()) return;
+
+            ShortestCycle = Cycles
+                .OrderBy(cycle => CalculateCycleDistance(cycle))
+                .First();
+        }
+
+        private double CalculateCycleDistance(List<CityNode> cycle)
+        {
+            double totalDistance = 0;
+            for (int i = 0; i < cycle.Count; i++)
+            {
+                var start = cycle[i];
+                var end = cycle[(i + 1) % Cycles.Count];
+
+                var route = Routes.FirstOrDefault(r =>
+                    r.Start == start && r.Destination == end);
+
+                if (route != null)
+                {
+                    totalDistance += route.Distance;
+                }
+            }
+            return totalDistance;
         }
 
         private void ResetCycleFlags()
