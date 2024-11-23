@@ -10,7 +10,26 @@
     </UserControl.Resources>
 
     <Grid>
-        <Canvas Width="800" Height="600">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- City Selection Controls -->
+        <StackPanel Orientation="Horizontal" Margin="10">
+            <ComboBox Width="120" Margin="5" 
+                      ItemsSource="{Binding Cities}"
+                      SelectedItem="{Binding SelectedStartCity}"
+                      DisplayMemberPath="Name"
+                      PlaceholderText="Start City"/>
+            <ComboBox Width="120" Margin="5"
+                      ItemsSource="{Binding Cities}"
+                      SelectedItem="{Binding SelectedEndCity}"
+                      DisplayMemberPath="Name"
+                      PlaceholderText="End City"/>
+        </StackPanel>
+
+        <Canvas Grid.Row="1" Width="800" Height="600">
             <!-- Draw routes between nodes -->
             <ItemsControl ItemsSource="{Binding Routes}">
                 <ItemsControl.ItemTemplate>
@@ -22,6 +41,10 @@
                                 <Line.Style>
                                     <Style TargetType="Line">
                                         <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsPartOfPath}" Value="True">
+                                                <Setter Property="Stroke" Value="Green"/>
+                                                <Setter Property="StrokeThickness" Value="4"/>
+                                            </DataTrigger>
                                             <DataTrigger Binding="{Binding IsPartOfCycle}" Value="True">
                                                 <Setter Property="Stroke" Value="Red"/>
                                                 <Setter Property="StrokeThickness" Value="3"/>
@@ -41,7 +64,7 @@
                                     </Style>
                                 </Line.Style>
                             </Line>
-                            <!-- Display distance on the line if it's part of shortest cycle -->
+                            <!-- Display distance on the line -->
                             <TextBlock Canvas.Left="{Binding Start.X}" Canvas.Top="{Binding Start.Y}"
                                      Text="{Binding Distance}">
                                 <TextBlock.Style>
@@ -49,6 +72,9 @@
                                         <Setter Property="Visibility" Value="Collapsed"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsPartOfCycle}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsPartOfPath}" Value="True">
                                                 <Setter Property="Visibility" Value="Visible"/>
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -70,6 +96,9 @@
                                 <Ellipse.Style>
                                     <Style TargetType="Ellipse">
                                         <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsPartOfPath}" Value="True">
+                                                <Setter Property="Fill" Value="LightGreen"/>
+                                            </DataTrigger>
                                             <DataTrigger Binding="{Binding IsPartOfCycle}" Value="True">
                                                 <Setter Property="Fill" Value="Pink"/>
                                             </DataTrigger>
@@ -88,15 +117,23 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
-            <!-- Display total distance of shortest cycle -->
-            <Border Background="#80FFFFFF" BorderBrush="Black" BorderThickness="1"
-                    CornerRadius="5" Padding="10" HorizontalAlignment="Right" VerticalAlignment="Top"
-                    Canvas.Right="10" Canvas.Top="10">
-                <TextBlock>
-                    <Run Text="Shortest Cycle Length: "/>
-                    <Run Text="{Binding ShortestCycleDistance, StringFormat={}{0:N0}}"/>
-                </TextBlock>
-            </Border>
+            <!-- Display statistics -->
+            <StackPanel Canvas.Right="10" Canvas.Top="10">
+                <Border Background="#80FFFFFF" BorderBrush="Black" BorderThickness="1"
+                        CornerRadius="5" Padding="10" Margin="0,0,0,5">
+                    <TextBlock>
+                        <Run Text="Shortest Cycle Length: "/>
+                        <Run Text="{Binding ShortestCycleDistance, StringFormat={}{0:N0}}"/>
+                    </TextBlock>
+                </Border>
+                <Border Background="#80FFFFFF" BorderBrush="Black" BorderThickness="1"
+                        CornerRadius="5" Padding="10">
+                    <TextBlock>
+                        <Run Text="Current Path Length: "/>
+                        <Run Text="{Binding CurrentPathDistance, StringFormat={}{0:N0}}"/>
+                    </TextBlock>
+                </Border>
+            </StackPanel>
         </Canvas>
     </Grid>
 </UserControl>

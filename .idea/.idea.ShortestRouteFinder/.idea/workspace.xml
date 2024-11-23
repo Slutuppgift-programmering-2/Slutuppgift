@@ -76,6 +76,7 @@
     <setting file="file://$PROJECT_DIR$/LabShortestRouteFinder/Model/CityNode.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/LabShortestRouteFinder/Model/MapWin.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/LabShortestRouteFinder/Model/Route.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/LabShortestRouteFinder/Services/PathFInderService.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/LabShortestRouteFinder/ViewModel/GraphViewModel.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProblemsViewState">
@@ -138,7 +139,7 @@
       <workItem from="1732141788337" duration="53000" />
       <workItem from="1732141850819" duration="217000" />
       <workItem from="1732142075441" duration="25000" />
-      <workItem from="1732142365044" duration="10032000" />
+      <workItem from="1732142365044" duration="14397000" />
     </task>
     <servers />
   </component>

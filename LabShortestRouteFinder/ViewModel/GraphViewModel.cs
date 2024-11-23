@@ -1,6 +1,7 @@
 ﻿using LabShortestRouteFinder;
 using LabShortestRouteFinder.Model;
 using System.Collections.ObjectModel;
+using LabShortestRouteFinder.Services;
 
 namespace LabShortestRouteFinder.ViewModel
 {
@@ -11,16 +12,54 @@ namespace LabShortestRouteFinder.ViewModel
         
         private ObservableCollection<List<CityNode>> cycles;
         private List<CityNode> shortestCycle;
+        private CityNode selectedStartCity;
+        private CityNode selectedEndCity;
+        private PathFinderService.PathResult currentPath;
         
         public double ShortestCycleDistance => shortestCycle != null ? CalculateCycleDistance(shortestCycle) : 0;
+        public double CurrentPathDistance => currentPath?.Distance ?? 0;
+        private readonly PathFinderService pathFinder;
 
         public GraphViewModel(MainViewModel mainViewModel) 
         {
             Cities = mainViewModel.Cities;
             Routes = mainViewModel.Routes;
             cycles = new ObservableCollection<List<CityNode>>();
+            pathFinder = new PathFinderService();
             Routes.CollectionChanged += (s, e) => FindCycles();
+        }
 
+        public CityNode SelectedStartCity
+        {
+            get => selectedStartCity;
+            set
+            {
+                selectedStartCity = value;
+                OnPropertyChanged();
+                FindShortestPath();
+            }
+        }
+
+        public CityNode SelectedEndCity
+        {
+            get => selectedEndCity;
+            set
+            {
+                selectedEndCity = value;
+                OnPropertyChanged();
+                FindShortestPath();
+            }
+        }
+
+        public PathFinderService.PathResult CurrentPath
+        {
+            get => currentPath;
+            private set
+            {
+                currentPath = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CurrentPathDistance));
+            }
         }
 
         public ObservableCollection<List<CityNode>> Cycles
@@ -43,13 +82,55 @@ namespace LabShortestRouteFinder.ViewModel
             }
         }
 
+        private void FindShortestPath()
+        {
+            ResetPathMarkers();
+            
+            if (selectedStartCity != null && selectedEndCity != null)
+            {
+                var result = pathFinder.FindShortestPath(Cities, Routes, selectedStartCity, selectedEndCity);
+                CurrentPath = result;
+                if (result.HasPath)
+                {
+                    MarkPath(result);
+                }
+            }
+            else
+            {
+                CurrentPath = PathFinderService.PathResult.Empty;
+            }
+        }
+
+        private void MarkPath(PathFinderService.PathResult path)
+        {
+            foreach (var route in path.Routes)
+            {
+                route.IsPartOfPath = true;
+                route.Start.NotifyRoutePropertyChanged(route, nameof(Route.IsPartOfPath));
+                route.Destination.NotifyRoutePropertyChanged(route, nameof(Route.IsPartOfPath));
+            }
+        }
+
+        private void ResetPathMarkers()
+        {
+            foreach (var route in Routes)
+            {
+                if (route.IsPartOfPath)
+                {
+                    route.IsPartOfPath = false;
+                    route.Start.NotifyRoutePropertyChanged(route, nameof(Route.IsPartOfPath));
+                    route.Destination.NotifyRoutePropertyChanged(route, nameof(Route.IsPartOfPath));
+                }
+            }
+        }
+
         private void FindCycles()
         {
             ResetCycleFlags();
 
             var _cycles = new ObservableCollection<List<CityNode>>();
             var visited = new HashSet<CityNode>();
-            var recursionStack = new HashSet<CityNode>(); //Sparar noder i aktuell väg
+            var recursionStack = new HashSet<CityNode>();
             var currentPath = new Stack<CityNode>();
 
             foreach (var city in Cities)
@@ -63,10 +144,8 @@ namespace LabShortestRouteFinder.ViewModel
             Cycles = _cycles;
             FindShortestCycle();
             MarkCycles();
-
         }
 
-        // Depth-First Search 
         private void DFSForCycles(CityNode current, HashSet<CityNode> visited,
             HashSet<CityNode> recursionStack, Stack<CityNode> currentPath,
             ObservableCollection<List<CityNode>> cycles)
@@ -75,7 +154,6 @@ namespace LabShortestRouteFinder.ViewModel
             recursionStack.Add(current);
             currentPath.Push(current);
 
-            //Hämtar Nodens grannar
             var neighbours = Routes
                 .Where(r => r.Start == current)
                 .Select(r => r.Destination);
@@ -87,9 +165,9 @@ namespace LabShortestRouteFinder.ViewModel
                     DFSForCycles(neighbour, visited, recursionStack,
                         currentPath, cycles);
                 }
-                else if (recursionStack.Contains(neighbour)) //Cykel hittad
+                else if (recursionStack.Contains(neighbour))
                 {
-                    var cycleStart = currentPath.Reverse().TakeWhile(c => c != neighbour).Reverse().ToList(); 
+                    var cycle = currentPath.Reverse().TakeWhile(c => c != neighbour).Reverse().ToList();
                     cycle.Add(neighbour);
                     cycles.Add(cycle);
                 }
@@ -114,7 +192,7 @@ namespace LabShortestRouteFinder.ViewModel
             for (int i = 0; i < cycle.Count; i++)
             {
                 var start = cycle[i];
-                var end = cycle[(i + 1) % Cycles.Count];
+                var end = cycle[(i + 1) % cycle.Count];
 
                 var route = Routes.FirstOrDefault(r =>
                     r.Start == start && r.Destination == end);
@@ -129,27 +207,21 @@ namespace LabShortestRouteFinder.ViewModel
 
         private void ResetCycleFlags()
         {
-            foreach (var city in Cities)
-            {
-                city.IsPartOfCycle = false;
-            }
-
             foreach (var route in Routes)
             {
-                route.IsPartOfCycle = false;
+                if (route.IsPartOfCycle)
+                {
+                    route.IsPartOfCycle = false;
+                    route.Start.NotifyRoutePropertyChanged(route, nameof(Route.IsPartOfCycle));
+                    route.Destination.NotifyRoutePropertyChanged(route, nameof(Route.IsPartOfCycle));
+                }
             }
         }
 
-        // markerar noder och vägar som hör med hittad cykel
         private void MarkCycles()
         {
             foreach (var cycle in Cycles)
             {
-                foreach (var city in cyclee)
-                {
-                    city.IsPartOfCycle = true;
-                }
-
                 for (int i = 0; i < cycle.Count; i++)
                 {
                     var start = cycle[i];
@@ -159,6 +231,8 @@ namespace LabShortestRouteFinder.ViewModel
                     if (route != null)
                     {
                         route.IsPartOfCycle = true;
+                        route.Start.NotifyRoutePropertyChanged(route, nameof(Route.IsPartOfCycle));
+                        route.Destination.NotifyRoutePropertyChanged(route, nameof(Route.IsPartOfCycle));
                     }
                 }
             }

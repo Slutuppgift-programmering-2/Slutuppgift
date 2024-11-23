@@ -11,6 +11,7 @@ namespace LabShortestRouteFinder.Model
     {
         private string _name;
         private bool isPartOfCycle;
+        private bool isPartOfPath;
         public required string Name
         {
             get => _name;
@@ -38,6 +39,19 @@ namespace LabShortestRouteFinder.Model
                 {
                     isPartOfCycle = value;
                     OnPropertyChanged(nameof(IsPartOfCycle));
+                }
+            }
+        }
+
+        public bool IsPartOfPath
+        {
+            get => isPartOfPath;
+            set
+            {
+                if (isPartOfPath != value)
+                {
+                    isPartOfPath = value;
+                    OnPropertyChanged(nameof(IsPartOfPath));
                 }
             }
         }

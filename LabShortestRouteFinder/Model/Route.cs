@@ -15,5 +15,6 @@ namespace LabShortestRouteFinder.Model
         public int Distance { get; set; }
 
         private bool isPartOfCycle { get; set; }
+        private bool isPartOfPath { get; set; }
     }
 }
