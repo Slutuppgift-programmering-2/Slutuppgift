@@ -54,6 +54,19 @@
 
         <Canvas Grid.Row="1" Width="800" Height="600">
             <!-- Draw routes between nodes -->
+            <ItemsControl ItemsSource="{Binding PathRoutes}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Canvas>
+                            <Line X1="{Binding Start.X}" Y1="{Binding Start.Y}"
+                                  X2="{Binding Destination.X}" Y2="{Binding Destination.Y}"
+                                  StrokeThickness="4"
+                                  Stroke="Green"/>
+                        </Canvas>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
             <ItemsControl ItemsSource="{Binding Routes}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
@@ -65,14 +78,9 @@
                                     <Style TargetType="Line">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsPartOfPath}" Value="True">
-                                                <Setter Property="Stroke" Value="Green"/>
-                                                <Setter Property="StrokeThickness" Value="4"/>
+                                                <Setter Property="Visibility" Value="Collapsed"/>
                                             </DataTrigger>
-                                            <DataTrigger Binding="{Binding IsPartOfCycle}" Value="True">
-                                                <Setter Property="Stroke" Value="Red"/>
-                                                <Setter Property="StrokeThickness" Value="3"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding IsPartOfCycle}" Value="False">
+                                            <DataTrigger Binding="{Binding IsPartOfPath}" Value="False">
                                                 <Setter Property="Stroke">
                                                     <Setter.Value>
                                                         <RadialGradientBrush GradientOrigin="0.5,0.5" Center="0.5,0.5" 
@@ -89,15 +97,12 @@
                             </Line>
 
                             <!-- Display distance on the line -->
-                            <TextBlock Canvas.Left="{Binding Start.X}" Canvas.Top="{Binding Start.Y}"
+                            <TextBlock Canvas.Left="{Binding MidpointX}" Canvas.Top="{Binding MidpointY}"
                                      Text="{Binding Distance}">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Visibility" Value="Collapsed"/>
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsPartOfCycle}" Value="True">
-                                                <Setter Property="Visibility" Value="Visible"/>
-                                            </DataTrigger>
                                             <DataTrigger Binding="{Binding IsPartOfPath}" Value="True">
                                                 <Setter Property="Visibility" Value="Visible"/>
                                             </DataTrigger>
@@ -123,10 +128,7 @@
                                             <DataTrigger Binding="{Binding IsPartOfPath}" Value="True">
                                                 <Setter Property="Fill" Value="LightGreen"/>
                                             </DataTrigger>
-                                            <DataTrigger Binding="{Binding IsPartOfCycle}" Value="True">
-                                                <Setter Property="Fill" Value="Pink"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding IsPartOfCycle}" Value="False">
+                                            <DataTrigger Binding="{Binding IsPartOfPath}" Value="False">
                                                 <Setter Property="Fill" Value="SkyBlue"/>
                                             </DataTrigger>
                                         </Style.Triggers>
@@ -143,13 +145,6 @@
 
             <!-- Display statistics -->
             <StackPanel Canvas.Right="10" Canvas.Top="10">
-                <Border Background="#80FFFFFF" BorderBrush="Black" BorderThickness="1"
-                        CornerRadius="5" Padding="10" Margin="0,0,0,5">
-                    <TextBlock>
-                        <Run Text="Shortest Cycle Length: "/>
-                        <Run Text="{Binding ShortestCycleDistance, StringFormat={}{0:N0}}"/>
-                    </TextBlock>
-                </Border>
                 <Border Background="#80FFFFFF" BorderBrush="Black" BorderThickness="1"
                         CornerRadius="5" Padding="10">
                     <TextBlock>

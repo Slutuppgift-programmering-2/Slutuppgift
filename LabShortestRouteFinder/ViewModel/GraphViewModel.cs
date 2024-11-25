@@ -11,11 +11,14 @@ namespace LabShortestRouteFinder.ViewModel
     {
         private readonly MainViewModel _mainViewModel;
         private readonly ObservableCollection<CityNode> _cities;
+        private readonly ObservableCollection<Route> _routes;
         private CityNode? _selectedStartCity;
         private CityNode? _selectedEndCity;
         private double _currentPathDistance;
 
         public ObservableCollection<CityNode> Cities => _cities;
+        public ObservableCollection<Route> Routes => _routes;
+        public ObservableCollection<Route> PathRoutes { get; } = [];
         
         public CityNode? SelectedStartCity
         {
@@ -56,6 +59,7 @@ namespace LabShortestRouteFinder.ViewModel
         {
             _mainViewModel = mainViewModel;
             _cities = mainViewModel.Cities;
+            _routes = mainViewModel.Routes;
         }
 
         private void FindShortestPath()
@@ -64,8 +68,6 @@ namespace LabShortestRouteFinder.ViewModel
                 return;
 
             Debug.WriteLine($"Finding path from {SelectedStartCity.Name} to {SelectedEndCity.Name}");
-            
-            // Reset previous path
             ResetPathHighlighting();
 
             var shortestPath = DijkstraShortestPath(SelectedStartCity, SelectedEndCity);
@@ -97,7 +99,6 @@ namespace LabShortestRouteFinder.ViewModel
 
             while (unvisited.Count > 0)
             {
-                // Get the unvisited node with the smallest distance
                 var current = unvisited.OrderBy(c => distances[c]).First();
                 
                 if (current == end)
@@ -105,8 +106,7 @@ namespace LabShortestRouteFinder.ViewModel
 
                 unvisited.Remove(current);
 
-                // Get all neighboring cities from MainViewModel's routes
-                var connectedRoutes = _mainViewModel.Routes.Where(r => 
+                var connectedRoutes = Routes.Where(r => 
                     (r.Start == current || r.Destination == current));
 
                 foreach (var route in connectedRoutes)
@@ -127,7 +127,6 @@ namespace LabShortestRouteFinder.ViewModel
             if (!previous.ContainsKey(end))
                 return null;
 
-            // Reconstruct the path
             var path = new List<CityNode>();
             var currentNode = end;
             while (currentNode != null)
@@ -136,30 +135,54 @@ namespace LabShortestRouteFinder.ViewModel
                 previous.TryGetValue(currentNode, out currentNode);
             }
             path.Reverse();
-            
-            Debug.WriteLine($"Path found with {path.Count} cities:");
-            foreach (var city in path)
-            {
-                Debug.WriteLine($"- {city.Name}");
-            }
-            
             return path;
         }
 
         private void HighlightPath(List<CityNode> path)
         {
+            PathRoutes.Clear();
+
             for (int i = 0; i < path.Count; i++)
             {
                 path[i].IsPartOfPath = true;
+            }
+
+            for (int i = 0; i < path.Count - 1; i++)
+            {
+                var route = Routes.FirstOrDefault(r =>
+                    (r.Start == path[i] && r.Destination == path[i + 1]) ||
+                    (r.Start == path[i + 1] && r.Destination == path[i]));
+
+                if (route != null)
+                {
+                    route.IsPartOfPath = true;
+                    var pathRoute = new Route
+                    {
+                        Start = path[i],
+                        Destination = path[i + 1],
+                        Distance = route.Distance
+                    };
+                    PathRoutes.Add(pathRoute);
+                }
             }
         }
 
         private void ResetPathHighlighting()
         {
+            PathRoutes.Clear();
+            
+            foreach (var route in Routes)
+            {
+                route.IsPartOfPath = false;
+                route.IsPartOfCycle = false;
+            }
+
             foreach (var city in Cities)
             {
                 city.IsPartOfPath = false;
+                city.IsPartOfCycle = false;
             }
+
             CurrentPathDistance = 0;
         }
 
@@ -167,14 +190,12 @@ namespace LabShortestRouteFinder.ViewModel
         {
             double totalDistance = 0;
             
-            // Calculate distance between consecutive cities in the path
             for (int i = 0; i < path.Count - 1; i++)
             {
                 var currentCity = path[i];
                 var nextCity = path[i + 1];
                 
-                // Find the route between these cities
-                var route = _mainViewModel.Routes.FirstOrDefault(r =>
+                var route = Routes.FirstOrDefault(r =>
                     (r.Start == currentCity && r.Destination == nextCity) ||
                     (r.Start == nextCity && r.Destination == currentCity));
                 
@@ -193,7 +214,6 @@ namespace LabShortestRouteFinder.ViewModel
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-
         protected virtual void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
