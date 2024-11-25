@@ -2,7 +2,8 @@
 using LabShortestRouteFinder.Model;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Xml.Linq;
+using System.IO;
+using System.Text.Json;
 
 namespace LabShortestRouteFinder.ViewModel
 {
@@ -13,13 +14,44 @@ namespace LabShortestRouteFinder.ViewModel
 
         public MainViewModel()
         {
-            // Initialize data here or load from JSON
+            // Initialize collections
             Cities = new ObservableCollection<CityNode>();
             Routes = new ObservableCollection<Route>();
 
-            LoadData();
+            // Load data and normalize
+            //LoadData();
+            //NormalizeCoordinates();
 
-            NormalizeCoordinates();
+            // New method to read cities from a file
+            LoadDataFromFile();
+        }
+
+        // New method to read cities from a json file. We also calculate X and Y so that they scale to the canvas size
+        private void LoadDataFromFile()
+        {
+            string jsonContent = File.ReadAllText("..\\net8.0-windows\\Resources\\cities.json");
+
+            // Deserialize the JSON content into a list of CityNode objects
+            List<CityNode> cities = JsonSerializer.Deserialize<List<CityNode>>(jsonContent) ?? new List<CityNode>();
+
+            double windowWidth = 800;
+            double windowHeight = 600;
+
+            // Min and Max for Sweden
+            double minLatitude = 55.0;
+            double maxLatitude = 69.0;
+            double minLongitude = 11.0;
+            double maxLongitude = 24.0;
+
+            double scaleFactorX = windowWidth / (maxLongitude - minLongitude);
+            double scaleFactorY = windowHeight / (maxLatitude - minLatitude);
+
+            foreach(var c in cities)
+            {
+                c.X = (int)Math.Round((c.Longitude - minLongitude) * scaleFactorX, 0);
+                c.Y = (int)Math.Round(windowHeight - ((c.Latitude - minLatitude) * scaleFactorY), 0);
+                Cities.Add(c);
+            }
         }
 
         private void NormalizeCoordinates()
@@ -34,9 +66,9 @@ namespace LabShortestRouteFinder.ViewModel
             }
         }
 
-        public void LoadData()
+        private void LoadData()
         {
-            // For simplicity, add sample data here or load from a JSON file
+            // Add sample data
             var cityA = new CityNode { Name = "Stockholm", Latitude = 59.3293, Longitude = 18.0686 };
             var cityB = new CityNode { Name = "Göteborg", Latitude = 57.7089, Longitude = 11.9746 };
             var cityC = new CityNode { Name = "Malmö", Latitude = 55.6050, Longitude = 13.0038 };
@@ -44,18 +76,19 @@ namespace LabShortestRouteFinder.ViewModel
             Cities.Add(cityB);
             Cities.Add(cityC);
 
-            // Definiera koordinaterna för kartområdet (t.ex. Sverige)
+            // Transform city coordinates
             double minLat = 55.0;
             double maxLat = 69.0;
             double minLon = 11.0;
             double maxLon = 24.0;
-            // Fönstrets bredd och höjd (i pixlar)
             int windowWidth = 800;
             int windowHeight = 600;
-            MapWin mapWin = new MapWin(minLat, maxLat, minLon, maxLon, windowWidth, windowHeight);
 
-            var transform = new MapTransformer(mapWin);
-            var transformedCities = transform.TransformCities(Cities);
+            MapWin mapWin = new MapWin(minLat, maxLat, minLon, maxLon, windowWidth, windowHeight);
+            var transformer = new MapTransformer(mapWin);
+            var transformedCities = transformer.TransformCities(Cities);
+
+            // Add routes
             Routes.Add(new Route { Start = transformedCities[0], Destination = transformedCities[1], Distance = 474 });
             Routes.Add(new Route { Start = transformedCities[0], Destination = transformedCities[2], Distance = 617 });
             Routes.Add(new Route { Start = transformedCities[1], Destination = transformedCities[2], Distance = 259 });
