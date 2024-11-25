@@ -16,8 +16,7 @@
             <ItemsControl ItemsSource="{Binding Routes}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Canvas>
-                            <!-- Route as a line -->
+                        <Canvas Panel.ZIndex="{Binding IsHighlighted, Converter={StaticResource BoolToZIndexConverter}}">
                             <Line X1="{Binding Start.X}" 
                                   Y1="{Binding Start.Y}"
                                   X2="{Binding Destination.X}" 
@@ -28,12 +27,10 @@
                                             <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
                                                 <Setter Property="Stroke" Value="Yellow"/>
                                                 <Setter Property="StrokeThickness" Value="4"/>
-                                                <Setter Property="ZIndex" Value="1"/>
                                             </DataTrigger>
                                             <DataTrigger Binding="{Binding IsHighlighted}" Value="False">
                                                 <Setter Property="Stroke" Value="Black"/>
                                                 <Setter Property="StrokeThickness" Value="2"/>
-                                                <Setter Property="ZIndex" Value="0"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
