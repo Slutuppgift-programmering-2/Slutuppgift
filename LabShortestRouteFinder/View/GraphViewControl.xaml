@@ -18,37 +18,34 @@
                     <DataTemplate>
                         <Canvas>
                             <!-- Route as a line -->
-                            <Line X1="{Binding Start.X}" Y1="{Binding Start.Y}"
-                                  X2="{Binding Destination.X}" Y2="{Binding Destination.Y}"
-                                  StrokeThickness="{Binding IsHighlighted, Converter={StaticResource ThicknessConverter}}">
+                            <Line X1="{Binding Start.X}" 
+                                  Y1="{Binding Start.Y}"
+                                  X2="{Binding Destination.X}" 
+                                  Y2="{Binding Destination.Y}">
                                 <Line.Style>
                                     <Style TargetType="Line">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
                                                 <Setter Property="Stroke" Value="Yellow"/>
                                                 <Setter Property="StrokeThickness" Value="4"/>
+                                                <Setter Property="ZIndex" Value="1"/>
                                             </DataTrigger>
                                             <DataTrigger Binding="{Binding IsHighlighted}" Value="False">
-                                                <Setter Property="Stroke">
-                                                    <Setter.Value>
-                                                        <RadialGradientBrush GradientOrigin="0.5,0.5" Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
-                                                            <RadialGradientBrush.GradientStops>
-                                                                <GradientStop Color="Red" Offset="0" />
-                                                                <GradientStop Color="Blue" Offset="0.25" />
-                                                            </RadialGradientBrush.GradientStops>
-                                                        </RadialGradientBrush>
-                                                    </Setter.Value>
-                                                </Setter>
+                                                <Setter Property="Stroke" Value="Black"/>
                                                 <Setter Property="StrokeThickness" Value="2"/>
+                                                <Setter Property="ZIndex" Value="0"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
                                 </Line.Style>
                                 <Line.ToolTip>
-                                    <TextBlock>
-                                        <Run Text="Distance: "/>
-                                        <Run Text="{Binding Distance}"/>
-                                    </TextBlock>
+                                    <ToolTip>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Distance: " Margin="0,0,4,0"/>
+                                            <TextBlock Text="{Binding Distance}"/>
+                                            <TextBlock Text=" km"/>
+                                        </StackPanel>
+                                    </ToolTip>
                                 </Line.ToolTip>
                             </Line>
                         </Canvas>
