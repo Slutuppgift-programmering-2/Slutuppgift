@@ -73,16 +73,16 @@
            </ItemsControl>
 
            <!-- Status message -->
-           <TextBlock Text="{Binding StatusMessage}" 
-                     Canvas.Left="10"
-                     Canvas.Bottom="10"
-                     Foreground="#212121"
-                     FontWeight="Bold"
-                     Background="#FFFFFF"
-                     BorderBrush="#E0E0E0"
-                     BorderThickness="1"
-                     Padding="8"/>
-       </Canvas>
+           <Border Canvas.Left="10"
+                   Canvas.Bottom="10"
+                   Background="#FFFFFF"
+                   BorderBrush="#E0E0E0"
+                   BorderThickness="1"
+                   Padding="8">
+               <TextBlock Text="{Binding StatusMessage}" 
+                          Foreground="#212121"
+                          FontWeight="Bold"/>
+           </Border>
 
        <!-- Controls for interacting with the graph -->
        <StackPanel Orientation="Vertical" 
