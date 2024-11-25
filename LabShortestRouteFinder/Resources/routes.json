@@ -1,77 +1,28 @@
-[
-  {
-    "Start": "A",
-    "Destination": "B",
-    "Distance": 5
-  },
-  {
-    "Start": "A",
-    "Destination": "C",
-    "Distance": 10
-  },
-  {
-    "Start": "B",
-    "Destination": "D",
-    "Distance": 3
-  },
-  {
-    "Start": "C",
-    "Destination": "D",
-    "Distance": 7
-  },
-  {
-    "Start": "D",
-    "Destination": "E",
-    "Distance": 6
-  },
-  {
-    "Start": "E",
-    "Destination": "F",
-    "Distance": 2
-  },
-  {
-    "Start": "F",
-    "Destination": "G",
-    "Distance": 8
-  },
-  {
-    "Start": "G",
-    "Destination": "H",
-    "Distance": 4
-  },
-  {
-    "Start": "H",
-    "Destination": "I",
-    "Distance": 9
-  },
-  {
-    "Start": "I",
-    "Destination": "J",
-    "Distance": 3
-  },
-  {
-    "Start": "J",
-    "Destination": "K",
-    "Distance": 5
-  },
-  {
-    "Start": "K",
-    "Destination": "L",
-    "Distance": 7
-  },
-  {
-    "Start": "L",
-    "Destination": "M",
-    "Distance": 6
-  },
-  {
-    "Start": "M",
-    "Destination": "N",
-    "Distance": 4
-  },
-  {
-    "Start": "N",
-    "Destination": "O",
-    "Distance": 2
-  }
-]
+{
+  "routes": [
+    { "from": "Stockholm", "to": "Uppsala", "distance": 71 },
+    { "from": "Stockholm", "to": "Västerås", "distance": 107 },
+    { "from": "Stockholm", "to": "Örebro", "distance": 196 },
+    { "from": "Stockholm", "to": "Linköping", "distance": 200 },
+    { "from": "Uppsala", "to": "Gävle", "distance": 110 },
+    { "from": "Gävle", "to": "Sandviken", "distance": 26 },
+    { "from": "Gävle", "to": "Hudiksvall", "distance": 134 },
+    { "from": "Hudiksvall", "to": "Umeå", "distance": 363 },
+    { "from": "Umeå", "to": "Luleå", "distance": 273 },
+    { "from": "Luleå", "to": "Kiruna", "distance": 343 },
+    { "from": "Östersund", "to": "Umeå", "distance": 363 },
+    { "from": "Östersund", "to": "Mora", "distance": 373 },
+    { "from": "Mora", "to": "Falun", "distance": 108 },
+    { "from": "Falun", "to": "Gävle", "distance": 103 },
+    { "from": "Örebro", "to": "Västerås", "distance": 96 },
+    { "from": "Örebro", "to": "Linköping", "distance": 199 },
+    { "from": "Linköping", "to": "Jönköping", "distance": 147 },
+    { "from": "Jönköping", "to": "Göteborg", "distance": 149 },
+    { "from": "Göteborg", "to": "Halmstad", "distance": 147 },
+    { "from": "Halmstad", "to": "Malmö", "distance": 154 },
+    { "from": "Malmö", "to": "Växjö", "distance": 302 },
+    { "from": "Växjö", "to": "Kalmar", "distance": 122 },
+    { "from": "Växjö", "to": "Jönköping", "distance": 161 },
+    { "from": "Kalmar", "to": "Linköping", "distance": 277 }
+  ]
+}

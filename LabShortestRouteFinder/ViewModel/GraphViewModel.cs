@@ -2,6 +2,8 @@
 using CommunityToolkit.Mvvm.Input;
 using LabShortestRouteFinder.Model;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Text.Json;
 using System.Windows;
 
 namespace LabShortestRouteFinder.ViewModel
@@ -20,29 +22,42 @@ namespace LabShortestRouteFinder.ViewModel
         [ObservableProperty]
         private string? statusMessage;  // For showing algorithm results/errors
         
-        
-
         public GraphViewModel(MainViewModel mainViewModel)
         {
             Cities = mainViewModel.Cities;
             Routes = mainViewModel.Routes;
 
-            // Add some test routes if Routes is empty
             if (Routes.Count == 0 && Cities.Count >= 2)
             {
-                ShowDebug("Adding test routes");
-                // Add a few test routes between existing cities
-                for (int i = 0; i < Cities.Count - 1; i++)
+                ShowDebug("Loading routes from JSON");
+                LoadRoutesFromFile();
+            }
+        }
+        
+        private void LoadRoutesFromFile()
+        {
+            string jsonContent = File.ReadAllText("..\\net8.0-windows\\Resources\\routes.json");
+    
+            // Deserialize the JSON content
+            var routeData = JsonSerializer.Deserialize<RouteData>(jsonContent) ?? new RouteData { routes = new List<RouteInfo>() };
+
+            foreach (var routeInfo in routeData.routes)
+            {
+                var startCity = Cities.FirstOrDefault(c => c.Name == routeInfo.from);
+                var endCity = Cities.FirstOrDefault(c => c.Name == routeInfo.to);
+
+                if (startCity != null && endCity != null)
                 {
                     Routes.Add(new Route
                     {
-                        Start = Cities[i],
-                        Destination = Cities[i + 1],
-                        Distance = 100 // Example distance
+                        Start = startCity,
+                        Destination = endCity,
+                        Distance = routeInfo.distance
                     });
-                    ShowDebug($"Added route from {Cities[i].Name} to {Cities[i + 1].Name}");
                 }
             }
+
+            ShowDebug($"Loaded {Routes.Count} routes successfully");
         }
         
         private void ShowDebug(string message)
@@ -303,4 +318,17 @@ namespace LabShortestRouteFinder.ViewModel
             }
         }
     }
+}
+
+// Helper classes for JSON deserialization
+public class RouteData
+{
+    public List<RouteInfo> routes { get; set; }
+}
+
+public class RouteInfo
+{
+    public string from { get; set; }
+    public string to { get; set; }
+    public int distance { get; set; }
 }
