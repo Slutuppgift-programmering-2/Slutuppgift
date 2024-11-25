@@ -4,51 +4,160 @@
              xmlns:vm="clr-namespace:LabShortestRouteFinder.ViewModel"
              xmlns:converters="clr-namespace:LabShortestRouteFinder.Converters" 
              xmlns:view="clr-namespace:LabShortestRouteFinder.View">
-    
-    <!--<view:ListViewControl DataContext="{Binding RouteViewModel, RelativeSource={RelativeSource AncestorType=Window}}" />-->
+
     <UserControl.Resources>
         <converters:YPositionConverter x:Key="YPositionConverter"/>
+
+        <!-- ComboBox Style -->
+        <Style x:Key="ComboBoxWithPlaceholder" TargetType="ComboBox">
+            <Setter Property="SelectedIndex" Value="-1"/>
+        </Style>
     </UserControl.Resources>
 
-    <Canvas Width="800" Height="600">
-        <!-- Draw routes between nodes -->
-        <ItemsControl ItemsSource="{Binding Routes}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Canvas>
-                        <!-- Route as a line -->
-                        <Line X1="{Binding Start.X}" Y1="{Binding Start.Y}"
-                              X2="{Binding Destination.X}" Y2="{Binding Destination.Y}"
-                              StrokeThickness="2">
-                            <Line.Stroke>
-                                <RadialGradientBrush GradientOrigin="0.5,0.5" Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
-                                    <RadialGradientBrush.GradientStops>
-                                        <GradientStop Color="Red" Offset="0" />
-                                        <GradientStop Color="Blue" Offset="0.25" />
-                                    </RadialGradientBrush.GradientStops>
-                                </RadialGradientBrush>
-                            </Line.Stroke>
-                        </Line>
-                    </Canvas>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-        <!-- Draw city nodes and labels -->
-        <ItemsControl ItemsSource="{Binding Cities}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Canvas>
-                        <!-- Node as a circle -->
-                        <Ellipse Width="20" Height="20" Fill="SkyBlue" Stroke="Black"
-                                 Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}"/>
-                        <!-- Node label -->
-                        <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="12"
-                                   Canvas.Left="{Binding X}"
-                                   Canvas.Top="{Binding Y, Converter={StaticResource YPositionConverter}}" />
-                    </Canvas>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </Canvas>
+        <!-- City Selection Controls -->
+        <StackPanel Orientation="Horizontal" Margin="10">
+            <Grid>
+                <ComboBox Width="120" Margin="5" 
+                          ItemsSource="{Binding Cities}"
+                          SelectedItem="{Binding SelectedStartCity}"
+                          DisplayMemberPath="Name">
+                    <ComboBox.Style>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="IsEditable" Value="True"/>
+                            <Setter Property="IsReadOnly" Value="True"/>
+                            <Setter Property="Text" Value="Select Start City"/>
+                        </Style>
+                    </ComboBox.Style>
+                </ComboBox>
+            </Grid>
+            <Grid>
+                <ComboBox Width="120" Margin="5"
+                          ItemsSource="{Binding Cities}"
+                          SelectedItem="{Binding SelectedEndCity}"
+                          DisplayMemberPath="Name">
+                    <ComboBox.Style>
+                        <Style TargetType="ComboBox">
+                            <Setter Property="IsEditable" Value="True"/>
+                            <Setter Property="IsReadOnly" Value="True"/>
+                            <Setter Property="Text" Value="Select End City"/>
+                        </Style>
+                    </ComboBox.Style>
+                </ComboBox>
+            </Grid>
+        </StackPanel>
+
+        <Canvas Grid.Row="1" Width="800" Height="600">
+            <!-- Draw routes between nodes -->
+            <ItemsControl ItemsSource="{Binding Routes}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Canvas>
+                            <Line X1="{Binding Start.X}" Y1="{Binding Start.Y}"
+                                  X2="{Binding Destination.X}" Y2="{Binding Destination.Y}"
+                                  StrokeThickness="2">
+                                <Line.Style>
+                                    <Style TargetType="Line">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsPartOfPath}" Value="True">
+                                                <Setter Property="Stroke" Value="Green"/>
+                                                <Setter Property="StrokeThickness" Value="4"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsPartOfCycle}" Value="True">
+                                                <Setter Property="Stroke" Value="Red"/>
+                                                <Setter Property="StrokeThickness" Value="3"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsPartOfCycle}" Value="False">
+                                                <Setter Property="Stroke">
+                                                    <Setter.Value>
+                                                        <RadialGradientBrush GradientOrigin="0.5,0.5" Center="0.5,0.5" 
+                                                                            RadiusX="0.5" RadiusY="0.5">
+                                                            <GradientStop Color="Blue" Offset="0" />
+                                                            <GradientStop Color="LightBlue" Offset="0.25" />
+                                                        </RadialGradientBrush>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Line.Style>
+                            </Line>
+
+                            <!-- Display distance on the line -->
+                            <TextBlock Canvas.Left="{Binding Start.X}" Canvas.Top="{Binding Start.Y}"
+                                     Text="{Binding Distance}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsPartOfCycle}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsPartOfPath}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </Canvas>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- Draw city nodes and labels -->
+            <ItemsControl ItemsSource="{Binding Cities}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Canvas>
+                            <Ellipse Width="20" Height="20" Stroke="Black"
+                                     Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}">
+                                <Ellipse.Style>
+                                    <Style TargetType="Ellipse">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsPartOfPath}" Value="True">
+                                                <Setter Property="Fill" Value="LightGreen"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsPartOfCycle}" Value="True">
+                                                <Setter Property="Fill" Value="Pink"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsPartOfCycle}" Value="False">
+                                                <Setter Property="Fill" Value="SkyBlue"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Ellipse.Style>
+                            </Ellipse>
+                            <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="12"
+                                     Canvas.Left="{Binding X}"
+                                     Canvas.Top="{Binding Y, Converter={StaticResource YPositionConverter}}" />
+                        </Canvas>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!-- Display statistics -->
+            <StackPanel Canvas.Right="10" Canvas.Top="10">
+                <Border Background="#80FFFFFF" BorderBrush="Black" BorderThickness="1"
+                        CornerRadius="5" Padding="10" Margin="0,0,0,5">
+                    <TextBlock>
+                        <Run Text="Shortest Cycle Length: "/>
+                        <Run Text="{Binding ShortestCycleDistance, StringFormat={}{0:N0}}"/>
+                    </TextBlock>
+                </Border>
+                <Border Background="#80FFFFFF" BorderBrush="Black" BorderThickness="1"
+                        CornerRadius="5" Padding="10">
+                    <TextBlock>
+                        <Run Text="Current Path Length: "/>
+                        <Run Text="{Binding CurrentPathDistance, StringFormat={}{0:N0}}"/>
+                    </TextBlock>
+                </Border>
+            </StackPanel>
+        </Canvas>
+    </Grid>
 </UserControl>
