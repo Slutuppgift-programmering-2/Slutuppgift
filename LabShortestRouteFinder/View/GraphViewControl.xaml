@@ -16,36 +16,34 @@
             <ItemsControl ItemsSource="{Binding Routes}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Canvas Panel.ZIndex="{Binding IsHighlighted, Converter={StaticResource BoolToZIndexConverter}}">
-                            <Line X1="{Binding Start.X}" 
-                                  Y1="{Binding Start.Y}"
-                                  X2="{Binding Destination.X}" 
-                                  Y2="{Binding Destination.Y}">
-                                <Line.Style>
-                                    <Style TargetType="Line">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
-                                                <Setter Property="Stroke" Value="Yellow"/>
-                                                <Setter Property="StrokeThickness" Value="4"/>
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding IsHighlighted}" Value="False">
-                                                <Setter Property="Stroke" Value="Black"/>
-                                                <Setter Property="StrokeThickness" Value="2"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Line.Style>
-                                <Line.ToolTip>
-                                    <ToolTip>
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="Distance: " Margin="0,0,4,0"/>
-                                            <TextBlock Text="{Binding Distance}"/>
-                                            <TextBlock Text=" km"/>
-                                        </StackPanel>
-                                    </ToolTip>
-                                </Line.ToolTip>
-                            </Line>
-                        </Canvas>
+                        <Line X1="{Binding Start.X}" 
+                              Y1="{Binding Start.Y}"
+                              X2="{Binding Destination.X}" 
+                              Y2="{Binding Destination.Y}">
+                            <Line.Style>
+                                <Style TargetType="Line">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
+                                            <Setter Property="Stroke" Value="Yellow"/>
+                                            <Setter Property="StrokeThickness" Value="4"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsHighlighted}" Value="False">
+                                            <Setter Property="Stroke" Value="Black"/>
+                                            <Setter Property="StrokeThickness" Value="2"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Line.Style>
+                            <Line.ToolTip>
+                                <ToolTip>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Distance: " Margin="0,0,4,0"/>
+                                        <TextBlock Text="{Binding Distance}"/>
+                                        <TextBlock Text=" km"/>
+                                    </StackPanel>
+                                </ToolTip>
+                            </Line.ToolTip>
+                        </Line>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
