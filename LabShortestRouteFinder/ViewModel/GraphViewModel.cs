@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using LabShortestRouteFinder.Model;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace LabShortestRouteFinder.ViewModel
 {
@@ -25,6 +26,11 @@ namespace LabShortestRouteFinder.ViewModel
         {
             Cities = mainViewModel.Cities;
             Routes = mainViewModel.Routes;
+        }
+        
+        private void ShowDebug(string message)
+        {
+            MessageBox.Show(message, "Debug Info", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void ClearHighlights()
@@ -76,9 +82,16 @@ namespace LabShortestRouteFinder.ViewModel
         {
             try
             {
-                if (SelectedStartCity == null || SelectedEndCity == null) return;
+                if (SelectedStartCity == null || SelectedEndCity == null)
+                {
+                    ShowDebug("Start or end city is null");
+                    return;
+                }
+                
+                ShowDebug($"Finding route from {SelectedStartCity.Name} to {SelectedEndCity.Name}");
 
                 var adjList = BuildAdjacencyList();
+                ShowDebug($"Built adjacency list with {adjList.Count} cities");
                 var distances = new Dictionary<CityNode, int>();
                 var previous = new Dictionary<CityNode, (CityNode city, Route route)?>();
                 var unvisited = new HashSet<CityNode>(Cities);
@@ -124,11 +137,13 @@ namespace LabShortestRouteFinder.ViewModel
                 }
 
                 path.Reverse();
+                ShowDebug($"Found path with {path.Count} segments");
                 HighlightPath(path);
                 StatusMessage = $"Found path with {path.Count} segments and total distance {path.Sum(r => r.Distance)}";
             }
             catch (Exception ex)
             {
+                ShowDebug($"Error: {ex.Message}\n\nStack Trace: {ex.StackTrace}");
                 StatusMessage = "Error finding route: " + ex.Message;
             }
         }
@@ -136,65 +151,73 @@ namespace LabShortestRouteFinder.ViewModel
         [RelayCommand]
         private void FindCycles()
         {
-            ClearHighlights();
-            var adjList = BuildAdjacencyList();
-            var visited = new HashSet<CityNode>();
-            var stack = new Stack<CityNode>();
-            var cycles = new List<List<Route>>();
-
-            void DFS(CityNode current, CityNode? parent)
+            try
             {
-                visited.Add(current);
-                stack.Push(current);
+                ClearHighlights();
+                var adjList = BuildAdjacencyList();
+                var visited = new HashSet<CityNode>();
+                var stack = new Stack<CityNode>();
+                var cycles = new List<List<Route>>();
 
-                foreach (var (neighbor, route) in adjList[current])
+                void DFS(CityNode current, CityNode? parent)
                 {
-                    if (neighbor == parent) continue;
+                    visited.Add(current);
+                    stack.Push(current);
 
-                    if (visited.Contains(neighbor))
+                    foreach (var (neighbor, route) in adjList[current])
                     {
-                        if (stack.Contains(neighbor))
+                        if (neighbor == parent) continue;
+
+                        if (visited.Contains(neighbor))
                         {
-                            // Found a cycle
-                            var cycle = new List<Route>();
-                            var cycleStack = new Stack<CityNode>(stack);
-                            var cycleCity = cycleStack.Pop();
-                            while (cycleStack.Count > 0 && cycleCity != neighbor)
+                            if (stack.Contains(neighbor))
                             {
-                                var nextCity = cycleStack.Pop();
-                                cycle.Add(Routes.First(r => 
-                                    (r.Start == cycleCity && r.Destination == nextCity) ||
-                                    (r.Start == nextCity && r.Destination == cycleCity)));
-                                cycleCity = nextCity;
+                                // Found a cycle
+                                var cycle = new List<Route>();
+                                var cycleStack = new Stack<CityNode>(stack);
+                                var cycleCity = cycleStack.Pop();
+                                while (cycleStack.Count > 0 && cycleCity != neighbor)
+                                {
+                                    var nextCity = cycleStack.Pop();
+                                    cycle.Add(Routes.First(r =>
+                                        (r.Start == cycleCity && r.Destination == nextCity) ||
+                                        (r.Start == nextCity && r.Destination == cycleCity)));
+                                    cycleCity = nextCity;
+                                }
+
+                                cycle.Add(route);
+                                cycles.Add(cycle);
                             }
-                            cycle.Add(route);
-                            cycles.Add(cycle);
+                        }
+                        else
+                        {
+                            DFS(neighbor, current);
                         }
                     }
-                    else
+
+                    stack.Pop();
+                }
+
+                foreach (var city in Cities)
+                {
+                    if (!visited.Contains(city))
                     {
-                        DFS(neighbor, current);
+                        DFS(city, null);
                     }
                 }
 
-                stack.Pop();
-            }
-
-            foreach (var city in Cities)
-            {
-                if (!visited.Contains(city))
+                // Highlight all cycles
+                foreach (var cycle in cycles)
                 {
-                    DFS(city, null);
+                    foreach (var route in cycle)
+                    {
+                        route.IsHighlighted = true;
+                    }
                 }
             }
-
-            // Highlight all cycles
-            foreach (var cycle in cycles)
+            catch (Exception ex)
             {
-                foreach (var route in cycle)
-                {
-                    route.IsHighlighted = true;
-                }
+                ShowDebug($"Error in FindCycles: {ex.Message}");
             }
         }
 
