@@ -5,50 +5,94 @@
              xmlns:converters="clr-namespace:LabShortestRouteFinder.Converters" 
              xmlns:view="clr-namespace:LabShortestRouteFinder.View">
 
-    <!--<view:ListViewControl DataContext="{Binding RouteViewModel, RelativeSource={RelativeSource AncestorType=Window}}" />-->
     <UserControl.Resources>
         <converters:YPositionConverter x:Key="YPositionConverter"/>
     </UserControl.Resources>
 
-    <Canvas Width="800" Height="600" Background="LimeGreen">
-        <!-- Draw routes between nodes -->
-        <ItemsControl ItemsSource="{Binding Routes}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Canvas>
-                        <!-- Route as a line -->
-                        <Line X1="{Binding Start.X}" Y1="{Binding Start.Y}"
-                              X2="{Binding Destination.X}" Y2="{Binding Destination.Y}"
-                              StrokeThickness="2">
-                            <Line.Stroke>
-                                <RadialGradientBrush GradientOrigin="0.5,0.5" Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
-                                    <RadialGradientBrush.GradientStops>
-                                        <GradientStop Color="Red" Offset="0" />
-                                        <GradientStop Color="Blue" Offset="0.25" />
-                                    </RadialGradientBrush.GradientStops>
-                                </RadialGradientBrush>
-                            </Line.Stroke>
-                        </Line>
-                    </Canvas>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+    <Grid>
+        <!-- The canvas for visualizing the graph -->
+        <Canvas Width="800" Height="600" Background="LimeGreen">
+            <!-- Draw routes between nodes -->
+            <ItemsControl ItemsSource="{Binding Routes}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Canvas>
+                            <!-- Route as a line -->
+                            <Line X1="{Binding Start.X}" Y1="{Binding Start.Y}"
+                                  X2="{Binding Destination.X}" Y2="{Binding Destination.Y}"
+                                  StrokeThickness="{Binding IsHighlighted, Converter={StaticResource ThicknessConverter}}">
+                                <Line.Style>
+                                    <Style TargetType="Line">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
+                                                <Setter Property="Stroke" Value="Yellow"/>
+                                                <Setter Property="StrokeThickness" Value="4"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding IsHighlighted}" Value="False">
+                                                <Setter Property="Stroke">
+                                                    <Setter.Value>
+                                                        <RadialGradientBrush GradientOrigin="0.5,0.5" Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+                                                            <RadialGradientBrush.GradientStops>
+                                                                <GradientStop Color="Red" Offset="0" />
+                                                                <GradientStop Color="Blue" Offset="0.25" />
+                                                            </RadialGradientBrush.GradientStops>
+                                                        </RadialGradientBrush>
+                                                    </Setter.Value>
+                                                </Setter>
+                                                <Setter Property="StrokeThickness" Value="2"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Line.Style>
+                                <Line.ToolTip>
+                                    <TextBlock>
+                                        <Run Text="Distance: "/>
+                                        <Run Text="{Binding Distance}"/>
+                                    </TextBlock>
+                                </Line.ToolTip>
+                            </Line>
+                        </Canvas>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
 
-        <!-- Draw city nodes and labels -->
-        <ItemsControl ItemsSource="{Binding Cities}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Canvas>
-                        <!-- Node as a circle -->
-                        <Ellipse Width="20" Height="20" Fill="SkyBlue" Stroke="Black"
-                                 Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}"/>
-                        <!-- Node label -->
-                        <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="12"
-                                   Canvas.Left="{Binding X}"
-                                   Canvas.Top="{Binding Y}" />
-                    </Canvas>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </Canvas>
+            <!-- Draw city nodes and labels -->
+            <ItemsControl ItemsSource="{Binding Cities}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Canvas>
+                            <!-- Node as a circle -->
+                            <Ellipse Width="20" Height="20" Fill="SkyBlue" Stroke="Black"
+                                     Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}"/>
+                            <!-- Node label -->
+                            <TextBlock Text="{Binding StatusMessage}" 
+                                       VerticalAlignment="Bottom" 
+                                       HorizontalAlignment="Left" 
+                                       Margin="10"/>
+                        </Canvas>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Canvas>
+
+        <!-- Controls for interacting with the graph -->
+        <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10">
+            <TextBlock Text="Graph Operations" FontSize="16" FontWeight="Bold" Margin="0,0,0,10"/>
+
+            <!-- Input for selecting start and end nodes -->
+            <ComboBox x:Name="StartCity" ItemsSource="{Binding Cities}" DisplayMemberPath="Name"
+                      SelectedItem="{Binding SelectedStartCity}" Width="150" Margin="0,5"/>
+            <ComboBox x:Name="EndCity" ItemsSource="{Binding Cities}" DisplayMemberPath="Name"
+                      SelectedItem="{Binding SelectedEndCity}" Width="150" Margin="0,5"/>
+
+            <!-- Button to find the shortest route -->
+            <Button Content="Find Shortest Route" Command="{Binding FindShortestRouteCommand}" Width="150" Margin="0,5"/>
+
+            <!-- Button to find all cycles -->
+            <Button Content="Find Cycles" Command="{Binding FindCyclesCommand}" Width="150" Margin="0,5"/>
+
+            <!-- Button to find the shortest cycle -->
+            <Button Content="Find Shortest Cycle" Command="{Binding FindShortestCycleCommand}" Width="150" Margin="0,5"/>
+        </StackPanel>
+    </Grid>
 </UserControl>
