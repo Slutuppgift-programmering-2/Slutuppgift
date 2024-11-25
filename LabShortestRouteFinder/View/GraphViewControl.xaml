@@ -80,53 +80,57 @@
                    BorderThickness="1"
                    Padding="8">
                <TextBlock Text="{Binding StatusMessage}" 
-                          Foreground="#212121"
-                          FontWeight="Bold"/>
+                         Foreground="#212121"
+                         FontWeight="Bold"/>
            </Border>
+       </Canvas>
 
        <!-- Controls for interacting with the graph -->
-       <StackPanel Orientation="Vertical" 
-                   VerticalAlignment="Top" 
-                   HorizontalAlignment="Right" 
-                   Margin="10"
-                   Background="#FFFFFF"
-                   Padding="15">
-           <TextBlock Text="Graph Operations" 
-                     FontSize="16" 
-                     FontWeight="Bold" 
-                     Margin="0,0,0,10"
-                     Foreground="#212121"/>
+       <Border VerticalAlignment="Top" 
+               HorizontalAlignment="Right" 
+               Margin="10"
+               Background="#FFFFFF"
+               BorderBrush="#E0E0E0"
+               BorderThickness="1"
+               Padding="15">
+           <StackPanel Orientation="Vertical">
+               <TextBlock Text="Graph Operations" 
+                         FontSize="16" 
+                         FontWeight="Bold" 
+                         Margin="0,0,0,10"
+                         Foreground="#212121"/>
 
-           <!-- Input for selecting start and end nodes -->
-           <ComboBox x:Name="StartCity" 
-                    ItemsSource="{Binding Cities}" 
-                    DisplayMemberPath="Name"
-                    SelectedItem="{Binding SelectedStartCity}" 
-                    Width="150" 
-                    Margin="0,5"/>
-           
-           <ComboBox x:Name="EndCity" 
-                    ItemsSource="{Binding Cities}" 
-                    DisplayMemberPath="Name"
-                    SelectedItem="{Binding SelectedEndCity}" 
-                    Width="150" 
-                    Margin="0,5"/>
+               <!-- Input for selecting start and end nodes -->
+               <ComboBox x:Name="StartCity" 
+                        ItemsSource="{Binding Cities}" 
+                        DisplayMemberPath="Name"
+                        SelectedItem="{Binding SelectedStartCity}" 
+                        Width="150" 
+                        Margin="0,5"/>
+               
+               <ComboBox x:Name="EndCity" 
+                        ItemsSource="{Binding Cities}" 
+                        DisplayMemberPath="Name"
+                        SelectedItem="{Binding SelectedEndCity}" 
+                        Width="150" 
+                        Margin="0,5"/>
 
-           <!-- Operation buttons -->
-           <Button Content="Find Shortest Route" 
-                   Command="{Binding FindShortestRouteCommand}" 
-                   Width="150" 
-                   Margin="0,5"/>
+               <!-- Operation buttons -->
+               <Button Content="Find Shortest Route" 
+                       Command="{Binding FindShortestRouteCommand}" 
+                       Width="150" 
+                       Margin="0,5"/>
 
-           <Button Content="Find Cycles" 
-                   Command="{Binding FindCyclesCommand}" 
-                   Width="150" 
-                   Margin="0,5"/>
+               <Button Content="Find Cycles" 
+                       Command="{Binding FindCyclesCommand}" 
+                       Width="150" 
+                       Margin="0,5"/>
 
-           <Button Content="Find Shortest Cycle" 
-                   Command="{Binding FindShortestCycleCommand}" 
-                   Width="150" 
-                   Margin="0,5"/>
-       </StackPanel>
+               <Button Content="Find Shortest Cycle" 
+                       Command="{Binding FindShortestCycleCommand}" 
+                       Width="150" 
+                       Margin="0,5"/>
+           </StackPanel>
+       </Border>
    </Grid>
 </UserControl>
