@@ -26,6 +26,23 @@ namespace LabShortestRouteFinder.ViewModel
         {
             Cities = mainViewModel.Cities;
             Routes = mainViewModel.Routes;
+
+            // Add some test routes if Routes is empty
+            if (Routes.Count == 0 && Cities.Count >= 2)
+            {
+                ShowDebug("Adding test routes");
+                // Add a few test routes between existing cities
+                for (int i = 0; i < Cities.Count - 1; i++)
+                {
+                    Routes.Add(new Route
+                    {
+                        Start = Cities[i],
+                        Destination = Cities[i + 1],
+                        Distance = 100 // Example distance
+                    });
+                    ShowDebug($"Added route from {Cities[i].Name} to {Cities[i + 1].Name}");
+                }
+            }
         }
         
         private void ShowDebug(string message)
