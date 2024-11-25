@@ -43,10 +43,21 @@ namespace LabShortestRouteFinder.ViewModel
 
         private void HighlightPath(IEnumerable<Route> path)
         {
-            ClearHighlights();
-            foreach (var route in path)
+            try
             {
-                route.IsHighlighted = true;
+                ClearHighlights();
+                var count = 0;
+                foreach (var route in path)
+                {
+                    route.IsHighlighted = true;
+                    count++;
+                    ShowDebug($"Highlighting route from {route.Start.Name} to {route.Destination.Name}");
+                }
+                ShowDebug($"Highlighted {count} routes");
+            }
+            catch (Exception ex)
+            {
+                ShowDebug($"Error in HighlightPath: {ex.Message}");
             }
         }
         
@@ -67,9 +78,11 @@ namespace LabShortestRouteFinder.ViewModel
             {
                 adjacencyList[city] = new List<(CityNode city, Route route)>();
             }
+            ShowDebug($"Starting to build adjacency list with {Routes.Count} routes");
 
             foreach (var route in Routes)
             {
+                ShowDebug($"Adding route: {route.Start.Name} -> {route.Destination.Name}");
                 adjacencyList[route.Start].Add((route.Destination, route));
                 adjacencyList[route.Destination].Add((route.Start, route)); // Remove if directed graph
             }
@@ -135,8 +148,15 @@ namespace LabShortestRouteFinder.ViewModel
                     path.Add(route);
                     currentCity = prevCity;
                 }
+                
+                ShowDebug($"Path reconstruction complete. Found {path.Count} segments:");
+                foreach (var route in path)
+                {
+                    ShowDebug($"Path segment: {route.Start.Name} -> {route.Destination.Name}");
+                }
 
                 path.Reverse();
+                ShowDebug($"About to highlight {path.Count} path segments");
                 ShowDebug($"Found path with {path.Count} segments");
                 HighlightPath(path);
                 StatusMessage = $"Found path with {path.Count} segments and total distance {path.Sum(r => r.Distance)}";
