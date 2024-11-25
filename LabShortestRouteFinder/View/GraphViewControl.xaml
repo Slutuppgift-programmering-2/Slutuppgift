@@ -57,14 +57,24 @@
                             <Ellipse Width="20" Height="20" Fill="SkyBlue" Stroke="Black"
                                      Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}"/>
                             <!-- Node label -->
-                            <TextBlock Text="{Binding StatusMessage}" 
-                                       VerticalAlignment="Bottom" 
-                                       HorizontalAlignment="Left" 
-                                       Margin="10"/>
+                            <TextBlock Text="{Binding Name}" 
+                                     FontWeight="Bold" 
+                                     FontSize="12"
+                                     Canvas.Left="{Binding X}"
+                                     Canvas.Top="{Binding Y}"/>
                         </Canvas>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+
+            <!-- Status message -->
+            <TextBlock Text="{Binding StatusMessage}" 
+                      Canvas.Left="10"
+                      Canvas.Bottom="10"
+                      Foreground="White"
+                      FontWeight="Bold"
+                      Background="#80000000"
+                      Padding="5"/>
         </Canvas>
 
         <!-- Controls for interacting with the graph -->
