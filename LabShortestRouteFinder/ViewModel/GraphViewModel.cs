@@ -18,6 +18,8 @@ namespace LabShortestRouteFinder.ViewModel
         
         [ObservableProperty]
         private string? statusMessage;  // For showing algorithm results/errors
+        
+        
 
         public GraphViewModel(MainViewModel mainViewModel)
         {
@@ -41,6 +43,9 @@ namespace LabShortestRouteFinder.ViewModel
                 route.IsHighlighted = true;
             }
         }
+        
+        partial void OnSelectedStartCityChanged(CityNode? value) => FindShortestRouteCommand.NotifyCanExecuteChanged();
+        partial void OnSelectedEndCityChanged(CityNode? value) => FindShortestRouteCommand.NotifyCanExecuteChanged();
 
         private bool CanFindShortestRoute()
         {
