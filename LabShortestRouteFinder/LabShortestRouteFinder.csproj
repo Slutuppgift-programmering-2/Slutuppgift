@@ -24,4 +24,11 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Resources\routes.json" />
+    <Content Include="Resources\routes.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>
