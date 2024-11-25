@@ -19,15 +19,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Resources\cities.json">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Resources\routes.json" />
     <Content Include="Resources\routes.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Remove="Resources\cities.json" />
+    <Content Include="Resources\cities.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
