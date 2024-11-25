@@ -1,6 +1,9 @@
 ﻿using LabShortestRouteFinder.Model;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Collections.Generic;
+using System.Linq;
+using System.Diagnostics;
 
 namespace LabShortestRouteFinder.ViewModel
 {
@@ -60,6 +63,8 @@ namespace LabShortestRouteFinder.ViewModel
             if (SelectedStartCity == null || SelectedEndCity == null)
                 return;
 
+            Debug.WriteLine($"Finding path from {SelectedStartCity.Name} to {SelectedEndCity.Name}");
+            
             // Reset previous path
             ResetPathHighlighting();
 
@@ -67,7 +72,14 @@ namespace LabShortestRouteFinder.ViewModel
             if (shortestPath != null)
             {
                 HighlightPath(shortestPath);
-                CurrentPathDistance = CalculatePathDistance(shortestPath);
+                var distance = CalculatePathDistance(shortestPath);
+                Debug.WriteLine($"Path found with distance: {distance}");
+                CurrentPathDistance = distance;
+            }
+            else
+            {
+                Debug.WriteLine("No path found");
+                CurrentPathDistance = 0;
             }
         }
 
@@ -85,6 +97,7 @@ namespace LabShortestRouteFinder.ViewModel
 
             while (unvisited.Count > 0)
             {
+                // Get the unvisited node with the smallest distance
                 var current = unvisited.OrderBy(c => distances[c]).First();
                 
                 if (current == end)
@@ -93,8 +106,9 @@ namespace LabShortestRouteFinder.ViewModel
                 unvisited.Remove(current);
 
                 // Get all neighboring cities from MainViewModel's routes
-                var connectedRoutes = _mainViewModel.Routes.Where(r => r.Start == current || r.Destination == current);
-                
+                var connectedRoutes = _mainViewModel.Routes.Where(r => 
+                    (r.Start == current || r.Destination == current));
+
                 foreach (var route in connectedRoutes)
                 {
                     var neighbor = route.Start == current ? route.Destination : route.Start;
@@ -122,6 +136,13 @@ namespace LabShortestRouteFinder.ViewModel
                 previous.TryGetValue(currentNode, out currentNode);
             }
             path.Reverse();
+            
+            Debug.WriteLine($"Path found with {path.Count} cities:");
+            foreach (var city in path)
+            {
+                Debug.WriteLine($"- {city.Name}");
+            }
+            
             return path;
         }
 
@@ -144,17 +165,31 @@ namespace LabShortestRouteFinder.ViewModel
 
         private double CalculatePathDistance(List<CityNode> path)
         {
-            double distance = 0;
+            double totalDistance = 0;
+            
+            // Calculate distance between consecutive cities in the path
             for (int i = 0; i < path.Count - 1; i++)
             {
+                var currentCity = path[i];
+                var nextCity = path[i + 1];
+                
+                // Find the route between these cities
                 var route = _mainViewModel.Routes.FirstOrDefault(r =>
-                    (r.Start == path[i] && r.Destination == path[i + 1]) ||
-                    (r.Start == path[i + 1] && r.Destination == path[i]));
-
+                    (r.Start == currentCity && r.Destination == nextCity) ||
+                    (r.Start == nextCity && r.Destination == currentCity));
+                
                 if (route != null)
-                    distance += route.Distance;
+                {
+                    totalDistance += route.Distance;
+                    Debug.WriteLine($"Distance from {currentCity.Name} to {nextCity.Name}: {route.Distance}");
+                }
+                else
+                {
+                    Debug.WriteLine($"No route found between {currentCity.Name} and {nextCity.Name}!");
+                }
             }
-            return distance;
+            
+            return totalDistance;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
