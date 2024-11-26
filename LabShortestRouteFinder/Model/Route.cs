@@ -7,6 +7,7 @@ public partial class Route : INotifyPropertyChanged
 {
     public required CityNode Start { get; set; }
     public required CityNode Destination { get; set; }
+    public int Cost { get; set; }
     public int Distance { get; set; }
 
     private bool _isHighlighted;
@@ -33,6 +34,7 @@ public partial class Route : INotifyPropertyChanged
             OnPropertyChanged(nameof(HighlightedColours));
         }
     }
+    
 
     public event PropertyChangedEventHandler? PropertyChanged;
     protected virtual void OnPropertyChanged(string propertyName) =>
