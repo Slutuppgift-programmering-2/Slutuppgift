@@ -240,130 +240,145 @@ public partial class GraphViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void FindCycles()
+private void FindCycles()
+{
+    try
     {
-        try
+        ClearHighlights();
+        var adjList = BuildAdjacencyList();
+        var cycles = new List<List<Route>>();
+        var seenEdges = new HashSet<string>();
+
+        var cycleColours = new[]
         {
-            ClearHighlights();
-            var adjList = BuildAdjacencyList();
+            "#FF0000", //red
+            "#00FFFF", //cyan
+            "#800080", //purple
+            "#FFFF00", //yellow
+            "#00FF00", //lime
+            "#FFA500", //orange
+            "#008000", //green
+            "#EAC117"  //gold brown
+        };
+
+        foreach (var startCity in Cities)
+        {
             var visited = new HashSet<CityNode>();
-            var cycles = new List<List<Route>>();
-            var cycleSignatures = new HashSet<string>(); // To track unique cycles
+            var path = new List<Route>();
+            var pathCities = new HashSet<CityNode>();
 
-            var cycleColours = new[]
+            void DFS(CityNode current, int depth)
             {
-                "#FF0000", //red
-                "#00FFFF", //cyan
-                "#800080", //purple
-                "#FFFF00", //yellow
-                "#00FF00", //lime
-                "#FFA500", //orange
-                "#008000", //green
-                "#EAC117" //gold brown
-            };
+                if (depth > 10 || cycles.Count >= 20) // Limit search depth and number of cycles
+                    return;
 
-            void FindCyclesFromCity(CityNode start)
-            {
-                var stack = new Stack<(CityNode city, List<Route> path)>();
-                stack.Push((start, new List<Route>()));
-                var visitedInPath = new HashSet<CityNode> { start };
+                visited.Add(current);
+                pathCities.Add(current);
 
-                while (stack.Count > 0)
+                foreach (var (neighbor, route) in adjList[current])
                 {
-                    var (current, currentPath) = stack.Pop();
+                    // Create unique edge identifier
+                    var edgeId = $"{Math.Min(current.GetHashCode(), neighbor.GetHashCode())}_{Math.Max(current.GetHashCode(), neighbor.GetHashCode())}";
 
-                    foreach (var (neighbor, route) in adjList[current])
-                        if (neighbor == start && currentPath.Count >= 2)
+                    if (neighbor == startCity && path.Count >= 2)
+                    {
+                        // Found a cycle
+                        var newCycle = new List<Route>(path) { route };
+                        var cycleEdges = new HashSet<string>();
+                        bool isUniqueCycle = true;
+
+                        // Check if this cycle is unique
+                        foreach (var cycleRoute in newCycle)
                         {
-                            // Found a cycle back to start
-                            var cycle = new List<Route>(currentPath);
-                            cycle.Add(route);
-
-                            // Create a signature for this cycle
-                            var cities = new List<string> { start.Name };
-                            var currentCity = start;
-                            foreach (var r in cycle)
+                            var routeId = $"{Math.Min(cycleRoute.Start.GetHashCode(), cycleRoute.Destination.GetHashCode())}_{Math.Max(cycleRoute.Start.GetHashCode(), cycleRoute.Destination.GetHashCode())}";
+                            if (!cycleEdges.Add(routeId))
                             {
-                                currentCity = r.Start == currentCity ? r.Destination : r.Start;
-                                cities.Add(currentCity.Name);
+                                isUniqueCycle = false;
+                                break;
                             }
-
-                            var signature = string.Join(",", cities.OrderBy(c => c));
-                            if (cycleSignatures.Add(signature)) // Only add if it's a new unique cycle
-                                cycles.Add(cycle);
                         }
-                        else if (!visitedInPath.Contains(neighbor))
+
+                        if (isUniqueCycle && newCycle.Count >= 3)
                         {
-                            var newPath = new List<Route>(currentPath) { route };
-                            visitedInPath.Add(neighbor);
-                            stack.Push((neighbor, newPath));
-                            visitedInPath.Remove(neighbor);
+                            cycles.Add(newCycle);
                         }
+                    }
+                    else if (!pathCities.Contains(neighbor))
+                    {
+                        path.Add(route);
+                        DFS(neighbor, depth + 1);
+                        path.RemoveAt(path.Count - 1);
+                    }
                 }
+
+                pathCities.Remove(current);
+                visited.Remove(current);
             }
 
-            // Find cycles starting from each city
-            foreach (var city in Cities) FindCyclesFromCity(city);
-
-            // Clear all highlight colours first
-            foreach (var route in Routes)
+            if (cycles.Count < 20) // Limit total number of cycles
             {
-                route.HighlightedColours.Clear();
-                route.IsHighlighted = false;
+                DFS(startCity, 0);
             }
+        }
 
-            // Apply the colours for each cycle
+        // Clear all highlight colours first
+        foreach (var route in Routes)
+        {
+            route.HighlightedColours.Clear();
+            route.IsHighlighted = false;
+        }
+
+        // Apply the colours for each cycle
+        for (var i = 0; i < cycles.Count; i++)
+        {
+            var cycleColour = cycleColours[i % cycleColours.Length];
+            foreach (var route in cycles[i])
+            {
+                route.HighlightedColours.Add(cycleColour);
+                route.IsHighlighted = true;
+            }
+        }
+
+        // Build status message showing the paths
+        if (cycles.Any())
+        {
+            StatusMessage = $"Found {cycles.Count} cycles:";
             for (var i = 0; i < cycles.Count; i++)
             {
-                var cycleColour = cycleColours[i % cycleColours.Length];
-                foreach (var route in cycles[i])
+                var cycle = cycles[i];
+                var pathCities = new List<string>();
+                var totalDistance = cycle.Sum(r => r.Distance);
+                var totalCost = cycle.Sum(r => r.Cost);
+
+                // Get the first city
+                var firstCity = cycle.First().Start;
+                pathCities.Add(firstCity.Name);
+
+                // Build the path by following the routes
+                var currentCity = firstCity;
+                foreach (var route in cycle)
                 {
-                    route.HighlightedColours.Add(cycleColour);
-                    route.IsHighlighted = true;
+                    var nextCity = route.Start == currentCity ? route.Destination : route.Start;
+                    pathCities.Add(nextCity.Name);
+                    currentCity = nextCity;
                 }
-            }
 
-            // Build status message showing the paths
-            if (cycles.Any())
-            {
-                StatusMessage = $"Found {cycles.Count} cycles:";
-                for (var i = 0; i < cycles.Count; i++)
-                {
-                    var cycle = cycles[i];
-                    var pathCities = new List<string>();
-                    var totalDistance = cycle.Sum(r => r.Distance);
-                    var totalCost = cycle.Sum(r => r.Cost);
+                pathCities.Add(firstCity.Name);
 
-                    // Get the first city
-                    var firstCity = cycle.First().Start;
-                    pathCities.Add(firstCity.Name);
-
-                    // Build the path by following the routes
-                    var currentCity = firstCity;
-                    foreach (var route in cycle)
-                    {
-                        var nextCity = route.Start == currentCity ? route.Destination : route.Start;
-                        pathCities.Add(nextCity.Name);
-                        currentCity = nextCity;
-                    }
-
-                    // Add the first city again to show it's a cycle
-                    pathCities.Add(firstCity.Name);
-
-                    StatusMessage += $"\nCycle {i + 1}: {string.Join(" → ", pathCities)}" +
-                                     $"\nDistance: {totalDistance} km, Cost: {totalCost} SEK";
-                }
-            }
-            else
-            {
-                StatusMessage = "No cycles found";
+                StatusMessage += $"\nCycle {i + 1}: {string.Join(" → ", pathCities)}" +
+                               $"\nDistance: {totalDistance} km, Cost: {totalCost} SEK";
             }
         }
-        catch (Exception ex)
+        else
         {
-            StatusMessage = $"Error finding cycles: {ex.Message}";
+            StatusMessage = "No cycles found";
         }
     }
+    catch (Exception ex)
+    {
+        StatusMessage = $"Error finding cycles: {ex.Message}";
+    }
+}
 
     [RelayCommand]
     private void FindShortestCycle()
