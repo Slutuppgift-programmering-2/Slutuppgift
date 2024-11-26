@@ -4,7 +4,6 @@ using LabShortestRouteFinder.Model;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Json;
-using System.Windows;
 
 namespace LabShortestRouteFinder.ViewModel
 {
@@ -20,7 +19,7 @@ namespace LabShortestRouteFinder.ViewModel
         private CityNode? selectedEndCity;
         
         [ObservableProperty]
-        private string? statusMessage;  // For showing algorithm results/errors
+        private string? statusMessage;
         
         public GraphViewModel(MainViewModel mainViewModel)
         {
@@ -29,94 +28,74 @@ namespace LabShortestRouteFinder.ViewModel
 
             if (Routes.Count == 0 && Cities.Count >= 2)
             {
-                ShowDebug("Loading routes from JSON");
                 LoadRoutesFromFile();
             }
         }
         
         private void LoadRoutesFromFile()
         {
-            string jsonContent = File.ReadAllText("..\\net8.0-windows\\Resources\\routes.json");
-    
-            // Deserialize the JSON content
-            var routeData = JsonSerializer.Deserialize<RouteData>(jsonContent) ?? new RouteData { routes = new List<RouteInfo>() };
-
-            foreach (var routeInfo in routeData.routes)
-            {
-                var startCity = Cities.FirstOrDefault(c => c.Name == routeInfo.from);
-                var endCity = Cities.FirstOrDefault(c => c.Name == routeInfo.to);
-
-                if (startCity != null && endCity != null)
-                {
-                    Routes.Add(new Route
-                    {
-                        Start = startCity,
-                        Destination = endCity,
-                        Distance = routeInfo.distance
-                    });
-                }
-            }
-
-            ShowDebug($"Loaded {Routes.Count} routes successfully");
-        }
-        
-        private void ShowDebug(string message)
-        {
-            MessageBox.Show(message, "Debug Info", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
-
-        private void ClearHighlights()
-        {
-            foreach (var route in Routes)
-            {
-                route.IsHighlighted = false;
-            }
-        }
-
-        private void HighlightPath(IEnumerable<Route> path)
-        {
             try
             {
-                ClearHighlights();
-                var count = 0;
-                foreach (var route in path)
+                string jsonContent = File.ReadAllText(Path.Combine("Resources", "routes.json"));
+                var routeData = JsonSerializer.Deserialize<RouteData>(jsonContent) 
+                    ?? new RouteData { routes = new List<RouteInfo>() };
+
+                foreach (var routeInfo in routeData.routes)
                 {
-                    route.IsHighlighted = true;
-                    count++;
-                    ShowDebug($"Highlighting route from {route.Start.Name} to {route.Destination.Name}");
+                    var startCity = Cities.FirstOrDefault(c => c.Name == routeInfo.from);
+                    var endCity = Cities.FirstOrDefault(c => c.Name == routeInfo.to);
+
+                    if (startCity != null && endCity != null)
+                    {
+                        Routes.Add(new Route
+                        {
+                            Start = startCity,
+                            Destination = endCity,
+                            Distance = routeInfo.distance
+                        });
+                    }
                 }
-                ShowDebug($"Highlighted {count} routes");
             }
             catch (Exception ex)
             {
-                ShowDebug($"Error in HighlightPath: {ex.Message}");
+                StatusMessage = $"Failed to load routes: {ex.Message}";
+            }
+        }
+
+        private void ClearHighlights() => 
+            Routes.ToList().ForEach(r => r.IsHighlighted = false);
+
+        private void HighlightPath(IEnumerable<Route> path)
+        {
+            ClearHighlights();
+            foreach (var route in path)
+            {
+                route.IsHighlighted = true;
             }
         }
         
-        partial void OnSelectedStartCityChanged(CityNode? value) => FindShortestRouteCommand.NotifyCanExecuteChanged();
-        partial void OnSelectedEndCityChanged(CityNode? value) => FindShortestRouteCommand.NotifyCanExecuteChanged();
+        partial void OnSelectedStartCityChanged(CityNode? value) => 
+            FindShortestRouteCommand.NotifyCanExecuteChanged();
+            
+        partial void OnSelectedEndCityChanged(CityNode? value) => 
+            FindShortestRouteCommand.NotifyCanExecuteChanged();
 
-        private bool CanFindShortestRoute()
-        {
-            return SelectedStartCity != null && SelectedEndCity != null &&
-                   SelectedStartCity != SelectedEndCity;
-        }
+        private bool CanFindShortestRoute() =>
+            SelectedStartCity != null && 
+            SelectedEndCity != null &&
+            SelectedStartCity != SelectedEndCity;
 
         private Dictionary<CityNode, List<(CityNode city, Route route)>> BuildAdjacencyList()
         {
-            var adjacencyList = new Dictionary<CityNode, List<(CityNode city, Route route)>>();
-            
-            foreach (var city in Cities)
-            {
-                adjacencyList[city] = new List<(CityNode city, Route route)>();
-            }
-            ShowDebug($"Starting to build adjacency list with {Routes.Count} routes");
+            var adjacencyList = Cities.ToDictionary(
+                city => city,
+                _ => new List<(CityNode city, Route route)>()
+            );
 
             foreach (var route in Routes)
             {
-                ShowDebug($"Adding route: {route.Start.Name} -> {route.Destination.Name}");
                 adjacencyList[route.Start].Add((route.Destination, route));
-                adjacencyList[route.Destination].Add((route.Start, route)); // Remove if directed graph
+                adjacencyList[route.Destination].Add((route.Start, route));
             }
 
             return adjacencyList;
@@ -127,77 +106,82 @@ namespace LabShortestRouteFinder.ViewModel
         {
             try
             {
-                if (SelectedStartCity == null || SelectedEndCity == null)
-                {
-                    ShowDebug("Start or end city is null");
-                    return;
-                }
+                if (SelectedStartCity == null || SelectedEndCity == null) return;
+
+                var path = FindShortestPath(SelectedStartCity, SelectedEndCity);
                 
-                ShowDebug($"Finding route from {SelectedStartCity.Name} to {SelectedEndCity.Name}");
-
-                var adjList = BuildAdjacencyList();
-                ShowDebug($"Built adjacency list with {adjList.Count} cities");
-                var distances = new Dictionary<CityNode, int>();
-                var previous = new Dictionary<CityNode, (CityNode city, Route route)?>();
-                var unvisited = new HashSet<CityNode>(Cities);
-
-                foreach (var city in Cities)
+                if (path.Any())
                 {
-                    distances[city] = int.MaxValue;
+                    HighlightPath(path);
+                    StatusMessage = $"Found path with {path.Count} segments and total distance {path.Sum(r => r.Distance)}";
                 }
-
-                distances[SelectedStartCity] = 0;
-
-                while (unvisited.Count > 0)
+                else
                 {
-                    var current = unvisited.MinBy(c => distances[c])!;
-                    if (current == SelectedEndCity) break;
-
-                    unvisited.Remove(current);
-
-                    foreach (var (neighbor, route) in adjList[current])
-                    {
-                        if (!unvisited.Contains(neighbor)) continue;
-
-                        var alt = distances[current] + route.Distance;
-                        if (alt < distances[neighbor])
-                        {
-                            distances[neighbor] = alt;
-                            previous[neighbor] = (current, route);
-                        }
-                    }
+                    StatusMessage = "No path found between selected cities";
                 }
-
-                // Reconstruct path
-                var path = new List<Route>();
-                var currentCity = SelectedEndCity;
-                while (currentCity != SelectedStartCity)
-                {
-                    if (!previous.ContainsKey(currentCity) || !previous[currentCity].HasValue)
-                        return; // No path exists
-
-                    var (prevCity, route) = previous[currentCity].Value;
-                    path.Add(route);
-                    currentCity = prevCity;
-                }
-                
-                ShowDebug($"Path reconstruction complete. Found {path.Count} segments:");
-                foreach (var route in path)
-                {
-                    ShowDebug($"Path segment: {route.Start.Name} -> {route.Destination.Name}");
-                }
-
-                path.Reverse();
-                ShowDebug($"About to highlight {path.Count} path segments");
-                ShowDebug($"Found path with {path.Count} segments");
-                HighlightPath(path);
-                StatusMessage = $"Found path with {path.Count} segments and total distance {path.Sum(r => r.Distance)}";
             }
             catch (Exception ex)
             {
-                ShowDebug($"Error: {ex.Message}\n\nStack Trace: {ex.StackTrace}");
-                StatusMessage = "Error finding route: " + ex.Message;
+                StatusMessage = $"Error finding route: {ex.Message}";
             }
+        }
+
+        private List<Route> FindShortestPath(CityNode start, CityNode end)
+        {
+            var adjList = BuildAdjacencyList();
+            var distances = new Dictionary<CityNode, int>();
+            var previous = new Dictionary<CityNode, (CityNode city, Route route)?>();
+            var unvisited = new HashSet<CityNode>(Cities);
+
+            foreach (var city in Cities)
+            {
+                distances[city] = int.MaxValue;
+            }
+            distances[start] = 0;
+
+            while (unvisited.Count > 0)
+            {
+                var current = unvisited.MinBy(c => distances[c])!;
+                if (current == end) break;
+
+                unvisited.Remove(current);
+
+                foreach (var (neighbor, route) in adjList[current])
+                {
+                    if (!unvisited.Contains(neighbor)) continue;
+
+                    var alt = distances[current] + route.Distance;
+                    if (alt < distances[neighbor])
+                    {
+                        distances[neighbor] = alt;
+                        previous[neighbor] = (current, route);
+                    }
+                }
+            }
+
+            return ReconstructPath(start, end, previous);
+        }
+
+        private static List<Route> ReconstructPath(
+            CityNode start, 
+            CityNode end, 
+            Dictionary<CityNode, (CityNode city, Route route)?> previous)
+        {
+            var path = new List<Route>();
+            var currentCity = end;
+
+            while (currentCity != start)
+            {
+                if (!previous.ContainsKey(currentCity) || !previous[currentCity].HasValue)
+                    return new List<Route>();
+
+                var (prevCity, route) = previous[currentCity].Value;
+                path.Add(route);
+                currentCity = prevCity;
+            }
+
+            path.Reverse();
+            return path;
         }
 
         [RelayCommand]
@@ -224,10 +208,10 @@ namespace LabShortestRouteFinder.ViewModel
                         {
                             if (stack.Contains(neighbor))
                             {
-                                // Found a cycle
                                 var cycle = new List<Route>();
                                 var cycleStack = new Stack<CityNode>(stack);
                                 var cycleCity = cycleStack.Pop();
+                                
                                 while (cycleStack.Count > 0 && cycleCity != neighbor)
                                 {
                                     var nextCity = cycleStack.Pop();
@@ -258,7 +242,6 @@ namespace LabShortestRouteFinder.ViewModel
                     }
                 }
 
-                // Highlight all cycles
                 foreach (var cycle in cycles)
                 {
                     foreach (var route in cycle)
@@ -266,69 +249,81 @@ namespace LabShortestRouteFinder.ViewModel
                         route.IsHighlighted = true;
                     }
                 }
+                
+                StatusMessage = $"Found {cycles.Count} cycles";
             }
             catch (Exception ex)
             {
-                ShowDebug($"Error in FindCycles: {ex.Message}");
+                StatusMessage = $"Error finding cycles: {ex.Message}";
             }
         }
 
         [RelayCommand]
         private void FindShortestCycle()
         {
-            var shortestCycle = new List<Route>();
-            var minDistance = int.MaxValue;
-
-            foreach (var startCity in Cities)
+            try
             {
-                var visited = new HashSet<CityNode> { startCity };
-                var adjList = BuildAdjacencyList();
-                
-                void FindCycles(CityNode current, List<Route> currentPath, int currentDistance)
+                var shortestCycle = new List<Route>();
+                var minDistance = int.MaxValue;
+
+                foreach (var startCity in Cities)
                 {
-                    foreach (var (neighbor, route) in adjList[current])
+                    var visited = new HashSet<CityNode> { startCity };
+                    var adjList = BuildAdjacencyList();
+                    
+                    void FindCycles(CityNode current, List<Route> currentPath, int currentDistance)
                     {
-                        if (neighbor == startCity && currentPath.Count > 2)
+                        foreach (var (neighbor, route) in adjList[current])
                         {
-                            // Found a cycle back to start
-                            var totalDistance = currentDistance + route.Distance;
-                            if (totalDistance < minDistance)
+                            if (neighbor == startCity && currentPath.Count > 2)
                             {
-                                minDistance = totalDistance;
-                                shortestCycle = new List<Route>(currentPath) { route };
+                                var totalDistance = currentDistance + route.Distance;
+                                if (totalDistance < minDistance)
+                                {
+                                    minDistance = totalDistance;
+                                    shortestCycle = new List<Route>(currentPath) { route };
+                                }
+                            }
+                            else if (!visited.Contains(neighbor))
+                            {
+                                visited.Add(neighbor);
+                                currentPath.Add(route);
+                                FindCycles(neighbor, currentPath, currentDistance + route.Distance);
+                                currentPath.RemoveAt(currentPath.Count - 1);
+                                visited.Remove(neighbor);
                             }
                         }
-                        else if (!visited.Contains(neighbor))
-                        {
-                            visited.Add(neighbor);
-                            currentPath.Add(route);
-                            FindCycles(neighbor, currentPath, currentDistance + route.Distance);
-                            currentPath.RemoveAt(currentPath.Count - 1);
-                            visited.Remove(neighbor);
-                        }
                     }
+
+                    FindCycles(startCity, new List<Route>(), 0);
                 }
 
-                FindCycles(startCity, new List<Route>(), 0);
+                if (shortestCycle.Any())
+                {
+                    HighlightPath(shortestCycle);
+                    StatusMessage = $"Found shortest cycle with distance {minDistance}";
+                }
+                else
+                {
+                    StatusMessage = "No cycles found";
+                }
             }
-
-            if (shortestCycle.Any())
+            catch (Exception ex)
             {
-                HighlightPath(shortestCycle);
+                StatusMessage = $"Error finding shortest cycle: {ex.Message}";
             }
         }
     }
-}
 
-// Helper classes for JSON deserialization
-public class RouteData
-{
-    public List<RouteInfo> routes { get; set; }
-}
+    public class RouteData
+    {
+        public List<RouteInfo> routes { get; set; } = new();
+    }
 
-public class RouteInfo
-{
-    public string from { get; set; }
-    public string to { get; set; }
-    public int distance { get; set; }
+    public class RouteInfo
+    {
+        public required string from { get; set; }
+        public required string to { get; set; }
+        public int distance { get; set; }
+    }
 }
