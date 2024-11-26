@@ -19,9 +19,7 @@
                        <Line X1="{Binding Start.CenterX}" 
                              Y1="{Binding Start.CenterY}"
                              X2="{Binding Destination.CenterX}" 
-                             Y2="{Binding Destination.CenterY}"
-                             Stroke="{Binding IsHighlighted, Converter={StaticResource HighlightColorConverter}}"
-                             StrokeThickness="{Binding IsHighlighted, Converter={StaticResource HighlightThicknessConverter}}">
+                             Y2="{Binding Destination.CenterY}">
                            <Line.Style>
                                <Style TargetType="Line">
                                    <Style.Triggers>
