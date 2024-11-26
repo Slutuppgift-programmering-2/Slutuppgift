@@ -23,7 +23,7 @@ namespace LabShortestRouteFinder.ViewModel
             {
                 // Load cities first, then routes
                 LoadCitiesFromFile();
-                //LoadRoutesFromFile();
+                
             }
             catch (Exception ex)
             {
@@ -62,35 +62,6 @@ namespace LabShortestRouteFinder.ViewModel
                 c.X = (int)Math.Round((c.Longitude - minLongitude) * scaleFactorX, 0);
                 c.Y = (int)Math.Round(windowHeight - ((c.Latitude - minLatitude) * scaleFactorY), 0);
                 Cities.Add(c);
-            }
-        }
-
-        private void LoadRoutesFromFile()
-        {
-            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "routes.json");
-            
-            if (!File.Exists(filePath))
-            {
-                throw new FileNotFoundException($"Routes file not found at: {filePath}");
-            }
-
-            string jsonContent = File.ReadAllText(filePath);
-            var routeData = JsonSerializer.Deserialize<RouteData>(jsonContent) ?? new RouteData { routes = new List<RouteInfo>() };
-
-            foreach (var routeInfo in routeData.routes)
-            {
-                var startCity = Cities.FirstOrDefault(c => c.Name == routeInfo.from);
-                var endCity = Cities.FirstOrDefault(c => c.Name == routeInfo.to);
-
-                if (startCity != null && endCity != null)
-                {
-                    Routes.Add(new Route
-                    {
-                        Start = startCity,
-                        Destination = endCity,
-                        Distance = routeInfo.distance
-                    });
-                }
             }
         }
 
