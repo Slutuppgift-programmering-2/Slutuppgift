@@ -23,14 +23,17 @@ public partial class Route : INotifyPropertyChanged
         }
     }
 
-    private List<string> _highlightColours = []; 
-    public List<string> HighlightColours
+    private string _highlightedColour; 
+    public string HighlightedColour
     {
-        get => _highlightColours;
+        get => _highlightedColour;
         set
         {
-            _highlightColours = value;
-            OnPropertyChanged(nameof(HighlightColours));
+            if (!_highlightedColour.Equals(value))
+            {
+            _highlightedColour = value;
+            OnPropertyChanged(nameof(HighlightedColour));
+            }
         }
     }
 
