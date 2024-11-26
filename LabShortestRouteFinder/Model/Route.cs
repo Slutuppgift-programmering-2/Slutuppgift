@@ -22,35 +22,19 @@ public partial class Route : INotifyPropertyChanged
             }
         }
     }
-    
-    private string _highlightColour = "#FF4081";
-    public string HighlightColour
+
+    private List<string> _highlightColours = []; 
+    public List<string> HighlightColours
     {
-        get => _highlightColour;
+        get => _highlightColours;
         set
         {
-            if (!TestHexadecimal(value))
-            {
-                throw new ArgumentException("Invalid hexadecimal color code");
-            }
-
-            if (_highlightColour != value)
-            {
-                _highlightColour = value;
-                OnPropertyChanged(nameof(HighlightColour));
-            }
+            _highlightColours = value;
+            OnPropertyChanged(nameof(HighlightColours));
         }
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
     protected virtual void OnPropertyChanged(string propertyName) =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    
-    public static bool TestHexadecimal(string hc)
-    {
-        return MyRegex().IsMatch(hc);
-    }
-
-    [GeneratedRegex(@"[#][0-9A-Fa-f]{6}\b")]
-    private static partial Regex MyRegex();
 }
