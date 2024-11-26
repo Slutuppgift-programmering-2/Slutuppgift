@@ -70,6 +70,7 @@ namespace LabShortestRouteFinder.ViewModel
             ClearHighlights();
             foreach (var route in path)
             {
+                Console.WriteLine($"Highlighting Route: {route.Start.Name} -> {route.Destination.Name}");
                 route.IsHighlighted = true;
             }
         }
