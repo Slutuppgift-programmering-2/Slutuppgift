@@ -16,10 +16,12 @@
            <ItemsControl ItemsSource="{Binding Routes}">
                <ItemsControl.ItemTemplate>
                    <DataTemplate>
-                       <Line X1="{Binding Start.X}" 
-                             Y1="{Binding Start.Y}"
-                             X2="{Binding Destination.X}" 
-                             Y2="{Binding Destination.Y}">
+                       <Line X1="{Binding Start.CenterX}" 
+                             Y1="{Binding Start.CenterY}"
+                             X2="{Binding Destination.CenterX}" 
+                             Y2="{Binding Destination.CenterY}"
+                             Stroke="{Binding IsHighlighted, Converter={StaticResource HighlightColorConverter}}"
+                             StrokeThickness="{Binding IsHighlighted, Converter={StaticResource HighlightThicknessConverter}}">
                            <Line.Style>
                                <Style TargetType="Line">
                                    <Style.Triggers>
@@ -46,6 +48,11 @@
                        </Line>
                    </DataTemplate>
                </ItemsControl.ItemTemplate>
+               <ItemsControl.ItemsPanel>
+                   <ItemsPanelTemplate>
+                       <Canvas/>
+                   </ItemsPanelTemplate>
+               </ItemsControl.ItemsPanel>
            </ItemsControl>
 
            <!-- Draw city nodes and labels -->

@@ -23,11 +23,42 @@ namespace LabShortestRouteFinder.Model
             }
         }
 
-        public int X { get; set; }
-        public int Y { get; set; }
+        private int _x;
+        public int X
+        {
+            get => _x;
+            set
+            {
+                if (_x != value)
+                {
+                    _x = value;
+                    OnPropertyChanged(nameof(X));
+                    OnPropertyChanged(nameof(CenterX));
+                }
+            }
+        }
+
+        private int _y;
+        public int Y
+        {
+            get => _y;
+            set
+            {
+                if (_y != value)
+                {
+                    _y = value;
+                    OnPropertyChanged(nameof(Y));
+                    OnPropertyChanged(nameof(CenterY));
+                }
+            }
+        }
+
+        // Center coordinates for the lines to connect to
+        public int CenterX => X + 10; // Assuming node width is 20
+        public int CenterY => Y + 10; // Assuming node height is 20
+
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-
 
         public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName) =>
