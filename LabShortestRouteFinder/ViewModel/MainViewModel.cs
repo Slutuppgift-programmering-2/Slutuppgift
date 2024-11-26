@@ -23,7 +23,7 @@ namespace LabShortestRouteFinder.ViewModel
             {
                 // Load cities first, then routes
                 LoadCitiesFromFile();
-                LoadRoutesFromFile();
+                //LoadRoutesFromFile();
             }
             catch (Exception ex)
             {
