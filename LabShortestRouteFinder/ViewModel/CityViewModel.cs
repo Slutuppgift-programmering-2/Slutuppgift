@@ -24,8 +24,8 @@ namespace LabShortestRouteFinder.ViewModel
 
         public void SaveCitiesToFile()
         {
-            double windowWidth = 800;
-            double windowHeight = 600;
+            double windowWidth = 433;
+            double windowHeight = 842;
 
             // Min and Max for Sweden
             double minLatitude = 55.0;
@@ -39,7 +39,7 @@ namespace LabShortestRouteFinder.ViewModel
             foreach (var c in Cities)
             {
                 //Validate that the X Y is within the allowed bounds
-                if (c.X < 0 || c.Y < 0 || c.X > 800 || c.Y > 600)
+                if (c.X < 0 || c.Y < 0 || c.X > 433 || c.Y > 842)
                     continue;
 
                 // Check that name is not empty

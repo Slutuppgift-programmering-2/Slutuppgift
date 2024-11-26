@@ -10,7 +10,7 @@
         <converters:YPositionConverter x:Key="YPositionConverter"/>
     </UserControl.Resources>
 
-    <Canvas Width="800" Height="600" Background="LimeGreen">
+    <Canvas Width="433" Height="842" Background="LimeGreen">
         <!-- Draw routes between nodes -->
         <ItemsControl ItemsSource="{Binding Routes}">
             <ItemsControl.ItemTemplate>
@@ -40,12 +40,12 @@
                 <DataTemplate>
                     <Canvas>
                         <!-- Node as a circle -->
-                        <Ellipse Width="20" Height="20" Fill="SkyBlue" Stroke="Black"
-                                 Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}"/>
+                        <Ellipse Width="10" Height="10" Fill="SkyBlue" Stroke="Black"
+                          Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}"/>
                         <!-- Node label -->
                         <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="12"
-                                   Canvas.Left="{Binding X}"
-                                   Canvas.Top="{Binding Y}" />
+                            Canvas.Left="{Binding X, Converter={StaticResource YPositionConverter}, ConverterParameter=-15}"
+                            Canvas.Top="{Binding Y, Converter={StaticResource YPositionConverter}, ConverterParameter=9}" />
                     </Canvas>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

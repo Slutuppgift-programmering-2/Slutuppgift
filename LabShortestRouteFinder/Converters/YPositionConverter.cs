@@ -8,8 +8,8 @@ namespace LabShortestRouteFinder.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is double y)
-                return y + 25; // Adjust the label position below the node
+            if (value is int y && parameter is string offsetString && double.TryParse(offsetString, out double offset))
+                return y + offset; // Adjust the label position below the node
             return value;
         }
 
