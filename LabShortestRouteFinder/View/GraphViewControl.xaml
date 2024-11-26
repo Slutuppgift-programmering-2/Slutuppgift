@@ -15,76 +15,110 @@
         <Canvas Width="800" Height="600" Background="#F5F5F5">
             <!-- Draw routes between nodes -->
             <ItemsControl ItemsSource="{Binding Routes}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Canvas>
-                            <!-- Non-highlighted line (default line) -->
-                            <Line X1="{Binding Start.CenterX}" 
-                                  Y1="{Binding Start.CenterY}"
-                                  X2="{Binding Destination.CenterX}" 
-                                  Y2="{Binding Destination.CenterY}"
-                                  Stroke="#404040"
-                                  StrokeThickness="2">
-                                <Line.Style>
-                                    <Style TargetType="Line">
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
-                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Line.Style>
-                                <Line.ToolTip>
-                                    <ToolTip>
-                                        <StackPanel Orientation="Vertical">
-                                            <StackPanel Orientation="Horizontal">
-                                                <TextBlock Text="Distance: " Margin="0,0,4,0"/>
-                                                <TextBlock Text="{Binding Distance}"/>
-                                                <TextBlock Text=" km"/>
-                                            </StackPanel>
-                                        </StackPanel>
-                                    </ToolTip>
-                                </Line.ToolTip>
+    <ItemsControl.ItemTemplate>
+        <DataTemplate>
+            <Canvas>
+                <!-- Base (non-highlighted) line -->
+                <Line X1="{Binding Start.CenterX}" 
+                      Y1="{Binding Start.CenterY}"
+                      X2="{Binding Destination.CenterX}" 
+                      Y2="{Binding Destination.CenterY}"
+                      Stroke="#404040"
+                      StrokeThickness="2">
+                    <Line.Style>
+                        <Style TargetType="Line">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Line.Style>
+                </Line>
+                
+                <!-- Single highlighted line -->
+                <Line X1="{Binding Start.CenterX}" 
+                      Y1="{Binding Start.CenterY}"
+                      X2="{Binding Destination.CenterX}" 
+                      Y2="{Binding Destination.CenterY}"
+                      Stroke="#FF4081"
+                      StrokeThickness="4">
+                    <Line.Style>
+                        <Style TargetType="Line">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsHighlighted}" Value="True"/>
+                                        <Condition Binding="{Binding HighlightedColours.Count}" Value="0"/>
+                                    </MultiDataTrigger.Conditions>
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Line.Style>
+                </Line>
+                
+                <!-- Multiple colored lines for cycles -->
+                <ItemsControl ItemsSource="{Binding HighlightedColours}">
+                    <ItemsControl.Style>
+                        <Style TargetType="ItemsControl">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding HighlightedColours.Count}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ItemsControl.Style>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Line X1="{Binding DataContext.Start.CenterX, RelativeSource={RelativeSource AncestorType=Canvas}}"
+                                  Y1="{Binding DataContext.Start.CenterY, RelativeSource={RelativeSource AncestorType=Canvas}}"
+                                  X2="{Binding DataContext.Destination.CenterX, RelativeSource={RelativeSource AncestorType=Canvas}}"
+                                  Y2="{Binding DataContext.Destination.CenterY, RelativeSource={RelativeSource AncestorType=Canvas}}"
+                                  Stroke="{Binding}"
+                                  StrokeThickness="4"
+                                  Opacity="0.8">
                             </Line>
-                            
-                            <!-- ItemsControl for highlighted lines -->
-                            <ItemsControl ItemsSource="{Binding HighlightedColours}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Line X1="{Binding DataContext.Start.CenterX, RelativeSource={RelativeSource AncestorType=Canvas}}"
-                                              Y1="{Binding DataContext.Start.CenterY, RelativeSource={RelativeSource AncestorType=Canvas}}"
-                                              X2="{Binding DataContext.Destination.CenterX, RelativeSource={RelativeSource AncestorType=Canvas}}"
-                                              Y2="{Binding DataContext.Destination.CenterY, RelativeSource={RelativeSource AncestorType=Canvas}}"
-                                              Stroke="{Binding}"
-                                              StrokeThickness="4"
-                                              Margin="0,0,0,2">
-                                            <Line.Style>
-                                                <Style TargetType="Line">
-                                                    <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding DataContext.IsHighlighted, RelativeSource={RelativeSource AncestorType=Canvas}}" Value="False">
-                                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                                        </DataTrigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Line.Style>
-                                        </Line>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <Canvas/>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                            </ItemsControl>
-                        </Canvas>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <Canvas/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+
+                <!-- Tooltip -->
+                <Line.ToolTip>
+                    <ToolTip>
+                        <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Distance: " Margin="0,0,4,0"/>
+                                <TextBlock Text="{Binding Distance}"/>
+                                <TextBlock Text=" km"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Cost: " Margin="0,0,4,0"/>
+                                <TextBlock Text="{Binding Cost}"/>
+                                <TextBlock Text=" SEK"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </ToolTip>
+                </Line.ToolTip>
+            </Canvas>
+        </DataTemplate>
+    </ItemsControl.ItemTemplate>
+    <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+            <Canvas/>
+        </ItemsPanelTemplate>
+    </ItemsControl.ItemsPanel>
+</ItemsControl>
 
             <!-- Draw city nodes and labels -->
             <ItemsControl ItemsSource="{Binding Cities}">

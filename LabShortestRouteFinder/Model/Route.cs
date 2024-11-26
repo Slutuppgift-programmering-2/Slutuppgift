@@ -12,7 +12,7 @@ public class Route : INotifyPropertyChanged
     private bool _isHighlighted;
     public bool IsHighlighted
     {
-        get => _isHighlighted || HighlightedColours.Any();
+        get => _isHighlighted;
         set
         {
             if (_isHighlighted != value)
@@ -31,7 +31,6 @@ public class Route : INotifyPropertyChanged
         {
             _highlightedColours = value;
             OnPropertyChanged(nameof(HighlightedColours));
-            OnPropertyChanged(nameof(IsHighlighted));  // Important: notify IsHighlighted has potentially changed
         }
     }
 
