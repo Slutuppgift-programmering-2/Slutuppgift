@@ -33,6 +33,17 @@
                                         </Style.Triggers>
                                     </Style>
                                 </Line.Style>
+                                <Line.ToolTip>
+                                    <ToolTip>
+                                        <StackPanel Orientation="Vertical">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="Distance: " Margin="0,0,4,0"/>
+                                                <TextBlock Text="{Binding Distance}"/>
+                                                <TextBlock Text=" km"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </ToolTip>
+                                </Line.ToolTip>
                             </Line>
                             
                             <!-- ItemsControl for highlighted lines -->
@@ -64,19 +75,6 @@
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                             </ItemsControl>
-
-                            <!-- Tooltip -->
-                            <Line.ToolTip>
-                                <ToolTip>
-                                    <StackPanel Orientation="Vertical">
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="Distance: " Margin="0,0,4,0"/>
-                                            <TextBlock Text="{Binding Distance}"/>
-                                            <TextBlock Text=" km"/>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </ToolTip>
-                            </Line.ToolTip>
                         </Canvas>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
