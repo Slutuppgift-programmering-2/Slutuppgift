@@ -24,7 +24,7 @@
                                <Style TargetType="Line">
                                    <Style.Triggers>
                                        <DataTrigger Binding="{Binding IsHighlighted}" Value="True">
-                                           <Setter Property="Stroke" Value="#FF4081"/>
+                                           <Setter Property="Stroke" Value="{Binding HighlightColour}"/>
                                            <Setter Property="StrokeThickness" Value="4"/>
                                        </DataTrigger>
                                        <DataTrigger Binding="{Binding IsHighlighted}" Value="False">

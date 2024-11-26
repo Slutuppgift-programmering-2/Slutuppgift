@@ -216,6 +216,19 @@ namespace LabShortestRouteFinder.ViewModel
                 var stack = new Stack<CityNode>();
                 var cycles = new List<List<Route>>();
 
+                var cycleColours = new[]
+                {
+                    "#FF0000", //red
+                    "#00FFFF", //cyan
+                    "#800080", //purple
+                    "#FFFF00", //yellow
+                    "#00FF00", //lime
+                    "#FFA500", //orange
+                    "#008000", //green
+                    "#EAC117" //gold brown
+                    
+                };
+                
                 void DFS(CityNode current, CityNode? parent)
                 {
                     visited.Add(current);
@@ -263,15 +276,18 @@ namespace LabShortestRouteFinder.ViewModel
                     }
                 }
 
-                foreach (var cycle in cycles)
+                for (int i = 0; i < cycles.Count; i++)
                 {
-                    foreach (var route in cycle)
+                    var cycleColour = cycleColours[i % cycleColours.Length];
+                    foreach (var route in cycles[i])
                     {
+                        route.HighlightColour = cycleColour;
                         route.IsHighlighted = true;
                     }
                 }
                 
                 StatusMessage = $"Found {cycles.Count} cycles";
+
             }
             catch (Exception ex)
             {
