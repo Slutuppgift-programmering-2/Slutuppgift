@@ -206,117 +206,121 @@ namespace LabShortestRouteFinder.ViewModel
         }
 
        [RelayCommand]
-    private void FindCycles()
+private void FindCycles()
+{
+    try
     {
-        try
+        ClearHighlights();
+        var adjList = BuildAdjacencyList();
+        var visited = new HashSet<CityNode>();
+        var stack = new Stack<CityNode>();
+        var cycles = new List<List<Route>>();
+
+        var cycleColours = new[]
         {
-            ClearHighlights();
-            var adjList = BuildAdjacencyList();
-            var visited = new HashSet<CityNode>();
-            var stack = new Stack<CityNode>();
-            var cycles = new List<List<Route>>();
-            var routeToCycleIndex = new Dictionary<Route, int>();
+            "#FF0000", //red
+            "#00FFFF", //cyan
+            "#800080", //purple
+            "#FFFF00", //yellow
+            "#00FF00", //lime
+            "#FFA500", //orange
+            "#008000", //green
+            "#EAC117"  //gold brown
+        };
+        
+        void DFS(CityNode current, CityNode? parent)
+        {
+            visited.Add(current);
+            stack.Push(current);
 
-            var cycleColours = new[]
+            foreach (var (neighbour, route) in adjList[current])
             {
-                "#FF0000", //red
-                "#00FFFF", //cyan
-                "#800080", //purple
-                "#FFFF00", //yellow
-                "#00FF00", //lime
-                "#FFA500", //orange
-                "#008000", //green
-                "#EAC117"  //gold brown
-            };
-            
-            void DFS(CityNode current, CityNode? parent)
-            {
-                visited.Add(current);
-                stack.Push(current);
+                if (neighbour == parent) continue;
 
-                foreach (var (neighbour, route) in adjList[current])
+                if (visited.Contains(neighbour))
                 {
-                    if (neighbour == parent) continue;
-
-                    if (visited.Contains(neighbour))
+                    if (stack.Contains(neighbour))
                     {
-                        if (stack.Contains(neighbour))
+                        var cycle = new List<Route>();
+                        var cycleStack = new Stack<CityNode>(stack);
+                        var cycleCity = cycleStack.Pop();
+                        
+                        while (cycleStack.Count > 0 && cycleCity != neighbour)
                         {
-                            var cycle = new List<Route>();
-                            var cycleStack = new Stack<CityNode>(stack);
-                            var cycleCity = cycleStack.Pop();
+                            var nextCity = cycleStack.Pop();
+                            var cycleRoute = Routes.First(r =>
+                                (r.Start == cycleCity && r.Destination == nextCity) ||
+                                (r.Start == nextCity && r.Destination == cycleCity));
                             
-                            while (cycleStack.Count > 0 && cycleCity != neighbour)
-                            {
-                                var nextCity = cycleStack.Pop();
-                                var cycleRoute = Routes.First(r =>
-                                    (r.Start == cycleCity && r.Destination == nextCity) ||
-                                    (r.Start == nextCity && r.Destination == cycleCity));
-                                
-                                cycle.Add(cycleRoute);
-                                cycleCity = nextCity;
-                            }
+                            cycle.Add(cycleRoute);
+                            cycleCity = nextCity;
+                        }
 
-                            cycle.Add(route);
+                        cycle.Add(route);
+                        
+                        // Only add cycles that have at least 3 paths
+                        if (cycle.Count >= 3)
+                        {
                             cycles.Add(cycle);
                         }
                     }
-                    else
-                    {
-                        DFS(neighbour, current);
-                    }
                 }
-
-                stack.Pop();
-            }
-
-            foreach (var city in Cities)
-            {
-                if (!visited.Contains(city))
+                else
                 {
-                    DFS(city, null);
+                    DFS(neighbour, current);
                 }
             }
 
-            // Clear all highlight colours first
-            foreach (var route in Routes)
-            {
-                route.HighlightedColours = new List<string>();
-                route.IsHighlighted = false;
-            }
+            stack.Pop();
+        }
 
-            // Apply the colours for each cycle
-            for (int i = 0; i < cycles.Count; i++)
+        foreach (var city in Cities)
+        {
+            if (!visited.Contains(city))
             {
-                var cycleColour = cycleColours[i % cycleColours.Length];
-                foreach (var route in cycles[i])
+                DFS(city, null);
+            }
+        }
+
+        // Clear all highlight colours first
+        foreach (var route in Routes)
+        {
+            route.HighlightedColours.Clear();
+            route.IsHighlighted = false;
+        }
+
+        // Apply the colours for each cycle
+        for (int i = 0; i < cycles.Count; i++)
+        {
+            var cycleColour = cycleColours[i % cycleColours.Length];
+            foreach (var route in cycles[i])
+            {
+                if (!route.HighlightedColours.Contains(cycleColour))
                 {
-                    if (!route.HighlightedColours.Contains(cycleColour))
-                    {
-                        route.HighlightedColours.Add(cycleColour);
-                        route.IsHighlighted = true;
-                    }
+                    route.HighlightedColours.Add(cycleColour);
+                    route.IsHighlighted = true;  // Set to true when adding any color
                 }
             }
-            
-            // Build status message showing the paths
-            StatusMessage = $"Found {cycles.Count} cycles:";
-            for (int i = 0; i < cycles.Count; i++)
+        }
+        
+        // Build status message showing the paths
+        StatusMessage = $"Found {cycles.Count} cycles:";
+        for (int i = 0; i < cycles.Count; i++)
+        {
+            var cycle = cycles[i];
+            var cities = new List<string> { cycle.First().Start.Name };
+            foreach (var route in cycle)
             {
-                var cycle = cycles[i];
-                var cities = new List<string> { cycle.First().Start.Name };
-                foreach (var route in cycle)
-                {
-                    cities.Add(route.Destination.Name);
-                }
-                StatusMessage += $"\nCycle {i + 1}: {string.Join(" → ", cities)}";
-                }
+                cities.Add(route.Destination.Name);
             }
-            catch (Exception ex)
-            {
-                StatusMessage = $"Error finding cycles: {ex.Message}";
-            }
+            StatusMessage += $"\nCycle {i + 1}: {string.Join(" → ", cities)}";
+        }
     }
+    catch (Exception ex)
+    {
+        StatusMessage = $"Error finding cycles: {ex.Message}";
+    }
+}
 
         [RelayCommand]
         private void FindShortestCycle()
