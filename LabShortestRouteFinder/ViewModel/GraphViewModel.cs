@@ -215,6 +215,7 @@ namespace LabShortestRouteFinder.ViewModel
                 var visited = new HashSet<CityNode>();
                 var stack = new Stack<CityNode>();
                 var cycles = new List<List<Route>>();
+                var routeToCycleIndex = new Dictionary<Route, int>();
 
                 var cycleColours = new[]
                 {
@@ -234,34 +235,52 @@ namespace LabShortestRouteFinder.ViewModel
                     visited.Add(current);
                     stack.Push(current);
 
-                    foreach (var (neighbor, route) in adjList[current])
+                    foreach (var (neighbour, route) in adjList[current])
                     {
-                        if (neighbor == parent) continue;
+                        if (neighbour == parent) continue;
 
-                        if (visited.Contains(neighbor))
+                        if (visited.Contains(neighbour))
                         {
-                            if (stack.Contains(neighbor))
+                            if (stack.Contains(neighbour))
                             {
                                 var cycle = new List<Route>();
                                 var cycleStack = new Stack<CityNode>(stack);
                                 var cycleCity = cycleStack.Pop();
                                 
-                                while (cycleStack.Count > 0 && cycleCity != neighbor)
+                                while (cycleStack.Count > 0 && cycleCity != neighbour)
                                 {
                                     var nextCity = cycleStack.Pop();
-                                    cycle.Add(Routes.First(r =>
+                                    var cycleRoute = Routes.First(r =>
                                         (r.Start == cycleCity && r.Destination == nextCity) ||
-                                        (r.Start == nextCity && r.Destination == cycleCity)));
-                                    cycleCity = nextCity;
+                                        (r.Start == nextCity && r.Destination == cycleCity));
+
+                                    if (routeToCycleIndex.ContainsKey(cycleRoute))
+                                    {
+                                        //Skip cycle if any of the routes and already used
+                                        cycle.Clear();
+                                        break;
+                                    }
+                                    cycle.Add(route);
+                                    cycles.Add(cycle);
                                 }
 
-                                cycle.Add(route);
-                                cycles.Add(cycle);
+                                if (cycle.Count > 0 && !routeToCycleIndex.ContainsKey(route))
+                                {
+                                    cycle.Add(route);
+                                    var cycleIndex = cycles.Count;
+                                    cycles.Add(cycle);
+                                    
+                                    //Record which cycle each route belongs to
+                                    foreach (var cycleRoute in cycle)
+                                    {
+                                        routeToCycleIndex[cycleRoute] = cycleIndex;
+                                    }
+                                }
                             }
                         }
                         else
                         {
-                            DFS(neighbor, current);
+                            DFS(neighbour, current);
                         }
                     }
 
