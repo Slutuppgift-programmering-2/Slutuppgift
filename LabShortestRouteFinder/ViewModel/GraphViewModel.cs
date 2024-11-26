@@ -70,7 +70,7 @@ namespace LabShortestRouteFinder.ViewModel
             ClearHighlights();
             foreach (var route in path)
             {
-                Console.WriteLine($"Highlighting Route: {route.Start.Name} -> {route.Destination.Name}");
+                StatusMessage = $"Highlighting Route: {route.Start.Name} -> {route.Destination.Name}";
                 route.IsHighlighted = true;
             }
         }
@@ -114,7 +114,7 @@ namespace LabShortestRouteFinder.ViewModel
                 if (path.Any())
                 {
                     HighlightPath(path);
-                    StatusMessage = $"Found path with {path.Count} segments and total distance {path.Sum(r => r.Distance)}";
+                    //StatusMessage = $"Found path with {path.Count} segments and total distance {path.Sum(r => r.Distance)}";
                 }
                 else
                 {
