@@ -2,6 +2,7 @@
 using System.IO;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using LabShortestRouteFinder.Model;
@@ -32,10 +33,15 @@ public partial class GraphViewModel : ObservableObject
         try
         {
             var jsonContent = File.ReadAllText(Path.Combine("Resources", "routes.json"));
-            var routeData = JsonSerializer.Deserialize<RouteData>(jsonContent)
-                            ?? new RouteData { routes = new List<RouteInfo>() };
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
 
-            foreach (var routeInfo in routeData.routes)
+            var routes = JsonSerializer.Deserialize<List<RouteInfo>>(jsonContent, options)
+                         ?? new List<RouteInfo>();
+
+            foreach (var routeInfo in routes)
             {
                 var startCity = Cities.FirstOrDefault(c => c.Name == routeInfo.From);
                 var endCity = Cities.FirstOrDefault(c => c.Name == routeInfo.To);
@@ -46,7 +52,8 @@ public partial class GraphViewModel : ObservableObject
                         Start = startCity,
                         Destination = endCity,
                         Distance = routeInfo.Distance,
-                        Cost = routeInfo.Kostnad
+                        Cost = routeInfo.Cost,
+                        HighlightedColours = new List<string>()
                     });
             }
         }
@@ -156,7 +163,8 @@ public partial class GraphViewModel : ObservableObject
 
         while (unvisited.Count > 0)
         {
-            var current = unvisited.MinBy(c => distances[c].distance)!;
+            var current =
+                unvisited.MinBy(c => distances[c].distance + distances[c].cost * 0.5)!; // Weight both distance and cost
             if (current == end) break;
 
             unvisited.Remove(current);
@@ -168,8 +176,8 @@ public partial class GraphViewModel : ObservableObject
                 var altDistance = distances[current].distance + route.Distance;
                 var altCost = distances[current].cost + route.Cost;
 
-                // You can modify this condition to prioritize cost or use a weighted combination
-                if (altDistance < distances[neighbor].distance)
+                // Consider both distance and cost in the optimization
+                if (altDistance + altCost * 0.5 < distances[neighbor].distance + distances[neighbor].cost * 0.5)
                 {
                     distances[neighbor] = (altDistance, altCost);
                     previous[neighbor] = (current, route);
@@ -179,6 +187,35 @@ public partial class GraphViewModel : ObservableObject
 
         return ReconstructPath(start, end, previous);
     }
+
+    private void UpdateCycleStatusMessage(List<List<Route>> cycles)
+    {
+        StatusMessage = $"Found {cycles.Count} cycles:";
+        for (var i = 0; i < cycles.Count; i++)
+        {
+            var cycle = cycles[i];
+            var pathCities = new List<string>();
+            var totalDistance = cycle.Sum(r => r.Distance);
+            var totalCost = cycle.Sum(r => r.Cost);
+
+            var firstCity = cycle.First().Start;
+            pathCities.Add(firstCity.Name);
+
+            var currentCity = firstCity;
+            foreach (var route in cycle)
+            {
+                var nextCity = route.Start == currentCity ? route.Destination : route.Start;
+                pathCities.Add(nextCity.Name);
+                currentCity = nextCity;
+            }
+
+            pathCities.Add(firstCity.Name);
+
+            StatusMessage += $"\nCycle {i + 1}: {string.Join(" → ", pathCities)}" +
+                             $"\nDistance: {totalDistance} km, Cost: {totalCost} SEK";
+        }
+    }
+
 
     private static List<Route> ReconstructPath(
         CityNode start,
@@ -396,8 +433,11 @@ public class RouteData
 
 public class RouteInfo
 {
-    public required string From { get; set; }
-    public required string To { get; set; }
-    public int Distance { get; set; }
-    public int Kostnad { get; set; }
+    [JsonPropertyName("Startpunkt")] public required string From { get; set; }
+
+    [JsonPropertyName("Destination")] public required string To { get; set; }
+
+    [JsonPropertyName("Avstånd")] public int Distance { get; set; }
+
+    [JsonPropertyName("Kostnad")] public int Cost { get; set; }
 }
