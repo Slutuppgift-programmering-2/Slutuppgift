@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel;
-using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace LabShortestRouteFinder.Model;
 
@@ -23,17 +23,14 @@ public partial class Route : INotifyPropertyChanged
         }
     }
 
-    private string _highlightColour; 
-    public string HighlightColour
+    private List<string> _highlightedColours = new();
+    public List<string> HighlightedColours
     {
-        get => _highlightColour;
+        get => _highlightedColours;
         set
         {
-            if (!_highlightColour.Equals(value))
-            {
-            _highlightColour = value;
-            OnPropertyChanged(nameof(HighlightColour));
-            }
+            _highlightedColours = value;
+            OnPropertyChanged(nameof(HighlightedColours));
         }
     }
 
