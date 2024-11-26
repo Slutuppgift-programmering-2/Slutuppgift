@@ -94,7 +94,7 @@
                 </ItemsControl>
 
                 <!-- Tooltip -->
-                <Line.ToolTip>
+                <Canvas.ToolTip>
                     <ToolTip>
                         <StackPanel Orientation="Vertical">
                             <StackPanel Orientation="Horizontal">
@@ -109,7 +109,7 @@
                             </StackPanel>
                         </StackPanel>
                     </ToolTip>
-                </Line.ToolTip>
+                </Canvas.ToolTip>
             </Canvas>
         </DataTemplate>
     </ItemsControl.ItemTemplate>
