@@ -67,12 +67,32 @@ namespace LabShortestRouteFinder.ViewModel
 
         private void HighlightPath(IEnumerable<Route> path)
         {
+            if (path == null) return;
+
+            // First clear any existing highlights
             ClearHighlights();
+
+            // Build a string to show the complete path
+            var pathDescription = new System.Text.StringBuilder();
+            var totalDistance = 0;
+            var isFirst = true;
+
             foreach (var route in path)
             {
-                StatusMessage = $"Highlighting Route: {route.Start.Name} -> {route.Destination.Name}";
                 route.IsHighlighted = true;
+        
+                // Build the path description
+                if (isFirst)
+                {
+                    pathDescription.Append(route.Start.Name);
+                    isFirst = false;
+                }
+                pathDescription.Append($" → {route.Destination.Name}");
+                totalDistance += route.Distance;
             }
+
+            // Update status message with the complete path and total distance
+            StatusMessage = $"Path: {pathDescription}\nTotal Distance: {totalDistance} km";
         }
         
         partial void OnSelectedStartCityChanged(CityNode? value) => 
