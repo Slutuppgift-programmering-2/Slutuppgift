@@ -1,19 +1,18 @@
 ﻿using System.ComponentModel;
-using System.Collections.Generic;
 
 namespace LabShortestRouteFinder.Model;
 
-public partial class Route : INotifyPropertyChanged
+public class Route : INotifyPropertyChanged
 {
     public required CityNode Start { get; set; }
     public required CityNode Destination { get; set; }
-    public int Cost { get; set; }
     public int Distance { get; set; }
+    public int Cost { get; set; }
 
     private bool _isHighlighted;
     public bool IsHighlighted
     {
-        get => _isHighlighted;
+        get => _isHighlighted || HighlightedColours.Any();
         set
         {
             if (_isHighlighted != value)
@@ -32,9 +31,9 @@ public partial class Route : INotifyPropertyChanged
         {
             _highlightedColours = value;
             OnPropertyChanged(nameof(HighlightedColours));
+            OnPropertyChanged(nameof(IsHighlighted));  // Important: notify IsHighlighted has potentially changed
         }
     }
-    
 
     public event PropertyChangedEventHandler? PropertyChanged;
     protected virtual void OnPropertyChanged(string propertyName) =>

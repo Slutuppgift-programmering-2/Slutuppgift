@@ -7,6 +7,7 @@
 
     <UserControl.Resources>
         <converters:YPositionConverter x:Key="YPositionConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </UserControl.Resources>
 
     <Grid>
