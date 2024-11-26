@@ -205,7 +205,7 @@ namespace LabShortestRouteFinder.ViewModel
             return path;
         }
 
-       [RelayCommand]
+      [RelayCommand]
 private void FindCycles()
 {
     try
@@ -256,9 +256,16 @@ private void FindCycles()
                             cycleCity = nextCity;
                         }
 
-                        cycle.Add(route);
+                        // Add the final route to close the cycle
+                        if (cycleCity == neighbour)
+                        {
+                            var finalRoute = Routes.First(r =>
+                                (r.Start == cycleCity && r.Destination == neighbour) ||
+                                (r.Start == neighbour && r.Destination == cycleCity));
+                            cycle.Add(finalRoute);
+                        }
                         
-                        // Only add cycles that have at least 3 paths
+                        // Only add cycles that have at least 3 paths and form a proper cycle
                         if (cycle.Count >= 3)
                         {
                             cycles.Add(cycle);
@@ -298,22 +305,35 @@ private void FindCycles()
                 if (!route.HighlightedColours.Contains(cycleColour))
                 {
                     route.HighlightedColours.Add(cycleColour);
-                    route.IsHighlighted = true;  // Set to true when adding any color
+                    route.IsHighlighted = true;
                 }
             }
         }
         
-        // Build status message showing the paths
+        // Build status message showing the paths, avoiding duplicates
         StatusMessage = $"Found {cycles.Count} cycles:";
         for (int i = 0; i < cycles.Count; i++)
         {
             var cycle = cycles[i];
-            var cities = new List<string> { cycle.First().Start.Name };
+            var pathCities = new List<string>();
+            
+            // Get the first city
+            var firstCity = cycle.First().Start;
+            pathCities.Add(firstCity.Name);
+            
+            // Build the path by following the routes
+            var currentCity = firstCity;
             foreach (var route in cycle)
             {
-                cities.Add(route.Destination.Name);
+                var nextCity = route.Start == currentCity ? route.Destination : route.Start;
+                pathCities.Add(nextCity.Name);
+                currentCity = nextCity;
             }
-            StatusMessage += $"\nCycle {i + 1}: {string.Join(" → ", cities)}";
+            
+            // Add the first city again to show it's a cycle
+            pathCities.Add(firstCity.Name);
+            
+            StatusMessage += $"\nCycle {i + 1}: {string.Join(" → ", pathCities)}";
         }
     }
     catch (Exception ex)
