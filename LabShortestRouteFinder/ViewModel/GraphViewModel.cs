@@ -261,7 +261,7 @@ namespace LabShortestRouteFinder.ViewModel
                                         break;
                                     }
                                     cycle.Add(route);
-                                    cycles.Add(cycle);
+                                    cycleCity = nextCity; 
                                 }
 
                                 if (cycle.Count > 0 && !routeToCycleIndex.ContainsKey(route))
