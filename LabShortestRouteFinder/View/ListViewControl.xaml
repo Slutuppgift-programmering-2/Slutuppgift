@@ -1,14 +1,42 @@
 ﻿<UserControl x:Class="LabShortestRouteFinder.View.ListViewControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             >
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Grid>
-        <DataGrid ItemsSource="{Binding Routes}" AutoGenerateColumns="False" Margin="10" IsReadOnly="False">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <DataGrid Grid.Row="0" 
+                  ItemsSource="{Binding Routes}" 
+                  AutoGenerateColumns="False" 
+                  Margin="10" 
+                  IsReadOnly="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Start" Binding="{Binding Start.Name, Mode=TwoWay}" />
-                <DataGridTextColumn Header="Destination" Binding="{Binding Destination.Name, Mode=TwoWay}" />
-                <DataGridTextColumn Header="Distance" Binding="{Binding Distance}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Start" 
+                                    Binding="{Binding Start.Name, Mode=TwoWay}" 
+                                    Width="*"/>
+                <DataGridTextColumn Header="Destination" 
+                                    Binding="{Binding Destination.Name, Mode=TwoWay}" 
+                                    Width="*"/>
+                <DataGridTextColumn Header="Distance (km)" 
+                                    Binding="{Binding Distance}" 
+                                    IsReadOnly="True" 
+                                    Width="auto"/>
+                <DataGridTextColumn Header="Cost (SEK)" 
+                                    Binding="{Binding Cost}" 
+                                    IsReadOnly="True" 
+                                    Width="auto"/>
             </DataGrid.Columns>
         </DataGrid>
+
+        <!-- Save Button -->
+        <Button Grid.Row="1" 
+                Content="Save Routes" 
+                Command="{Binding SaveRoutesCommand}" 
+                HorizontalAlignment="Right"
+                Margin="10"
+                Padding="10,5"
+                Width="100"/>
     </Grid>
 </UserControl>

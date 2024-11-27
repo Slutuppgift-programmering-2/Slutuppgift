@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -62,6 +63,44 @@ public partial class GraphViewModel : ObservableObject
             StatusMessage = $"Failed to load routes: {ex.Message}";
         }
     }
+    
+    public void SaveRoutesToFile()
+    {
+        try
+        {
+            var routeInfos = Routes.Select(r => new RouteInfo
+            {
+                From = r.Start.Name,
+                To = r.Destination.Name,
+                Distance = r.Distance,
+                Cost = r.Cost
+            }).ToList();
+
+            // Configure JSON serialization options
+            var options = new JsonSerializerOptions
+            {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+                WriteIndented = true
+            };
+
+            string updatedJson = JsonSerializer.Serialize(routeInfos, options);
+            File.WriteAllText("Resources\\routes.json", updatedJson);
+
+            StatusMessage = "Routes saved successfully";
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Error saving routes: {ex.Message}";
+        }
+    }
+    
+    [RelayCommand]
+    private void SaveRoutes()
+    {
+        SaveRoutesToFile();
+    }
+    
+    
 
     private void ClearHighlights()
     {
