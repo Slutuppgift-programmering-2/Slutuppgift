@@ -15,7 +15,7 @@ Vi har försökt att dela upp allt i projektet efter kunskaper och erfarenhetsni
 För min del har detta projekt bjudit på en hel del utmaningar mest beroende på allt nytt som tex att jobba med GITHUB och versionshantering men också att få ihop och bidra till helheten på ett bra sätt.
 
 Det positiva är att jag lärt mig mycket nya bregrepp och fått en inblick i vilka fanatastiska möjlighter det finns att skapa applikationer i C sharp. Hur många sätt det finns att lösa olika problem och mångsidigheten i
-att återanvända kod och på så vis slippa uppfinna hjulet på nytt. Det märks verkligen att det finns alla möjligheter och att det enda som sätter gränser är fanatsin för en duktig Programmerare som lärt sig bemsätra de olika delarna.
+att återanvända kod och på så vis slippa uppfinna hjulet på nytt. Det märks verkligen att det finns alla möjligheter och att det enda som sätter gränser är fanatsin för en duktig Programmerare som lärt sig bemästra de olika delarna.
 
 Det var lite av mina tankar kring detta.
 
