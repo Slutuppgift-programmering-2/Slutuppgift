@@ -7,6 +7,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+        <!-- DataGrid for managing routes -->
         <DataGrid Grid.Row="0" 
                   ItemsSource="{Binding Routes}" 
                   AutoGenerateColumns="False"
@@ -15,6 +16,7 @@
                   VirtualizingPanel.VirtualizationMode="Standard"
                   Margin="10">
             <DataGrid.Columns>
+                <!-- Start City Column -->
                 <DataGridTemplateColumn Header="Start" Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -23,16 +25,19 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
+                            <!-- ComboBox for selecting the Start city -->
                             <ComboBox ItemsSource="{Binding Path=DataContext.Cities, 
                                       RelativeSource={RelativeSource FindAncestor, 
                                       AncestorType={x:Type UserControl}}}"
                                     DisplayMemberPath="Name"
                                     SelectedItem="{Binding Start}"
-                                    IsDropDownOpen="True"/>
+                                    Width="150"
+                                    Margin="0,5"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
+                <!-- Destination City Column -->
                 <DataGridTemplateColumn Header="Destination" Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -41,25 +46,30 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
+                            <!-- ComboBox for selecting the Destination city -->
                             <ComboBox ItemsSource="{Binding Path=DataContext.Cities, 
                                       RelativeSource={RelativeSource FindAncestor, 
                                       AncestorType={x:Type UserControl}}}"
                                     DisplayMemberPath="Name"
                                     SelectedItem="{Binding Destination}"
-                                    IsDropDownOpen="True"/>
+                                    Width="150"
+                                    Margin="0,5"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
+                <!-- Distance Column -->
                 <DataGridTextColumn Header="Distance (km)" 
                                   Binding="{Binding Distance, UpdateSourceTrigger=PropertyChanged}" 
                                   Width="auto"/>
+                <!-- Cost Column -->
                 <DataGridTextColumn Header="Cost (SEK)" 
                                   Binding="{Binding Cost, UpdateSourceTrigger=PropertyChanged}" 
                                   Width="auto"/>
             </DataGrid.Columns>
         </DataGrid>
 
+        <!-- Button for saving routes -->
         <Button Grid.Row="1" 
                 Content="Save Routes" 
                 Command="{Binding SaveRoutesCommand}" 
