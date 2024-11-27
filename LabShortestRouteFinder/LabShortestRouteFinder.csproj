@@ -14,13 +14,19 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Resources\cities.json">
+    <None Remove="Resources\routes.json" />
+    <Content Include="Resources\routes.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Remove="Resources\cities.json" />
+    <Content Include="Resources\cities.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </Content>
   </ItemGroup>
 
 </Project>
