@@ -25,12 +25,10 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox 
-                                ItemsSource="{Binding Cities}" 
-                                DisplayMemberPath="Name"
-                                SelectedItem="{Binding Start, Mode=TwoWay}" 
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Center" />
+                            <!-- Editable TextBox for Start city -->
+                            <TextBox Text="{Binding Start.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                     HorizontalAlignment="Stretch"
+                                     VerticalAlignment="Center" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
@@ -44,12 +42,10 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox 
-                                ItemsSource="{Binding Cities}" 
-                                DisplayMemberPath="Name"
-                                SelectedItem="{Binding Destination, Mode=TwoWay}" 
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Center" />
+                            <!-- Editable TextBox for Destination city -->
+                            <TextBox Text="{Binding Destination.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                     HorizontalAlignment="Stretch"
+                                     VerticalAlignment="Center" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
