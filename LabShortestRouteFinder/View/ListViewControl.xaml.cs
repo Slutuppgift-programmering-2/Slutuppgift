@@ -16,19 +16,20 @@ using System.Windows.Shapes;
 namespace LabShortestRouteFinder.View
 {
     /// <summary>
-    /// Interaction logic for ListView.xaml
+    /// Interaction logic for ListViewControl.xaml
     /// </summary>
     public partial class ListViewControl : UserControl
     {
         public ListViewControl()
         {
             InitializeComponent();
+        }
 
-            //// Set DataContext to RouteViewModel if not done in XAML
-            //if (DataContext == null)
-            //{
-            //    DataContext = new RouteViewModel();
-            //}
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Cast DataContext to ListViewModel and call the Save method
+            ListViewModel viewModel = (ListViewModel)DataContext;
+            viewModel.SaveRoutesToFile();
         }
     }
 }

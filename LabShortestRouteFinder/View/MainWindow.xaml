@@ -1,36 +1,35 @@
 ﻿<Window x:Class="LabShortestRouteFinder.View.MainWindow"
-            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-            xmlns:view="clr-namespace:LabShortestRouteFinder.View"
-            Title="Route Viewer" Height="900" Width="1300">
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:view="clr-namespace:LabShortestRouteFinder.View"
+        Title="Route Viewer" Height="900" Width="1300">
     <DockPanel>
         <!-- Left Navigation Panel -->
-        <StackPanel DockPanel.Dock="Left" Width="150" Background="#EFEFEF">
+        <StackPanel DockPanel.Dock="Left" Width="150" Background="#EFEFEF" Margin="10">
             <TextBlock Text="Select View:" FontWeight="Bold" Margin="0,0,0,10" />
             <ListBox Name="NavigationListBox" SelectionChanged="OnNavigationSelectionChanged">
-                <ListBoxItem Content="List View" Tag="ListTab" />
+                <ListBoxItem Content="Routes" Tag="ListTab" />
+                <ListBoxItem Content="Cities" Tag="CityListTab" />
                 <ListBoxItem Content="Graph View" Tag="GraphTab" />
             </ListBox>
         </StackPanel>
 
         <!-- Main Content Area with TabControl -->
-        <TabControl Name="MainTabControl">
+        <TabControl Name="MainTabControl" Margin="10">
             <!-- Tab for List View -->
             <TabItem Header="Routes" Name="ListTab">
-                <view:ListViewControl DataContext="{Binding RouteViewModel, RelativeSource={RelativeSource AncestorType=Window}}" />
+                <view:ListViewControl DataContext="{Binding ListViewModel, RelativeSource={RelativeSource AncestorType=Window}}" />
             </TabItem>
 
+            <!-- Tab for City List View -->
             <TabItem Header="Cities" Name="CityListTab">
                 <view:CityListViewControl DataContext="{Binding CityViewModel, RelativeSource={RelativeSource AncestorType=Window}}" />
             </TabItem>
 
             <!-- Tab for Graph View -->
             <TabItem Header="Graph View" Name="GraphTab">
-                <view:GraphViewControl DataContext="{Binding GraphViewModel, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                <view:GraphViewControl DataContext="{Binding GraphViewModel, RelativeSource={RelativeSource AncestorType=Window}}" />
             </TabItem>
         </TabControl>
     </DockPanel>
 </Window>
-    

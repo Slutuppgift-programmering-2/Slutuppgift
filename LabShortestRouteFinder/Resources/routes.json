@@ -1,77 +1,38 @@
 [
-  {
-    "Start": "A",
-    "Destination": "B",
-    "Distance": 5
-  },
-  {
-    "Start": "A",
-    "Destination": "C",
-    "Distance": 10
-  },
-  {
-    "Start": "B",
-    "Destination": "D",
-    "Distance": 3
-  },
-  {
-    "Start": "C",
-    "Destination": "D",
-    "Distance": 7
-  },
-  {
-    "Start": "D",
-    "Destination": "E",
-    "Distance": 6
-  },
-  {
-    "Start": "E",
-    "Destination": "F",
-    "Distance": 2
-  },
-  {
-    "Start": "F",
-    "Destination": "G",
-    "Distance": 8
-  },
-  {
-    "Start": "G",
-    "Destination": "H",
-    "Distance": 4
-  },
-  {
-    "Start": "H",
-    "Destination": "I",
-    "Distance": 9
-  },
-  {
-    "Start": "I",
-    "Destination": "J",
-    "Distance": 3
-  },
-  {
-    "Start": "J",
-    "Destination": "K",
-    "Distance": 5
-  },
-  {
-    "Start": "K",
-    "Destination": "L",
-    "Distance": 7
-  },
-  {
-    "Start": "L",
-    "Destination": "M",
-    "Distance": 6
-  },
-  {
-    "Start": "M",
-    "Destination": "N",
-    "Distance": 4
-  },
-  {
-    "Start": "N",
-    "Destination": "O",
-    "Distance": 3
-  }
+  { "Startpunkt": "Stockholm", "Destination": "Uppsala", "Avstånd": 71, "Kostnad": 142 },
+  { "Startpunkt": "Stockholm", "Destination": "Västerås", "Avstånd": 107, "Kostnad": 214 },
+  { "Startpunkt": "Stockholm", "Destination": "Örebro", "Avstånd": 196, "Kostnad": 392 },
+  { "Startpunkt": "Stockholm", "Destination": "Linköping", "Avstånd": 200, "Kostnad": 400 },
+  { "Startpunkt": "Uppsala", "Destination": "Gävle", "Avstånd": 110, "Kostnad": 220 },
+  { "Startpunkt": "Gävle", "Destination": "Sandviken", "Avstånd": 26, "Kostnad": 52 },
+  { "Startpunkt": "Gävle", "Destination": "Hudiksvall", "Avstånd": 134, "Kostnad": 268 },
+  { "Startpunkt": "Hudiksvall", "Destination": "Umeå", "Avstånd": 363, "Kostnad": 726 },
+  { "Startpunkt": "Umeå", "Destination": "Luleå", "Avstånd": 273, "Kostnad": 546 },
+  { "Startpunkt": "Luleå", "Destination": "Kiruna", "Avstånd": 343, "Kostnad": 686 },
+  { "Startpunkt": "Östersund", "Destination": "Umeå", "Avstånd": 363, "Kostnad": 726 },
+  { "Startpunkt": "Östersund", "Destination": "Mora", "Avstånd": 373, "Kostnad": 746 },
+  { "Startpunkt": "Mora", "Destination": "Falun", "Avstånd": 108, "Kostnad": 216 },
+  { "Startpunkt": "Falun", "Destination": "Gävle", "Avstånd": 103, "Kostnad": 206 },
+  { "Startpunkt": "Örebro", "Destination": "Västerås", "Avstånd": 96, "Kostnad": 192 },
+  { "Startpunkt": "Örebro", "Destination": "Linköping", "Avstånd": 199, "Kostnad": 398 },
+  { "Startpunkt": "Linköping", "Destination": "Jönköping", "Avstånd": 147, "Kostnad": 294 },
+  { "Startpunkt": "Jönköping", "Destination": "Göteborg", "Avstånd": 149, "Kostnad": 298 },
+  { "Startpunkt": "Göteborg", "Destination": "Halmstad", "Avstånd": 147, "Kostnad": 294 },
+  { "Startpunkt": "Halmstad", "Destination": "Malmö", "Avstånd": 154, "Kostnad": 308 },
+  { "Startpunkt": "Malmö", "Destination": "Växjö", "Avstånd": 302, "Kostnad": 604 },
+  { "Startpunkt": "Växjö", "Destination": "Kalmar", "Avstånd": 122, "Kostnad": 244 },
+  { "Startpunkt": "Växjö", "Destination": "Jönköping", "Avstånd": 161, "Kostnad": 322 },
+  { "Startpunkt": "Kalmar", "Destination": "Linköping", "Avstånd": 277, "Kostnad": 554 },
+  { "Startpunkt": "Västerås", "Destination": "Falun", "Avstånd": 157, "Kostnad": 314 },
+  { "Startpunkt": "Örebro", "Destination": "Mora", "Avstånd": 278, "Kostnad": 556 },
+  { "Startpunkt": "Sandviken", "Destination": "Falun", "Avstånd": 98, "Kostnad": 196 },
+  { "Startpunkt": "Uppsala", "Destination": "Västerås", "Avstånd": 115, "Kostnad": 230 },
+  { "Startpunkt": "Göteborg", "Destination": "Örebro", "Avstånd": 278, "Kostnad": 556 },
+  { "Startpunkt": "Linköping", "Destination": "Växjö", "Avstånd": 235, "Kostnad": 470 },
+  { "Startpunkt": "Hudiksvall", "Destination": "Östersund", "Avstånd": 315, "Kostnad": 630 },
+  { "Startpunkt": "Falun", "Destination": "Hudiksvall", "Avstånd": 220, "Kostnad": 440 },
+  { "Startpunkt": "Örebro", "Destination": "Falun", "Avstånd": 201, "Kostnad": 402 },
+  { "Startpunkt": "Jönköping", "Destination": "Örebro", "Avstånd": 242, "Kostnad": 484 },
+  { "Startpunkt": "Växjö", "Destination": "Göteborg", "Avstånd": 235, "Kostnad": 470 },
+  { "Startpunkt": "Halmstad", "Destination": "Jönköping", "Avstånd": 196, "Kostnad": 392 }
 ]
