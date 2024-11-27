@@ -10,27 +10,27 @@
         <DataGrid Grid.Row="0" 
                   ItemsSource="{Binding Routes}" 
                   AutoGenerateColumns="False" 
-                  Margin="10" 
-                  IsReadOnly="False">
+                  Margin="10">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Start" 
-                                    Binding="{Binding Start.Name, Mode=TwoWay}" 
-                                    Width="*"/>
-                <DataGridTextColumn Header="Destination" 
-                                    Binding="{Binding Destination.Name, Mode=TwoWay}" 
-                                    Width="*"/>
+                <DataGridComboBoxColumn Header="Start" 
+                                      SelectedItemBinding="{Binding Start}"
+                                      ItemsSource="{Binding DataContext.Cities, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                      DisplayMemberPath="Name"
+                                      Width="*"/>
+                <DataGridComboBoxColumn Header="Destination" 
+                                      SelectedItemBinding="{Binding Destination}"
+                                      ItemsSource="{Binding DataContext.Cities, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                      DisplayMemberPath="Name"
+                                      Width="*"/>
                 <DataGridTextColumn Header="Distance (km)" 
-                                    Binding="{Binding Distance}" 
-                                    IsReadOnly="True" 
-                                    Width="auto"/>
+                                  Binding="{Binding Distance, UpdateSourceTrigger=PropertyChanged}" 
+                                  Width="auto"/>
                 <DataGridTextColumn Header="Cost (SEK)" 
-                                    Binding="{Binding Cost}" 
-                                    IsReadOnly="True" 
-                                    Width="auto"/>
+                                  Binding="{Binding Cost, UpdateSourceTrigger=PropertyChanged}" 
+                                  Width="auto"/>
             </DataGrid.Columns>
         </DataGrid>
 
-        <!-- Save Button -->
         <Button Grid.Row="1" 
                 Content="Save Routes" 
                 Command="{Binding SaveRoutesCommand}" 
