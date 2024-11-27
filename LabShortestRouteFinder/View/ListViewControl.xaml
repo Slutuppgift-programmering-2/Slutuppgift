@@ -13,13 +13,11 @@
                   Margin="10">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Start" 
-                                    Binding="{Binding Start.Name}" 
-                                    Width="*"
-                                    IsReadOnly="True"/>
+                                    Binding="{Binding Start.Name, UpdateSourceTrigger=PropertyChanged}" 
+                                    Width="*"/>
                 <DataGridTextColumn Header="Destination" 
-                                    Binding="{Binding Destination.Name}" 
-                                    Width="*"
-                                    IsReadOnly="True"/>
+                                    Binding="{Binding Destination.Name, UpdateSourceTrigger=PropertyChanged}" 
+                                    Width="*"/>
                 <DataGridTextColumn Header="Distance (km)" 
                                     Binding="{Binding Distance, UpdateSourceTrigger=PropertyChanged}" 
                                     Width="auto"/>
