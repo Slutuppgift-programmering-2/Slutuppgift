@@ -13,23 +13,21 @@
                   Margin="10">
             <DataGrid.Columns>
                 <DataGridComboBoxColumn Header="Start" 
-                                      SelectedItemBinding="{Binding Start}"
-                                      ItemsSource="{Binding Cities}"
-                                      DisplayMemberPath="Name"
-                                      SelectedValuePath="Name"
-                                      Width="*"/>
+                                        ItemsSource="{Binding Cities}"
+                                        DisplayMemberPath="Name"
+                                        SelectedValueBinding="{Binding Start.Name}"
+                                        Width="*"/>
                 <DataGridComboBoxColumn Header="Destination" 
-                                      SelectedItemBinding="{Binding Destination}"
-                                      ItemsSource="{Binding Cities}"
-                                      DisplayMemberPath="Name"
-                                      SelectedValuePath="Name"
-                                      Width="*"/>
+                                        ItemsSource="{Binding Cities}"
+                                        DisplayMemberPath="Name"
+                                        SelectedValueBinding="{Binding Destination.Name}"
+                                        Width="*"/>
                 <DataGridTextColumn Header="Distance (km)" 
-                                  Binding="{Binding Distance, UpdateSourceTrigger=PropertyChanged}" 
-                                  Width="auto"/>
+                                    Binding="{Binding Distance, UpdateSourceTrigger=PropertyChanged}" 
+                                    Width="auto"/>
                 <DataGridTextColumn Header="Cost (SEK)" 
-                                  Binding="{Binding Cost, UpdateSourceTrigger=PropertyChanged}" 
-                                  Width="auto"/>
+                                    Binding="{Binding Cost, UpdateSourceTrigger=PropertyChanged}" 
+                                    Width="auto"/>
             </DataGrid.Columns>
         </DataGrid>
 
