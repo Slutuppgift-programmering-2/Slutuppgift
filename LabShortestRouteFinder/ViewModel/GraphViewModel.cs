@@ -80,11 +80,12 @@ public partial class GraphViewModel : ObservableObject
             var options = new JsonSerializerOptions
             {
                 Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
-                WriteIndented = true
+                WriteIndented = true,
+                PropertyNameCaseInsensitive = true
             };
 
             string updatedJson = JsonSerializer.Serialize(routeInfos, options);
-            File.WriteAllText("Resources\\routes.json", updatedJson);
+            File.WriteAllText(Path.Combine("Resources", "routes.json"), updatedJson);
 
             StatusMessage = "Routes saved successfully";
         }
@@ -100,8 +101,6 @@ public partial class GraphViewModel : ObservableObject
         SaveRoutesToFile();
     }
     
-    
-
     private void ClearHighlights()
     {
         Routes.ToList().ForEach(r => r.IsHighlighted = false);
@@ -132,8 +131,6 @@ public partial class GraphViewModel : ObservableObject
             totalDistance += route.Distance;
             totalCost += route.Cost;
         }
-
-        //StatusMessage = $"Path: {pathDescription}\nTotal Distance: {totalDistance} km\nTotal Cost: {totalCost} SEK";
     }
 
     partial void OnSelectedStartCityChanged(CityNode? value)
