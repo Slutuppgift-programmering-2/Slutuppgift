@@ -10,31 +10,22 @@
         <DataGrid Grid.Row="0" 
                   ItemsSource="{Binding Routes}" 
                   AutoGenerateColumns="False" 
-                  Name="routeGrid"
                   Margin="10">
-            <DataGrid.Resources>
-                <CollectionViewSource x:Key="CitiesCollection" Source="{Binding Cities}"/>
-            </DataGrid.Resources>
-            
             <DataGrid.Columns>
-                <DataGridComboBoxColumn Header="Start" 
-                                      SelectedValueBinding="{Binding Start}"
-                                      ItemsSource="{Binding Source={StaticResource CitiesCollection}}"
-                                      SelectedValuePath="Name"
-                                      DisplayMemberPath="Name"
-                                      Width="*"/>
-                <DataGridComboBoxColumn Header="Destination" 
-                                      SelectedValueBinding="{Binding Destination}"
-                                      ItemsSource="{Binding Source={StaticResource CitiesCollection}}"
-                                      SelectedValuePath="Name"
-                                      DisplayMemberPath="Name"
-                                      Width="*"/>
+                <DataGridTextColumn Header="Start" 
+                                    Binding="{Binding Start.Name}" 
+                                    Width="*"
+                                    IsReadOnly="True"/>
+                <DataGridTextColumn Header="Destination" 
+                                    Binding="{Binding Destination.Name}" 
+                                    Width="*"
+                                    IsReadOnly="True"/>
                 <DataGridTextColumn Header="Distance (km)" 
-                                  Binding="{Binding Distance, UpdateSourceTrigger=PropertyChanged}" 
-                                  Width="auto"/>
+                                    Binding="{Binding Distance, UpdateSourceTrigger=PropertyChanged}" 
+                                    Width="auto"/>
                 <DataGridTextColumn Header="Cost (SEK)" 
-                                  Binding="{Binding Cost, UpdateSourceTrigger=PropertyChanged}" 
-                                  Width="auto"/>
+                                    Binding="{Binding Cost, UpdateSourceTrigger=PropertyChanged}" 
+                                    Width="auto"/>
             </DataGrid.Columns>
         </DataGrid>
 
