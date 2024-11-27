@@ -18,13 +18,17 @@
         <!-- Main Content Area with TabControl -->
         <TabControl Name="MainTabControl">
             <!-- Tab for List View -->
-            <TabItem Header="List View" Name="ListTab">
+            <TabItem Header="Routes" Name="ListTab">
                 <view:ListViewControl DataContext="{Binding RouteViewModel, RelativeSource={RelativeSource AncestorType=Window}}" />
+            </TabItem>
+
+            <TabItem Header="Cities" Name="CityListTab">
+                <view:CityListViewControl DataContext="{Binding CityViewModel, RelativeSource={RelativeSource AncestorType=Window}}" />
             </TabItem>
 
             <!-- Tab for Graph View -->
             <TabItem Header="Graph View" Name="GraphTab">
-                <view:GraphViewControl DataContext="{Binding GraphViewModel, RelativeSource={RelativeSource AncestorType=Window}}" />
+                <view:GraphViewControl DataContext="{Binding GraphViewModel, RelativeSource={RelativeSource AncestorType=Window}}"/>
             </TabItem>
         </TabControl>
     </DockPanel>

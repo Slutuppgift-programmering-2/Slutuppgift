@@ -1,0 +1,22 @@
+[
+  { "Name": "Stockholm", "Longitude": 18.0710, "Latitude": 59.3251 },
+  { "Name": "Göteborg", "Longitude": 11.9670, "Latitude": 57.7072 },
+  { "Name": "Malmö", "Longitude": 13.0001, "Latitude": 55.6052 },
+  { "Name": "Kiruna", "Longitude": 19.5, "Latitude": 68.1666 },
+  { "Name": "Luleå", "Longitude": 22.1459, "Latitude": 65.5831 },
+  { "Name": "Umeå", "Longitude": 20.2630, "Latitude": 63.3256 },
+  { "Name": "Östersund", "Longitude": 14.6357, "Latitude": 63.1793 },
+  { "Name": "Hudiksvall", "Longitude": 17.1055, "Latitude": 61.7281 },
+  { "Name": "Gävle", "Longitude": 17.1467, "Latitude": 60.6750 },
+  { "Name": "Mora", "Longitude": 14.5442, "Latitude": 61.0086 },
+  { "Name": "Falun", "Longitude": 15.6323, "Latitude": 60.6070 },
+  { "Name": "Sandviken", "Longitude": 16.7759, "Latitude": 60.6218 },
+  { "Name": "Uppsala", "Longitude": 17.6387, "Latitude": 59.8586 },
+  { "Name": "Västerås", "Longitude": 16.5463, "Latitude": 59.6110 },
+  { "Name": "Örebro", "Longitude": 15.2151, "Latitude": 59.2747 },
+  { "Name": "Linköping", "Longitude": 15.6245, "Latitude": 58.4098 },
+  { "Name": "Jönköping", "Longitude": 14.1657, "Latitude": 57.7825 },
+  { "Name": "Halmstad", "Longitude": 12.8574, "Latitude": 56.6739 },
+  { "Name": "Växjö", "Longitude": 14.8094, "Latitude": 56.8787 },
+  { "Name": "Kalmar", "Longitude": 16.3662, "Latitude": 56.6628 }
+]

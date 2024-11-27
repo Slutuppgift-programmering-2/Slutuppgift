@@ -1,5 +1,4 @@
-﻿using LabShortestRouteFinder;
-using LabShortestRouteFinder.Model;
+﻿using LabShortestRouteFinder.Model;
 using System.Collections.ObjectModel;
 
 namespace LabShortestRouteFinder.ViewModel
@@ -9,10 +8,13 @@ namespace LabShortestRouteFinder.ViewModel
         public ObservableCollection<CityNode> Cities { get; }
         public ObservableCollection<Route> Routes { get; }
 
-        public GraphViewModel(MainViewModel mainViewModel) 
+        public GraphViewModel(MainViewModel mainViewModel)
         {
             Cities = mainViewModel.Cities;
             Routes = mainViewModel.Routes;
         }
+
+        
     }
 }
+
