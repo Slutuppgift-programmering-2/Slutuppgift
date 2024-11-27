@@ -188,35 +188,6 @@ public partial class GraphViewModel : ObservableObject
         return ReconstructPath(start, end, previous);
     }
 
-    private void UpdateCycleStatusMessage(List<List<Route>> cycles)
-    {
-        StatusMessage = $"Found {cycles.Count} cycles:";
-       // for (var i = 0; i < cycles.Count; i++)
-       // {
-        //    var cycle = cycles[i];
-        //    var pathCities = new List<string>();
-        //    var totalDistance = cycle.Sum(r => r.Distance);
-        //    var totalCost = cycle.Sum(r => r.Cost);
-
-        //    var firstCity = cycle.First().Start;
-        //    pathCities.Add(firstCity.Name);
-
-        //    var currentCity = firstCity;
-        //    foreach (var route in cycle)
-        //    {
-        //        var nextCity = route.Start == currentCity ? route.Destination : route.Start;
-        //        pathCities.Add(nextCity.Name);
-        //        currentCity = nextCity;
-        //    }
-
-        //    pathCities.Add(firstCity.Name);
-
-        //    StatusMessage += $"\nCycle {i + 1}: {string.Join(" → ", pathCities)}" +
-        //                     $"\nDistance: {totalDistance} km, Cost: {totalCost} SEK";
-        //}
-    }
-
-
     private static List<Route> ReconstructPath(
         CityNode start,
         CityNode end,
@@ -343,31 +314,6 @@ private void FindCycles()
         if (cycles.Any())
         {
             StatusMessage = $"Found {cycles.Count} cycles:";
-            for (var i = 0; i < cycles.Count; i++)
-            {
-                var cycle = cycles[i];
-                var pathCities = new List<string>();
-                var totalDistance = cycle.Sum(r => r.Distance);
-                var totalCost = cycle.Sum(r => r.Cost);
-
-                // Get the first city
-                var firstCity = cycle.First().Start;
-                pathCities.Add(firstCity.Name);
-
-                // Build the path by following the routes
-                var currentCity = firstCity;
-                foreach (var route in cycle)
-                {
-                    var nextCity = route.Start == currentCity ? route.Destination : route.Start;
-                    pathCities.Add(nextCity.Name);
-                    currentCity = nextCity;
-                }
-
-                pathCities.Add(firstCity.Name);
-
-                StatusMessage += $"\nCycle {i + 1}: {string.Join(" → ", pathCities)}" +
-                               $"\nDistance: {totalDistance} km, Cost: {totalCost} SEK";
-            }
         }
         else
         {
