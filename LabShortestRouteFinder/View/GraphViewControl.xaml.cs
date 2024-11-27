@@ -1,21 +1,20 @@
-﻿using LabShortestRouteFinder.ViewModel;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
+using LabShortestRouteFinder.ViewModel;
 
-namespace LabShortestRouteFinder.View
+namespace LabShortestRouteFinder.View;
+
+/// <summary>
+///     Interaction logic for GraphViewControl.xaml
+/// </summary>
+public partial class GraphViewControl : UserControl
 {
-    /// <summary>
-    /// Interaction logic for GraphViewControl.xaml
-    /// </summary>
-    public partial class GraphViewControl : UserControl
+    public GraphViewControl()
     {
-        public GraphViewControl()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
 
-        public GraphViewControl(MainViewModel mainViewModel)
-        {
-            InitializeComponent();
-        }
+    public GraphViewControl(MainViewModel mainViewModel)
+    {
+        InitializeComponent();
     }
 }
