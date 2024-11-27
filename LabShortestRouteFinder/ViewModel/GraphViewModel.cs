@@ -94,7 +94,7 @@ public partial class GraphViewModel : ObservableObject
             totalCost += route.Cost;
         }
 
-        StatusMessage = $"Path: {pathDescription}\nTotal Distance: {totalDistance} km\nTotal Cost: {totalCost} SEK";
+        //StatusMessage = $"Path: {pathDescription}\nTotal Distance: {totalDistance} km\nTotal Cost: {totalCost} SEK";
     }
 
     partial void OnSelectedStartCityChanged(CityNode? value)
@@ -191,29 +191,29 @@ public partial class GraphViewModel : ObservableObject
     private void UpdateCycleStatusMessage(List<List<Route>> cycles)
     {
         StatusMessage = $"Found {cycles.Count} cycles:";
-        for (var i = 0; i < cycles.Count; i++)
-        {
-            var cycle = cycles[i];
-            var pathCities = new List<string>();
-            var totalDistance = cycle.Sum(r => r.Distance);
-            var totalCost = cycle.Sum(r => r.Cost);
+       // for (var i = 0; i < cycles.Count; i++)
+       // {
+        //    var cycle = cycles[i];
+        //    var pathCities = new List<string>();
+        //    var totalDistance = cycle.Sum(r => r.Distance);
+        //    var totalCost = cycle.Sum(r => r.Cost);
 
-            var firstCity = cycle.First().Start;
-            pathCities.Add(firstCity.Name);
+        //    var firstCity = cycle.First().Start;
+        //    pathCities.Add(firstCity.Name);
 
-            var currentCity = firstCity;
-            foreach (var route in cycle)
-            {
-                var nextCity = route.Start == currentCity ? route.Destination : route.Start;
-                pathCities.Add(nextCity.Name);
-                currentCity = nextCity;
-            }
+        //    var currentCity = firstCity;
+        //    foreach (var route in cycle)
+        //    {
+        //        var nextCity = route.Start == currentCity ? route.Destination : route.Start;
+        //        pathCities.Add(nextCity.Name);
+        //        currentCity = nextCity;
+        //    }
 
-            pathCities.Add(firstCity.Name);
+        //    pathCities.Add(firstCity.Name);
 
-            StatusMessage += $"\nCycle {i + 1}: {string.Join(" → ", pathCities)}" +
-                             $"\nDistance: {totalDistance} km, Cost: {totalCost} SEK";
-        }
+        //    StatusMessage += $"\nCycle {i + 1}: {string.Join(" → ", pathCities)}" +
+        //                     $"\nDistance: {totalDistance} km, Cost: {totalCost} SEK";
+        //}
     }
 
 
