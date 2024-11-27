@@ -23,11 +23,12 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox ItemsSource="{Binding DataContext.Cities, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                            <ComboBox ItemsSource="{Binding Path=DataContext.Cities, 
+                                      RelativeSource={RelativeSource FindAncestor, 
+                                      AncestorType={x:Type UserControl}}}"
                                     DisplayMemberPath="Name"
                                     SelectedItem="{Binding Start}"
-                                    IsDropDownOpen="True"
-                                    IsSynchronizedWithCurrentItem="True"/>
+                                    IsDropDownOpen="True"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
@@ -40,11 +41,12 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox ItemsSource="{Binding DataContext.Cities, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                            <ComboBox ItemsSource="{Binding Path=DataContext.Cities, 
+                                      RelativeSource={RelativeSource FindAncestor, 
+                                      AncestorType={x:Type UserControl}}}"
                                     DisplayMemberPath="Name"
                                     SelectedItem="{Binding Destination}"
-                                    IsDropDownOpen="True"
-                                    IsSynchronizedWithCurrentItem="True"/>
+                                    IsDropDownOpen="True"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
