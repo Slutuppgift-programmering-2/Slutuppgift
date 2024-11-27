@@ -26,13 +26,17 @@
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
                             <!-- ComboBox for selecting the Start city -->
-                            <ComboBox ItemsSource="{Binding Path=DataContext.Cities, 
-                                      RelativeSource={RelativeSource FindAncestor, 
-                                      AncestorType={x:Type UserControl}}}"
-                                    DisplayMemberPath="Name"
-                                    SelectedItem="{Binding Start}"
-                                    Width="150"
-                                    Margin="0,5"/>
+                            <ComboBox ItemsSource="{Binding Path=DataContext.Cities, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                      DisplayMemberPath="Name"
+                                      SelectedItem="{Binding Start}"
+                                      Width="150"
+                                      Margin="0,5">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="City 1"/>
+                                    <ComboBoxItem Content="City 2"/>
+                                </ComboBox.Items>
+                            </ComboBox>
+
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
