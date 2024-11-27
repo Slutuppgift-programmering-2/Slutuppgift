@@ -18,9 +18,9 @@ namespace LabShortestRouteFinder.View
     public partial class MainWindow : Window
     {
         public MainViewModel MainViewModel { get; }
-
         public RouteViewModel RouteViewModel { get; }
         public GraphViewModel GraphViewModel { get; }
+        public CityViewModel CityViewModel { get; }
 
         public MainWindow()
         {
@@ -29,6 +29,7 @@ namespace LabShortestRouteFinder.View
             MainViewModel = new MainViewModel();
             RouteViewModel = new RouteViewModel(MainViewModel);
             GraphViewModel = new GraphViewModel(MainViewModel);
+            CityViewModel = new CityViewModel(MainViewModel);
 
             DataContext = MainViewModel;
         }

@@ -6,8 +6,8 @@
         <DataGrid ItemsSource="{Binding Routes}" AutoGenerateColumns="False" Margin="10" IsReadOnly="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Start" Binding="{Binding Start.Name, Mode=TwoWay}" />
-                <DataGridTextColumn Header="Destination" Binding="{Binding Destination.Name}" />
-                <DataGridTextColumn Header="Distance" Binding="{Binding Distance}" />
+                <DataGridTextColumn Header="Destination" Binding="{Binding Destination.Name, Mode=TwoWay}" />
+                <DataGridTextColumn Header="Distance" Binding="{Binding Distance}" IsReadOnly="True" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
