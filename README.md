@@ -20,3 +20,19 @@ att återanvända kod och på så vis slippa uppfinna hjulet på nytt. Det märk
 Det var lite av mina tankar kring detta.
 
 /Jonas J
+
+----
+
+### Gjort av Joakim 
+
+- Laddar data: Hämtar städer från cities.json och vägar från routes.json. Kopplar ihop vägar med städer och anpassar koordinaterna för canvas.
+- Visualisering: Vägar som linjer mellan städerna. Vägar och cykler markeras med färger från en färglista.
+- Grafoperationer:
+* * * Har dropdowns för att välja start- och slutstad samt knappar för att hitta kortaste väg, cykler och kortaste cykel.
+* * Kortaste väg: Använder en algoritm för att hitta och markera kortaste vägen mellan två valda städer.
+* * Cykler: Letar upp och markerar cykler i grafen med olika färger för att skilja dem åt.
+* * Kortaste cykel: Söker efter den kortaste cykeln i grafen och markerar den.
+* * *  Statusmeddelanden: Visar resultat från olika operationer direkt i gränssnittet.
+
+
+
