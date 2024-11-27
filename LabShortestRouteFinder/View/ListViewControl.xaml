@@ -10,16 +10,23 @@
         <DataGrid Grid.Row="0" 
                   ItemsSource="{Binding Routes}" 
                   AutoGenerateColumns="False" 
+                  Name="routeGrid"
                   Margin="10">
+            <DataGrid.Resources>
+                <CollectionViewSource x:Key="CitiesCollection" Source="{Binding Cities}"/>
+            </DataGrid.Resources>
+            
             <DataGrid.Columns>
                 <DataGridComboBoxColumn Header="Start" 
-                                      SelectedItemBinding="{Binding Start}"
-                                      ItemsSource="{Binding DataContext.Cities, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                      SelectedValueBinding="{Binding Start}"
+                                      ItemsSource="{Binding Source={StaticResource CitiesCollection}}"
+                                      SelectedValuePath="Name"
                                       DisplayMemberPath="Name"
                                       Width="*"/>
                 <DataGridComboBoxColumn Header="Destination" 
-                                      SelectedItemBinding="{Binding Destination}"
-                                      ItemsSource="{Binding DataContext.Cities, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                      SelectedValueBinding="{Binding Destination}"
+                                      ItemsSource="{Binding Source={StaticResource CitiesCollection}}"
+                                      SelectedValuePath="Name"
                                       DisplayMemberPath="Name"
                                       Width="*"/>
                 <DataGridTextColumn Header="Distance (km)" 
