@@ -26,6 +26,7 @@ Det var lite av mina tankar kring detta.
 ### Gjort av Joakim 
 
 - Laddar data: Hämtar städer från cities.json och vägar från routes.json. Kopplar ihop vägar med städer och anpassar koordinaterna för canvas.
+- Visa rutter och kan ändra: namn på Startstad, Destinationsstad, Sträcka mellan städerna och ett fiktivt pengarvärde att ta sig mellan städerna
 - Visualisering: Vägar som linjer mellan städerna. Vägar och cykler markeras med färger från en färglista.
 - Grafoperationer:
 * * * Har dropdowns för att välja start- och slutstad samt knappar för att hitta kortaste väg, cykler och kortaste cykel.
@@ -33,6 +34,7 @@ Det var lite av mina tankar kring detta.
 * * Cykler: Letar upp och markerar cykler i grafen med olika färger för att skilja dem åt.
 * * Kortaste cykel: Söker efter den kortaste cykeln i grafen och markerar den.
 * * *  Statusmeddelanden: Visar resultat från olika operationer direkt i gränssnittet.
+
 
 
 
