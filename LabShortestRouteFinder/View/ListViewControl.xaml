@@ -26,17 +26,13 @@
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
                             <!-- ComboBox for selecting the Start city -->
-                            <ComboBox ItemsSource="{Binding Path=DataContext.Cities, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                            <ComboBox ItemsSource="{Binding Path=DataContext.Cities, 
+                                      RelativeSource={RelativeSource FindAncestor, 
+                                      AncestorType={x:Type UserControl}}}"
                                       DisplayMemberPath="Name"
                                       SelectedItem="{Binding Start}"
-                                      Width="150"
-                                      Margin="0,5">
-                                <ComboBox.Items>
-                                    <ComboBoxItem Content="City 1"/>
-                                    <ComboBoxItem Content="City 2"/>
-                                </ComboBox.Items>
-                            </ComboBox>
-
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Center"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
@@ -54,10 +50,10 @@
                             <ComboBox ItemsSource="{Binding Path=DataContext.Cities, 
                                       RelativeSource={RelativeSource FindAncestor, 
                                       AncestorType={x:Type UserControl}}}"
-                                    DisplayMemberPath="Name"
-                                    SelectedItem="{Binding Destination}"
-                                    Width="150"
-                                    Margin="0,5"/>
+                                      DisplayMemberPath="Name"
+                                      SelectedItem="{Binding Destination}"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Center"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
