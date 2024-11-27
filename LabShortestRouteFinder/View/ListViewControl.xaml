@@ -20,19 +20,17 @@
                 <DataGridTemplateColumn Header="Start" Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Start.Name}"/>
+                            <TextBlock Text="{Binding Start.Name}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <!-- ComboBox for selecting the Start city -->
-                            <ComboBox ItemsSource="{Binding Path=DataContext.Cities, 
-                                      RelativeSource={RelativeSource FindAncestor, 
-                                      AncestorType={x:Type UserControl}}}"
-                                      DisplayMemberPath="Name"
-                                      SelectedItem="{Binding Start}"
-                                      HorizontalAlignment="Stretch"
-                                      VerticalAlignment="Center"/>
+                            <ComboBox 
+                                ItemsSource="{Binding Cities}" 
+                                DisplayMemberPath="Name"
+                                SelectedItem="{Binding Start, Mode=TwoWay}" 
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
@@ -41,19 +39,17 @@
                 <DataGridTemplateColumn Header="Destination" Width="*">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Destination.Name}"/>
+                            <TextBlock Text="{Binding Destination.Name}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <!-- ComboBox for selecting the Destination city -->
-                            <ComboBox ItemsSource="{Binding Path=DataContext.Cities, 
-                                      RelativeSource={RelativeSource FindAncestor, 
-                                      AncestorType={x:Type UserControl}}}"
-                                      DisplayMemberPath="Name"
-                                      SelectedItem="{Binding Destination}"
-                                      HorizontalAlignment="Stretch"
-                                      VerticalAlignment="Center"/>
+                            <ComboBox 
+                                ItemsSource="{Binding Cities}" 
+                                DisplayMemberPath="Name"
+                                SelectedItem="{Binding Destination, Mode=TwoWay}" 
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
