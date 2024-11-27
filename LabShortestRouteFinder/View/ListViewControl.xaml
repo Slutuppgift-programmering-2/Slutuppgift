@@ -9,7 +9,10 @@
 
         <DataGrid Grid.Row="0" 
                   ItemsSource="{Binding Routes}" 
-                  AutoGenerateColumns="False" 
+                  AutoGenerateColumns="False"
+                  EnableRowVirtualization="True"
+                  VirtualizingPanel.IsVirtualizing="True"
+                  VirtualizingPanel.VirtualizationMode="Standard"
                   Margin="10">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Start" Width="*">
@@ -20,9 +23,11 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox ItemsSource="{Binding DataContext.Cities, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                            <ComboBox ItemsSource="{Binding DataContext.Cities, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                     DisplayMemberPath="Name"
-                                    SelectedItem="{Binding Start, UpdateSourceTrigger=PropertyChanged}"/>
+                                    SelectedItem="{Binding Start}"
+                                    IsDropDownOpen="True"
+                                    IsSynchronizedWithCurrentItem="True"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
@@ -35,9 +40,11 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox ItemsSource="{Binding DataContext.Cities, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                            <ComboBox ItemsSource="{Binding DataContext.Cities, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                     DisplayMemberPath="Name"
-                                    SelectedItem="{Binding Destination, UpdateSourceTrigger=PropertyChanged}"/>
+                                    SelectedItem="{Binding Destination}"
+                                    IsDropDownOpen="True"
+                                    IsSynchronizedWithCurrentItem="True"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
