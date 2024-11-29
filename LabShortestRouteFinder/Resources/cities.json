@@ -1,22 +1,202 @@
-[
-  { "Name": "Stockholm", "Longitude": 18.0710, "Latitude": 59.3251 },
-  { "Name": "Göteborg", "Longitude": 11.9670, "Latitude": 57.7072 },
-  { "Name": "Malmö", "Longitude": 13.0001, "Latitude": 55.6052 },
-  { "Name": "Kiruna", "Longitude": 19.5, "Latitude": 68.1666 },
-  { "Name": "Luleå", "Longitude": 22.1459, "Latitude": 65.5831 },
-  { "Name": "Umeå", "Longitude": 20.2630, "Latitude": 63.3256 },
-  { "Name": "Östersund", "Longitude": 14.6357, "Latitude": 63.1793 },
-  { "Name": "Hudiksvall", "Longitude": 17.1055, "Latitude": 61.7281 },
-  { "Name": "Gävle", "Longitude": 17.1467, "Latitude": 60.6750 },
-  { "Name": "Mora", "Longitude": 14.5442, "Latitude": 61.0086 },
-  { "Name": "Falun", "Longitude": 15.6323, "Latitude": 60.6070 },
-  { "Name": "Sandviken", "Longitude": 16.7759, "Latitude": 60.6218 },
-  { "Name": "Uppsala", "Longitude": 17.6387, "Latitude": 59.8586 },
-  { "Name": "Västerås", "Longitude": 16.5463, "Latitude": 59.6110 },
-  { "Name": "Örebro", "Longitude": 15.2151, "Latitude": 59.2747 },
-  { "Name": "Linköping", "Longitude": 15.6245, "Latitude": 58.4098 },
-  { "Name": "Jönköping", "Longitude": 14.1657, "Latitude": 57.7825 },
-  { "Name": "Halmstad", "Longitude": 12.8574, "Latitude": 56.6739 },
-  { "Name": "Växjö", "Longitude": 14.8094, "Latitude": 56.8787 },
-  { "Name": "Kalmar", "Longitude": 16.3662, "Latitude": 56.6628 }
-]Test
+{
+  "Rectangle": {
+    "NorthWest": {
+      "Latitude": 69.06,
+      "Longitude": 10.93
+    },
+    "NorthEast": {
+      "Latitude": 69.06,
+      "Longitude": 24.16
+    },
+    "SouthWest": {
+      "Latitude": 55.2,
+      "Longitude": 10.93
+    },
+    "SouthEast": {
+      "Latitude": 55.2,
+      "Longitude": 24.16
+    }
+  },
+  "Cities": [
+    {
+      "Name": "Stockholm",
+      "X": 233,
+      "Y": 591,
+      "CenterX": 243,
+      "CenterY": 601,
+      "Latitude": 59.3251,
+      "Longitude": 18.071
+    },
+    {
+      "Name": "Göteborg",
+      "X": 33,
+      "Y": 689,
+      "CenterX": 43,
+      "CenterY": 699,
+      "Latitude": 57.7072,
+      "Longitude": 11.967
+    },
+    {
+      "Name": "Malmö",
+      "X": 67,
+      "Y": 817,
+      "CenterX": 77,
+      "CenterY": 827,
+      "Latitude": 55.6052,
+      "Longitude": 13.0001
+    },
+    {
+      "Name": "Kiruna",
+      "X": 280,
+      "Y": 54,
+      "CenterX": 290,
+      "CenterY": 64,
+      "Latitude": 68.1666,
+      "Longitude": 19.5
+    },
+    {
+      "Name": "Luleå",
+      "X": 367,
+      "Y": 211,
+      "CenterX": 377,
+      "CenterY": 221,
+      "Latitude": 65.5831,
+      "Longitude": 22.1459
+    },
+    {
+      "Name": "Umeå",
+      "X": 305,
+      "Y": 348,
+      "CenterX": 315,
+      "CenterY": 358,
+      "Latitude": 63.3256,
+      "Longitude": 20.263
+    },
+    {
+      "Name": "Östersund",
+      "X": 121,
+      "Y": 357,
+      "CenterX": 131,
+      "CenterY": 367,
+      "Latitude": 63.1793,
+      "Longitude": 14.6357
+    },
+    {
+      "Name": "Hudiksvall",
+      "X": 202,
+      "Y": 445,
+      "CenterX": 212,
+      "CenterY": 455,
+      "Latitude": 61.7281,
+      "Longitude": 17.1055
+    },
+    {
+      "Name": "Gävle",
+      "X": 203,
+      "Y": 509,
+      "CenterX": 213,
+      "CenterY": 519,
+      "Latitude": 60.675,
+      "Longitude": 17.1467
+    },
+    {
+      "Name": "Mora",
+      "X": 118,
+      "Y": 489,
+      "CenterX": 128,
+      "CenterY": 499,
+      "Latitude": 61.0086,
+      "Longitude": 14.5442
+    },
+    {
+      "Name": "Falun",
+      "X": 153,
+      "Y": 513,
+      "CenterX": 163,
+      "CenterY": 523,
+      "Latitude": 60.607,
+      "Longitude": 15.6323
+    },
+    {
+      "Name": "Sandviken",
+      "X": 191,
+      "Y": 512,
+      "CenterX": 201,
+      "CenterY": 522,
+      "Latitude": 60.6218,
+      "Longitude": 16.7759
+    },
+    {
+      "Name": "Uppsala",
+      "X": 219,
+      "Y": 558,
+      "CenterX": 229,
+      "CenterY": 568,
+      "Latitude": 59.8586,
+      "Longitude": 17.6387
+    },
+    {
+      "Name": "Västerås",
+      "X": 183,
+      "Y": 574,
+      "CenterX": 193,
+      "CenterY": 584,
+      "Latitude": 59.611,
+      "Longitude": 16.5463
+    },
+    {
+      "Name": "Örebro",
+      "X": 140,
+      "Y": 594,
+      "CenterX": 150,
+      "CenterY": 604,
+      "Latitude": 59.2747,
+      "Longitude": 15.2151
+    },
+    {
+      "Name": "Linköping",
+      "X": 153,
+      "Y": 647,
+      "CenterX": 163,
+      "CenterY": 657,
+      "Latitude": 58.4098,
+      "Longitude": 15.6245
+    },
+    {
+      "Name": "Jönköping",
+      "X": 105,
+      "Y": 685,
+      "CenterX": 115,
+      "CenterY": 695,
+      "Latitude": 57.7825,
+      "Longitude": 14.1657
+    },
+    {
+      "Name": "Halmstad",
+      "X": 63,
+      "Y": 752,
+      "CenterX": 73,
+      "CenterY": 762,
+      "Latitude": 56.6739,
+      "Longitude": 12.8574
+    },
+    {
+      "Name": "Växjö",
+      "X": 126,
+      "Y": 740,
+      "CenterX": 136,
+      "CenterY": 750,
+      "Latitude": 56.8787,
+      "Longitude": 14.8094
+    },
+    {
+      "Name": "Kalmar",
+      "X": 177,
+      "Y": 753,
+      "CenterX": 187,
+      "CenterY": 763,
+      "Latitude": 56.6628,
+      "Longitude": 16.3662
+    }
+  ]
+}
