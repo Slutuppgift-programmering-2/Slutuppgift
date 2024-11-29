@@ -5,11 +5,13 @@ Uppgifter i Shortest Route Finder.
 -	Skapat en ny View som heter CityListViewControl. Så att man kan visa alla städer, Longitud, och Latitud i listan (som har laddats in från filen cities.json).
 -	Skapat en knapp för att spara listan till en json fil i Cities. Man kan även lägga till en ny stad med Longitud och Latitud koordinater.
 -	Knappen finns i filen CityListViewControl och har ett klickevent i koden bakom. Koden för att spara finns i  CityViewModel.
--	Skapet en Delete knapp i Routes med samma funktion som i Cities. Knappen finns i ListViewControl och har ett klickevent bakom.Lade till det för att det skulle bli lika 
+-	Skapet en Delete knapp i Routes med samma funktion som i Cities. Knappen finns i ListViewControl och har ett klickevent bakom. Lade till det för att det skulle bli lika 
 -	Validering av Longitud och Latitud när städer sparas till filen. Koden finns i CityViewModel.
 -	Ändrat bakgrundsfärg i Canvas i GrapViewControl tilll grönt för att se vart Canvas slutar.
 -	Justerat GraphViewModel så att noderna visas lite snyggare med stadsnamnet under och justerat storleken på canvas från 800x600 till 433x842 så det ser bättre ut. 
 - Lagt till två filer i Model mappen RectangelCoordinates.cs och CitiesRoot.cs där jag skapat en nya klasser för att använda Rectangel Coordinates i cities.json för att definera Sveriges gränser.
+- Uppdaterat spara funktionen till cities.json filen när en ny stad läggs till med Longitud och Latitud koordninater så att den sparas två gånger både till bin katalogen som det var förut men också till själva cities.json filen i programemt så den finns kvar
+  om man stänger ner programmet och startar det igen. Koden finns i ListViewModel.cs.
 
 Ovanstående är en uppdatering efter ändringarna vi skulle göra efter Redovisningen.
 
