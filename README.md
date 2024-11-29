@@ -1,4 +1,4 @@
-Uppgifter i Shortest Route Finder.
+Uppgifter i Shortest Route Finder. OBS har fixat nedstående saker men har problem att pusha ändringarna till GITHUB!
 
 -	Läs in städer från filen cities.json. Kod finns i MainViewModel.
 -	Konverterar Longitud och Latitud till X och Y koordinater. Detta sker i samma metod i MainViewModel där vi läser in json filen.
