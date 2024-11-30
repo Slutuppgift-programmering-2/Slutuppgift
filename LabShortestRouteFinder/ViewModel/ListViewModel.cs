@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace LabShortestRouteFinder.ViewModel
@@ -12,16 +13,24 @@ namespace LabShortestRouteFinder.ViewModel
         [ObservableProperty]
         private string? _statusMessage;
 
+        [ObservableProperty]
+        private Route? _selectedRoute;
+
+        [ObservableProperty]
+        private CityNode? _selectedStartCity;
+
+        [ObservableProperty]
+        private CityNode? _selectedDestinationCity;
+
         public ObservableCollection<Route> Routes { get; }
-        public ObservableCollection<City> AvailableCities { get; }
-        public Route SelectedRoute { get; set; }
+        public ObservableCollection<CityNode> Cities { get; }
         private readonly MainViewModel _mainViewModel;
 
         public ListViewModel(MainViewModel mainViewModel)
         {
             _mainViewModel = mainViewModel;
             Routes = mainViewModel.Routes;
-            AvailableCities = mainViewModel.Cities;
+            Cities = mainViewModel.Cities;
         }
 
         public void SaveRoutesToFile()
@@ -54,7 +63,7 @@ namespace LabShortestRouteFinder.ViewModel
 
                 if (!routeInfos.Any())
                 {
-                    StatusMessage = "No valid routes to save. Please ensure all routes have distances and costs greater than 0.";
+                    StatusMessage = "No valid routes to save. Please ensure all routes have valid cities, distances, and costs greater than 0.";
                     return;
                 }
 

@@ -9,6 +9,7 @@
             </StackPanel>
 
             <DataGrid ItemsSource="{Binding Routes}" 
+                     SelectedItem="{Binding SelectedRoute}"
                      AutoGenerateColumns="False" 
                      Margin="10" 
                      IsReadOnly="False"
@@ -19,15 +20,13 @@
                      ScrollViewer.HorizontalScrollBarVisibility="Auto">
                 <DataGrid.Columns>
                     <DataGridComboBoxColumn Header="Start" 
-                                          ItemsSource="{Binding AvailableCities}"
-                                          SelectedItemBinding="{Binding Start}"
-                                          DisplayMemberPath="Name"
-                                          SelectedValuePath="Name"/>
+                                          ItemsSource="{Binding Cities}"
+                                          SelectedValueBinding="{Binding Start}"
+                                          DisplayMemberPath="Name"/>
                     <DataGridComboBoxColumn Header="Destination" 
-                                          ItemsSource="{Binding AvailableCities}"
-                                          SelectedItemBinding="{Binding Destination}"
-                                          DisplayMemberPath="Name"
-                                          SelectedValuePath="Name"/>
+                                          ItemsSource="{Binding Cities}"
+                                          SelectedValueBinding="{Binding Destination}"
+                                          DisplayMemberPath="Name"/>
                     <DataGridTextColumn Header="Distance (km)" 
                                       Binding="{Binding Distance, Mode=TwoWay}" />
                     <DataGridTextColumn Header="Cost (SEK)" 
