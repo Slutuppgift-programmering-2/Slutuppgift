@@ -3,11 +3,15 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace LabShortestRouteFinder.ViewModel
 {
-    public class ListViewModel
+    public partial class ListViewModel : ObservableObject
     {
+        [ObservableProperty]
+        private string? _statusMessage;
+
         public ObservableCollection<Route> Routes { get; }
         public Route SelectedRoute { get; set; }
         public ListViewModel(MainViewModel mainViewModel)
@@ -20,9 +24,21 @@ namespace LabShortestRouteFinder.ViewModel
         {
             try
             {
+                // Check if Routes collection is null or empty
+                if (Routes == null || !Routes.Any())
+                {
+                    StatusMessage = "No routes available to save";
+                    return;
+                }
+
                 // Validate and prepare the routes for saving
                 var routeInfos = Routes
-                    .Where(r =>
+                    .Where(r => 
+                        r != null && 
+                        r.Start != null && 
+                        r.Destination != null && 
+                        !string.IsNullOrEmpty(r.Start.Name) && 
+                        !string.IsNullOrEmpty(r.Destination.Name) && 
                         r.Distance > 0 &&
                         r.Cost > 0)
                     .Select(r => new RouteInfo
@@ -34,6 +50,19 @@ namespace LabShortestRouteFinder.ViewModel
                     })
                     .ToList();
 
+                if (!routeInfos.Any())
+                {
+                    StatusMessage = "No valid routes to save. Please ensure all routes have valid cities, distances, and costs.";
+                    return;
+                }
+
+                // Ensure directory exists
+                var directoryPath = @"..\net8.0-windows\Resources";
+                if (!Directory.Exists(directoryPath))
+                {
+                    Directory.CreateDirectory(directoryPath);
+                }
+
                 // Configure JSON serialization options
                 var options = new JsonSerializerOptions
                 {
@@ -42,13 +71,31 @@ namespace LabShortestRouteFinder.ViewModel
                 };
 
                 // Serialize and save to file
+                string filePath = Path.Combine(directoryPath, "routes.json");
                 string updatedJson = JsonSerializer.Serialize(routeInfos, options);
-                File.WriteAllText(@"..\net8.0-windows\Resources\routes.json", updatedJson);
+                File.WriteAllText(filePath, updatedJson);
+                
+                StatusMessage = $"Successfully saved {routeInfos.Count} routes to file";
+            }
+            catch (UnauthorizedAccessException)
+            {
+                StatusMessage = "Access denied. Unable to save the file. Please check your permissions.";
+            }
+            catch (DirectoryNotFoundException)
+            {
+                StatusMessage = "Could not find the Resources directory. Please ensure it exists.";
+            }
+            catch (IOException ex)
+            {
+                StatusMessage = $"Error accessing the file: {ex.Message}";
+            }
+            catch (JsonException)
+            {
+                StatusMessage = "Error creating JSON data. Please check the route data format.";
             }
             catch (Exception ex)
             {
-                // Handle any errors that occur during saving
-                System.Diagnostics.Debug.WriteLine($"Error saving routes: {ex.Message}");
+                StatusMessage = $"Unexpected error while saving: {ex.Message}";
             }
         }
     }
