@@ -31,5 +31,15 @@ namespace LabShortestRouteFinder.View
             CityViewModel viewModel = (CityViewModel)DataContext;
             viewModel.SaveCitiesToFile();
         }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            CityViewModel viewModel = (CityViewModel)DataContext;
+            if (viewModel != null)
+            {
+
+                viewModel.Cities.Remove(viewModel.SelectedCity);
+            }
+        }
     }
 }
