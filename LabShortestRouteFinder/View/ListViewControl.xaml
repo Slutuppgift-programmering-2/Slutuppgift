@@ -9,20 +9,23 @@
             </StackPanel>
 
             <DataGrid ItemsSource="{Binding Routes}" 
-                      AutoGenerateColumns="False" 
-                      Margin="10" 
-                      IsReadOnly="False"
-                      CanUserAddRows="True"
-                      CanUserDeleteRows="True">
+                     AutoGenerateColumns="False" 
+                     Margin="10" 
+                     IsReadOnly="False"
+                     CanUserAddRows="True"
+                     CanUserDeleteRows="True"
+                     MaxHeight="400"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     ScrollViewer.HorizontalScrollBarVisibility="Auto">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Start" 
-                                        Binding="{Binding Start.Name, Mode=TwoWay}" />
+                                      Binding="{Binding Start.Name, Mode=TwoWay}" />
                     <DataGridTextColumn Header="Destination" 
-                                        Binding="{Binding Destination.Name, Mode=TwoWay}" />
+                                      Binding="{Binding Destination.Name, Mode=TwoWay}" />
                     <DataGridTextColumn Header="Distance (km)" 
-                                        Binding="{Binding Distance, Mode=TwoWay}" />
+                                      Binding="{Binding Distance, Mode=TwoWay}" />
                     <DataGridTextColumn Header="Cost (SEK)" 
-                                        Binding="{Binding Cost, Mode=TwoWay}" />
+                                      Binding="{Binding Cost, Mode=TwoWay}" />
                 </DataGrid.Columns>
             </DataGrid>
 
