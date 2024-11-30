@@ -22,27 +22,48 @@
                           MaxHeight="400"
                           ScrollViewer.CanContentScroll="True"
                           ScrollViewer.VerticalScrollBarVisibility="Auto"
-                          ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                          ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                          RowHeight="30"
+                          MinColumnWidth="150">
+                    <DataGrid.Resources>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Padding" Value="8,0,8,0"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="DataGridCell">
+                                        <Border Padding="{TemplateBinding Padding}">
+                                            <ContentPresenter VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGrid.Resources>
+                    
                     <DataGrid.Columns>
                         <!-- Start City Column -->
                         <DataGridTextColumn Header="Start" 
                                           Binding="{Binding Start.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                          Width="*"/>
+                                          Width="Auto"
+                                          MinWidth="150"/>
 
                         <!-- Destination City Column -->
                         <DataGridTextColumn Header="Destination" 
                                           Binding="{Binding Destination.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                          Width="*"/>
+                                          Width="Auto"
+                                          MinWidth="150"/>
 
                         <!-- Distance Column -->
                         <DataGridTextColumn Header="Distance (km)" 
                                           Binding="{Binding Distance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                          Width="*"/>
+                                          Width="Auto"
+                                          MinWidth="120"/>
 
                         <!-- Cost Column -->
                         <DataGridTextColumn Header="Cost (SEK)" 
                                           Binding="{Binding Cost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                          Width="*"/>
+                                          Width="Auto"
+                                          MinWidth="120"/>
                     </DataGrid.Columns>
                 </DataGrid>
 
