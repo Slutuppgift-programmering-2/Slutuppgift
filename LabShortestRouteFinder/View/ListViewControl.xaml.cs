@@ -1,25 +1,13 @@
-﻿using LabShortestRouteFinder.ViewModel;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using LabShortestRouteFinder.ViewModel;
 
 namespace LabShortestRouteFinder.View
 {
-    /// <summary>
-    /// Interaction logic for ListViewControl.xaml
-    /// </summary>
     public partial class ListViewControl : UserControl
     {
+        private ListViewModel? ViewModel => DataContext as ListViewModel;
+
         public ListViewControl()
         {
             InitializeComponent();
@@ -27,18 +15,24 @@ namespace LabShortestRouteFinder.View
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            // Cast DataContext to ListViewModel and call the Save method
-            ListViewModel viewModel = (ListViewModel)DataContext;
-            viewModel.SaveRoutesToFile();
+            if (ViewModel != null)
+            {
+                // Ensure the current edit is committed
+                routesGrid.CommitEdit();
+                ViewModel.SaveRoutesToFile();
+            }
+            else
+            {
+                MessageBox.Show("ViewModel is not properly initialized.", "Error", 
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
-        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        private void DataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            ListViewModel viewModel = (ListViewModel)DataContext;
-            if (viewModel != null)
+            if (e.EditAction == DataGridEditAction.Commit)
             {
-
-                viewModel.Routes.Remove(viewModel.SelectedRoute);
+                routesGrid.CommitEdit();
             }
         }
     }
