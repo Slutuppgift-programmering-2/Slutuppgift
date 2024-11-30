@@ -8,9 +8,7 @@
                 <Button Margin="10" Content="Save" Width="80" Click="SaveButton_Click" />
             </StackPanel>
 
-            <DataGrid x:Name="routesGrid"
-                     ItemsSource="{Binding Routes}" 
-                     SelectedItem="{Binding SelectedRoute}"
+            <DataGrid ItemsSource="{Binding Routes}" 
                      AutoGenerateColumns="False" 
                      Margin="10" 
                      IsReadOnly="False"
@@ -18,49 +16,24 @@
                      CanUserDeleteRows="True"
                      MaxHeight="400"
                      ScrollViewer.VerticalScrollBarVisibility="Auto"
-                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                     CellEditEnding="DataGrid_CellEditEnding">
+                     ScrollViewer.HorizontalScrollBarVisibility="Auto">
                 <DataGrid.Columns>
-                    <DataGridTemplateColumn Header="Start" Width="*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Start.Name}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                        <DataGridTemplateColumn.CellEditingTemplate>
-                            <DataTemplate>
-                                <ComboBox ItemsSource="{Binding DataContext.Cities, 
-                                          RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                          SelectedItem="{Binding Start, UpdateSourceTrigger=PropertyChanged}"
+                    <DataGridComboBoxColumn Header="Start" 
+                                          ItemsSource="{Binding Cities}"
+                                          SelectedItemBinding="{Binding Start}"
                                           DisplayMemberPath="Name"
-                                          IsDropDownOpen="True"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellEditingTemplate>
-                    </DataGridTemplateColumn>
-
-                    <DataGridTemplateColumn Header="Destination" Width="*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Destination.Name}"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                        <DataGridTemplateColumn.CellEditingTemplate>
-                            <DataTemplate>
-                                <ComboBox ItemsSource="{Binding DataContext.Cities, 
-                                          RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                          SelectedItem="{Binding Destination, UpdateSourceTrigger=PropertyChanged}"
+                                          Width="*"/>
+                    <DataGridComboBoxColumn Header="Destination" 
+                                          ItemsSource="{Binding Cities}"
+                                          SelectedItemBinding="{Binding Destination}"
                                           DisplayMemberPath="Name"
-                                          IsDropDownOpen="True"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellEditingTemplate>
-                    </DataGridTemplateColumn>
-
+                                          Width="*"/>
                     <DataGridTextColumn Header="Distance (km)" 
-                                      Width="*"
-                                      Binding="{Binding Distance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                      Binding="{Binding Distance}" 
+                                      Width="*"/>
                     <DataGridTextColumn Header="Cost (SEK)" 
-                                      Width="*"
-                                      Binding="{Binding Cost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                      Binding="{Binding Cost}" 
+                                      Width="*"/>
                 </DataGrid.Columns>
             </DataGrid>
 

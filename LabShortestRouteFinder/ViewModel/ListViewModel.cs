@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace LabShortestRouteFinder.ViewModel
@@ -12,15 +11,6 @@ namespace LabShortestRouteFinder.ViewModel
     {
         [ObservableProperty]
         private string? _statusMessage;
-
-        [ObservableProperty]
-        private Route? _selectedRoute;
-
-        [ObservableProperty]
-        private CityNode? _selectedStartCity;
-
-        [ObservableProperty]
-        private CityNode? _selectedDestinationCity;
 
         public ObservableCollection<Route> Routes { get; }
         public ObservableCollection<CityNode> Cities { get; }
@@ -37,14 +27,12 @@ namespace LabShortestRouteFinder.ViewModel
         {
             try
             {
-                // Check if Routes collection is null or empty
                 if (Routes == null || !Routes.Any())
                 {
                     StatusMessage = "No routes available to save";
                     return;
                 }
 
-                // Validate and prepare the routes for saving
                 var routeInfos = Routes
                     .Where(r => 
                         r != null && 
@@ -67,21 +55,18 @@ namespace LabShortestRouteFinder.ViewModel
                     return;
                 }
 
-                // Ensure directory exists
                 var directoryPath = @"..\net8.0-windows\Resources";
                 if (!Directory.Exists(directoryPath))
                 {
                     Directory.CreateDirectory(directoryPath);
                 }
 
-                // Configure JSON serialization options
                 var options = new JsonSerializerOptions
                 {
                     Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
                     WriteIndented = true
                 };
 
-                // Serialize and save to file
                 string filePath = Path.Combine(directoryPath, "routes.json");
                 string updatedJson = JsonSerializer.Serialize(routeInfos, options);
                 File.WriteAllText(filePath, updatedJson);
