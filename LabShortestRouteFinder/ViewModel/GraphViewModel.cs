@@ -63,7 +63,7 @@ public partial class GraphViewModel : ObservableObject
             StatusMessage = $"Failed to load routes: {ex.Message}";
         }
     }
-    
+
     private void ClearHighlights()
     {
         Routes.ToList().ForEach(r => r.IsHighlighted = false);
@@ -210,17 +210,17 @@ public partial class GraphViewModel : ObservableObject
     }
 
     [RelayCommand]
-private void FindCycles()
-{
-    try
+    private void FindCycles()
     {
-        ClearHighlights();
-        var adjList = BuildAdjacencyList();
-        var cycles = new List<List<Route>>();
-        var seenEdges = new HashSet<string>();
-
-        var cycleColours = new[]
+        try
         {
+            ClearHighlights();
+            var adjList = BuildAdjacencyList();
+            var cycles = new List<List<Route>>();
+            var seenEdges = new HashSet<string>();
+
+            var cycleColours = new[]
+            {
             "#FF0000", //red
             "#00FFFF", //cyan
             "#800080", //purple
@@ -231,99 +231,99 @@ private void FindCycles()
             "#EAC117"  //gold brown
         };
 
-        foreach (var startCity in Cities)
-        {
-            var visited = new HashSet<CityNode>();
-            var path = new List<Route>();
-            var pathCities = new HashSet<CityNode>();
-
-            void DFS(CityNode current, int depth)
+            foreach (var startCity in Cities)
             {
-                if (depth > 10 || cycles.Count >= 20) // Limit search depth and number of cycles
-                    return;
+                var visited = new HashSet<CityNode>();
+                var path = new List<Route>();
+                var pathCities = new HashSet<CityNode>();
 
-                visited.Add(current);
-                pathCities.Add(current);
-
-                foreach (var (neighbor, route) in adjList[current])
+                void DFS(CityNode current, int depth)
                 {
-                    // Create unique edge identifier
-                    var edgeId = $"{Math.Min(current.GetHashCode(), neighbor.GetHashCode())}_{Math.Max(current.GetHashCode(), neighbor.GetHashCode())}";
+                    if (depth > 10 || cycles.Count >= 20) // Limit search depth and number of cycles
+                        return;
 
-                    if (neighbor == startCity && path.Count >= 2)
+                    visited.Add(current);
+                    pathCities.Add(current);
+
+                    foreach (var (neighbor, route) in adjList[current])
                     {
-                        // Found a cycle
-                        var newCycle = new List<Route>(path) { route };
-                        var cycleEdges = new HashSet<string>();
-                        bool isUniqueCycle = true;
+                        // Create unique edge identifier
+                        var edgeId = $"{Math.Min(current.GetHashCode(), neighbor.GetHashCode())}_{Math.Max(current.GetHashCode(), neighbor.GetHashCode())}";
 
-                        // Check if this cycle is unique
-                        foreach (var cycleRoute in newCycle)
+                        if (neighbor == startCity && path.Count >= 2)
                         {
-                            var routeId = $"{Math.Min(cycleRoute.Start.GetHashCode(), cycleRoute.Destination.GetHashCode())}_{Math.Max(cycleRoute.Start.GetHashCode(), cycleRoute.Destination.GetHashCode())}";
-                            if (!cycleEdges.Add(routeId))
+                            // Found a cycle
+                            var newCycle = new List<Route>(path) { route };
+                            var cycleEdges = new HashSet<string>();
+                            bool isUniqueCycle = true;
+
+                            // Check if this cycle is unique
+                            foreach (var cycleRoute in newCycle)
                             {
-                                isUniqueCycle = false;
-                                break;
+                                var routeId = $"{Math.Min(cycleRoute.Start.GetHashCode(), cycleRoute.Destination.GetHashCode())}_{Math.Max(cycleRoute.Start.GetHashCode(), cycleRoute.Destination.GetHashCode())}";
+                                if (!cycleEdges.Add(routeId))
+                                {
+                                    isUniqueCycle = false;
+                                    break;
+                                }
+                            }
+
+                            if (isUniqueCycle && newCycle.Count >= 3)
+                            {
+                                cycles.Add(newCycle);
                             }
                         }
-
-                        if (isUniqueCycle && newCycle.Count >= 3)
+                        else if (!pathCities.Contains(neighbor))
                         {
-                            cycles.Add(newCycle);
+                            path.Add(route);
+                            DFS(neighbor, depth + 1);
+                            path.RemoveAt(path.Count - 1);
                         }
                     }
-                    else if (!pathCities.Contains(neighbor))
-                    {
-                        path.Add(route);
-                        DFS(neighbor, depth + 1);
-                        path.RemoveAt(path.Count - 1);
-                    }
+
+                    pathCities.Remove(current);
+                    visited.Remove(current);
                 }
 
-                pathCities.Remove(current);
-                visited.Remove(current);
+                if (cycles.Count < 20) // Limit total number of cycles
+                {
+                    DFS(startCity, 0);
+                }
             }
 
-            if (cycles.Count < 20) // Limit total number of cycles
+            // Clear all highlight colours first
+            foreach (var route in Routes)
             {
-                DFS(startCity, 0);
+                route.HighlightedColours.Clear();
+                route.IsHighlighted = false;
             }
-        }
 
-        // Clear all highlight colours first
-        foreach (var route in Routes)
-        {
-            route.HighlightedColours.Clear();
-            route.IsHighlighted = false;
-        }
-
-        // Apply the colours for each cycle
-        for (var i = 0; i < cycles.Count; i++)
-        {
-            var cycleColour = cycleColours[i % cycleColours.Length];
-            foreach (var route in cycles[i])
+            // Apply the colours for each cycle
+            for (var i = 0; i < cycles.Count; i++)
             {
-                route.HighlightedColours.Add(cycleColour);
-                route.IsHighlighted = true;
+                var cycleColour = cycleColours[i % cycleColours.Length];
+                foreach (var route in cycles[i])
+                {
+                    route.HighlightedColours.Add(cycleColour);
+                    route.IsHighlighted = true;
+                }
+            }
+
+            // Build status message showing the paths
+            if (cycles.Any())
+            {
+                StatusMessage = $"Found {cycles.Count} cycles:";
+            }
+            else
+            {
+                StatusMessage = "No cycles found";
             }
         }
-
-        // Build status message showing the paths
-        if (cycles.Any())
+        catch (Exception ex)
         {
-            StatusMessage = $"Found {cycles.Count} cycles:";
-        }
-        else
-        {
-            StatusMessage = "No cycles found";
+            StatusMessage = $"Error finding cycles: {ex.Message}";
         }
     }
-    catch (Exception ex)
-    {
-        StatusMessage = $"Error finding cycles: {ex.Message}";
-    }
-}
 
     [RelayCommand]
     private void FindShortestCycle()

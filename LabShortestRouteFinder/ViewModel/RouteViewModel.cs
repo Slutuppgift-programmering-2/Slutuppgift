@@ -29,4 +29,3 @@ namespace LabShortestRouteFinder.ViewModel
         }
     }
 }
-

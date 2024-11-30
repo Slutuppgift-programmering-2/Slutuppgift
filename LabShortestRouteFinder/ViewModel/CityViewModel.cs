@@ -3,12 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Threading.Tasks;
-using System.Windows.Input;
+using System.Windows;
 
 namespace LabShortestRouteFinder.ViewModel
 {
@@ -16,10 +13,15 @@ namespace LabShortestRouteFinder.ViewModel
     {
         public ObservableCollection<CityNode> Cities { get; }
 
+        private RectangleCoordinates Rectangle { get; }
+
+        public CityNode SelectedCity { get; set; }
+
         public CityViewModel(MainViewModel mainViewModel)
         {
             // Reference the shared Cities collection
             Cities = mainViewModel.Cities;
+            Rectangle = mainViewModel.Rectangle;
         }
 
         public void SaveCitiesToFile()
@@ -28,26 +30,38 @@ namespace LabShortestRouteFinder.ViewModel
             double windowHeight = 842;
 
             // Min and Max for Sweden
-            double minLatitude = 55.0;
-            double maxLatitude = 69.0;
-            double minLongitude = 11.0;
-            double maxLongitude = 24.0;
+            double minLatitude = Rectangle.SouthWest.Latitude;
+            double maxLatitude = Rectangle.NorthEast.Latitude;
+            double minLongitude = Rectangle.SouthWest.Longitude;
+            double maxLongitude = Rectangle.NorthEast.Longitude;
 
             double scaleFactorX = windowWidth / (maxLongitude - minLongitude);
             double scaleFactorY = windowHeight / (maxLatitude - minLatitude);
 
             foreach (var c in Cities)
             {
-                //Validate that the X Y is within the allowed bounds
-                if (c.X < 0 || c.Y < 0 || c.X > 433 || c.Y > 842)
-                    continue;
-
-                // Check that name is not empty
                 if (string.IsNullOrEmpty(c.Name))
-                    continue;
 
-                c.Longitude = (c.X / scaleFactorX) + minLongitude;
-                c.Latitude = minLatitude + (windowHeight - c.Y) / scaleFactorY;
+                {
+
+                    MessageBox.Show("Namn på stad får ej vara tomt ");
+
+                    return;
+
+                }
+
+                if (c.Latitude < minLatitude || c.Latitude > maxLatitude || c.Longitude < minLongitude || c.Longitude > maxLongitude)
+
+                {
+
+                    MessageBox.Show("Felaktiga koordinater för " + c.Name);
+
+                    return;
+
+                }
+
+                c.X = (int)((c.Longitude - minLongitude) * scaleFactorX);
+                c.Y = (int)(windowHeight - ((c.Latitude - minLatitude) * scaleFactorY));
             }
 
             // Fix that å ö ä is saved correctly
@@ -57,9 +71,20 @@ namespace LabShortestRouteFinder.ViewModel
                 WriteIndented = true
             };
 
-            string updatedJson = JsonSerializer.Serialize(Cities, options);
+            CitiesRoot citiesRoot = new CitiesRoot();
+            citiesRoot.Rectangle = Rectangle;
+            citiesRoot.Cities = Cities.ToList();
 
-            File.WriteAllText("..\\net8.0-windows\\Resources\\cities.json", updatedJson);
+            string updatedJson = JsonSerializer.Serialize(citiesRoot, options);
+
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "cities.json");
+
+            File.WriteAllText(filePath, updatedJson);
+
+            filePath = "..\\..\\..\\Resources\\cities.json";
+
+            File.WriteAllText(filePath, updatedJson);
+
 
         }
     }

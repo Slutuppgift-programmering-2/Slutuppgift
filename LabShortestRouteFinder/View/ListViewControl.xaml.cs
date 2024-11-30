@@ -11,25 +11,36 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace LabShortestRouteFinder.View
 {
     /// <summary>
-    /// Interaction logic for ListViewControl.xaml
+    /// Interaction logic for CityListViewControl.xaml
     /// </summary>
-    public partial class ListViewControl : UserControl
+    public partial class CityListViewControl : UserControl
     {
-        public ListViewControl()
+        public CityListViewControl()
         {
             InitializeComponent();
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            // Cast DataContext to ListViewModel and call the Save method
-            ListViewModel viewModel = (ListViewModel)DataContext;
-            viewModel.SaveRoutesToFile();
+            CityViewModel viewModel = (CityViewModel)DataContext;
+            viewModel.SaveCitiesToFile();
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            CityViewModel viewModel = (CityViewModel)DataContext;
+            if (viewModel != null)
+            {
+
+                viewModel.Cities.Remove(viewModel.SelectedCity);
+            }
         }
     }
+
 }

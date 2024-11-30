@@ -4,6 +4,7 @@
              xmlns:converters="clr-namespace:LabShortestRouteFinder.Converters">
 
     <UserControl.Resources>
+        <converters:YPositionConverter x:Key="YPositionConverter"/>
     </UserControl.Resources>
 
     <Grid>
@@ -107,8 +108,8 @@
                                      Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" />
                             <!-- Node label -->
                             <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="12"
-                                       Canvas.Left="{Binding X}"
-                                       Canvas.Top="{Binding Y}" />
+                                       Canvas.Left="{Binding X, Converter={StaticResource YPositionConverter}, ConverterParameter=-15}"
+                                       Canvas.Top="{Binding Y, Converter={StaticResource YPositionConverter}, ConverterParameter=17}" />
                         </Canvas>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

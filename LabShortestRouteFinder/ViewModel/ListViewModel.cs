@@ -9,7 +9,7 @@ namespace LabShortestRouteFinder.ViewModel
     public class ListViewModel
     {
         public ObservableCollection<Route> Routes { get; }
-
+        public Route SelectedRoute { get; set; }
         public ListViewModel(MainViewModel mainViewModel)
         {
             // Reference the shared Routes collection

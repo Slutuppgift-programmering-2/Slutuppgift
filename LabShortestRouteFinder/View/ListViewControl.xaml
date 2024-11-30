@@ -1,25 +1,20 @@
-﻿<UserControl x:Class="LabShortestRouteFinder.View.ListViewControl"
+﻿<UserControl x:Class="LabShortestRouteFinder.View.CityListViewControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             >
     <Grid>
         <StackPanel Orientation="Vertical">
-            <!-- Save Button -->
-            <Button Margin="10" Content="Save" Width="80" Click="SaveButton_Click" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Margin="10" Content="Save" Width="80" Click="SaveButton_Click" />
+                <Button Margin="10" Content="Delete" Width="80" Click="DeleteButton_Click" />
+            </StackPanel>
 
-            <!-- DataGrid for Routes -->
-            <DataGrid ItemsSource="{Binding Routes}" AutoGenerateColumns="False" Margin="10" IsReadOnly="False">
+
+            <DataGrid SelectedItem="{Binding SelectedCity}" ItemsSource="{Binding Cities}" AutoGenerateColumns="False" Margin="10" IsReadOnly="False">
                 <DataGrid.Columns>
-                    <!-- Start City Column -->
-                    <DataGridTextColumn Header="Start" Binding="{Binding Start.Name, Mode=TwoWay}" />
-
-                    <!-- Destination City Column -->
-                    <DataGridTextColumn Header="Destination" Binding="{Binding Destination.Name, Mode=TwoWay}" />
-
-                    <!-- Distance Column -->
-                    <DataGridTextColumn Header="Distance (km)" Binding="{Binding Distance, Mode=TwoWay}" />
-
-                    <!-- Cost Column -->
-                    <DataGridTextColumn Header="Cost (SEK)" Binding="{Binding Cost, Mode=TwoWay}" />
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name, Mode=TwoWay}" />
+                    <DataGridTextColumn Header="Longitude" Binding="{Binding Longitude, Mode=TwoWay}" />
+                    <DataGridTextColumn Header="Latitude" Binding="{Binding Latitude, Mode=TwoWay}" />
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>
