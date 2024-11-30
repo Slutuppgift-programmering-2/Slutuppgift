@@ -18,15 +18,50 @@
                      MaxHeight="400"
                      ScrollViewer.VerticalScrollBarVisibility="Auto"
                      ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                <DataGrid.Resources>
+                    <ComboBox x:Key="citiesComboBox" 
+                             ItemsSource="{Binding DataContext.Cities, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                             DisplayMemberPath="Name"/>
+                </DataGrid.Resources>
                 <DataGrid.Columns>
-                    <DataGridComboBoxColumn Header="Start" 
-                                          ItemsSource="{Binding Cities}"
-                                          SelectedValueBinding="{Binding Start}"
+                    <DataGridTemplateColumn Header="Start">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding DataContext.Cities, 
+                                          RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                          SelectedItem="{Binding Start, UpdateSourceTrigger=PropertyChanged}"
                                           DisplayMemberPath="Name"/>
-                    <DataGridComboBoxColumn Header="Destination" 
-                                          ItemsSource="{Binding Cities}"
-                                          SelectedValueBinding="{Binding Destination}"
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding DataContext.Cities, 
+                                          RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                          SelectedItem="{Binding Start, UpdateSourceTrigger=PropertyChanged}"
                                           DisplayMemberPath="Name"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Header="Destination">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding DataContext.Cities, 
+                                          RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                          SelectedItem="{Binding Destination, UpdateSourceTrigger=PropertyChanged}"
+                                          DisplayMemberPath="Name"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding DataContext.Cities, 
+                                          RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                          SelectedItem="{Binding Destination, UpdateSourceTrigger=PropertyChanged}"
+                                          DisplayMemberPath="Name"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
+
                     <DataGridTextColumn Header="Distance (km)" 
                                       Binding="{Binding Distance, Mode=TwoWay}" />
                     <DataGridTextColumn Header="Cost (SEK)" 
