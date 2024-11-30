@@ -2,82 +2,40 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:LabShortestRouteFinder.ViewModel">
-    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-        <Grid>
-            <StackPanel Orientation="Vertical">
-                <!-- Save Button -->
-                <Button Margin="10" Content="Save Routes" 
-                        Width="100" Height="30"
-                        Click="SaveButton_Click" />
-
-                <!-- DataGrid for Routes -->
-                <DataGrid ItemsSource="{Binding Routes}" 
-                          AutoGenerateColumns="False" 
-                          Margin="10" 
-                          IsReadOnly="False"
-                          CanUserAddRows="True"
-                          CanUserDeleteRows="True"
-                          CanUserReorderColumns="True"
-                          AlternatingRowBackground="#F5F5F5"
-                          MaxHeight="400"
-                          ScrollViewer.CanContentScroll="True"
-                          ScrollViewer.VerticalScrollBarVisibility="Auto"
-                          ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                          RowHeight="30"
-                          MinColumnWidth="150">
-                    <DataGrid.Resources>
-                        <Style TargetType="DataGridCell">
-                            <Setter Property="Padding" Value="8,0,8,0"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="DataGridCell">
-                                        <Border Padding="{TemplateBinding Padding}">
-                                            <ContentPresenter VerticalAlignment="Center"/>
-                                        </Border>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGrid.Resources>
-                    
-                    <DataGrid.Columns>
-                        <!-- Start City Column -->
-                        <DataGridTextColumn Header="Start" 
-                                          Binding="{Binding Start.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                          Width="Auto"
-                                          MinWidth="150"/>
-
-                        <!-- Destination City Column -->
-                        <DataGridTextColumn Header="Destination" 
-                                          Binding="{Binding Destination.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                          Width="Auto"
-                                          MinWidth="150"/>
-
-                        <!-- Distance Column -->
-                        <DataGridTextColumn Header="Distance (km)" 
-                                          Binding="{Binding Distance, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                          Width="Auto"
-                                          MinWidth="120"/>
-
-                        <!-- Cost Column -->
-                        <DataGridTextColumn Header="Cost (SEK)" 
-                                          Binding="{Binding Cost, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                          Width="Auto"
-                                          MinWidth="120"/>
-                    </DataGrid.Columns>
-                </DataGrid>
-
-                <!-- Status Message -->
-                <Border Background="#FFFFFF"
-                        BorderBrush="#E0E0E0"
-                        BorderThickness="1"
-                        Padding="8"
-                        Margin="10">
-                    <TextBlock Text="{Binding StatusMessage}"
-                               Foreground="#212121"
-                               FontWeight="Bold" />
-                </Border>
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Margin="10" Content="Save" Width="80" Click="SaveButton_Click" />
             </StackPanel>
-        </Grid>
-    </ScrollViewer>
+
+            <DataGrid ItemsSource="{Binding Routes}" 
+                      AutoGenerateColumns="False" 
+                      Margin="10" 
+                      IsReadOnly="False"
+                      CanUserAddRows="True"
+                      CanUserDeleteRows="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Start" 
+                                        Binding="{Binding Start.Name, Mode=TwoWay}" />
+                    <DataGridTextColumn Header="Destination" 
+                                        Binding="{Binding Destination.Name, Mode=TwoWay}" />
+                    <DataGridTextColumn Header="Distance (km)" 
+                                        Binding="{Binding Distance, Mode=TwoWay}" />
+                    <DataGridTextColumn Header="Cost (SEK)" 
+                                        Binding="{Binding Cost, Mode=TwoWay}" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <!-- Status Message -->
+            <Border Background="#FFFFFF"
+                    BorderBrush="#E0E0E0"
+                    BorderThickness="1"
+                    Padding="8"
+                    Margin="10">
+                <TextBlock Text="{Binding StatusMessage}"
+                           Foreground="#212121"
+                           FontWeight="Bold" />
+            </Border>
+        </StackPanel>
+    </Grid>
 </UserControl>
