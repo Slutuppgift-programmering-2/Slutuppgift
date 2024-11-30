@@ -13,11 +13,15 @@ namespace LabShortestRouteFinder.ViewModel
         private string? _statusMessage;
 
         public ObservableCollection<Route> Routes { get; }
+        public ObservableCollection<City> AvailableCities { get; }
         public Route SelectedRoute { get; set; }
+        private readonly MainViewModel _mainViewModel;
+
         public ListViewModel(MainViewModel mainViewModel)
         {
-            // Reference the shared Routes collection
+            _mainViewModel = mainViewModel;
             Routes = mainViewModel.Routes;
+            AvailableCities = mainViewModel.Cities;
         }
 
         public void SaveRoutesToFile()
@@ -37,8 +41,6 @@ namespace LabShortestRouteFinder.ViewModel
                         r != null && 
                         r.Start != null && 
                         r.Destination != null && 
-                        !string.IsNullOrEmpty(r.Start.Name) && 
-                        !string.IsNullOrEmpty(r.Destination.Name) && 
                         r.Distance > 0 &&
                         r.Cost > 0)
                     .Select(r => new RouteInfo
@@ -52,7 +54,7 @@ namespace LabShortestRouteFinder.ViewModel
 
                 if (!routeInfos.Any())
                 {
-                    StatusMessage = "No valid routes to save. Please ensure all routes have valid cities, distances, and costs.";
+                    StatusMessage = "No valid routes to save. Please ensure all routes have distances and costs greater than 0.";
                     return;
                 }
 

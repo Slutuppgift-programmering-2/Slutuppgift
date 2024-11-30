@@ -18,10 +18,16 @@
                      ScrollViewer.VerticalScrollBarVisibility="Auto"
                      ScrollViewer.HorizontalScrollBarVisibility="Auto">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="Start" 
-                                      Binding="{Binding Start.Name, Mode=TwoWay}" />
-                    <DataGridTextColumn Header="Destination" 
-                                      Binding="{Binding Destination.Name, Mode=TwoWay}" />
+                    <DataGridComboBoxColumn Header="Start" 
+                                          ItemsSource="{Binding AvailableCities}"
+                                          SelectedItemBinding="{Binding Start}"
+                                          DisplayMemberPath="Name"
+                                          SelectedValuePath="Name"/>
+                    <DataGridComboBoxColumn Header="Destination" 
+                                          ItemsSource="{Binding AvailableCities}"
+                                          SelectedItemBinding="{Binding Destination}"
+                                          DisplayMemberPath="Name"
+                                          SelectedValuePath="Name"/>
                     <DataGridTextColumn Header="Distance (km)" 
                                       Binding="{Binding Distance, Mode=TwoWay}" />
                     <DataGridTextColumn Header="Cost (SEK)" 
