@@ -8,7 +8,8 @@
                 <Button Margin="10" Content="Save" Width="80" Click="SaveButton_Click" />
             </StackPanel>
 
-            <DataGrid ItemsSource="{Binding Routes}" 
+            <DataGrid x:Name="routesGrid"
+                     ItemsSource="{Binding Routes}" 
                      AutoGenerateColumns="False" 
                      Margin="10" 
                      IsReadOnly="False"
@@ -18,16 +19,38 @@
                      ScrollViewer.VerticalScrollBarVisibility="Auto"
                      ScrollViewer.HorizontalScrollBarVisibility="Auto">
                 <DataGrid.Columns>
-                    <DataGridComboBoxColumn Header="Start" 
-                                          ItemsSource="{Binding Cities}"
-                                          SelectedItemBinding="{Binding Start}"
-                                          DisplayMemberPath="Name"
-                                          Width="*"/>
-                    <DataGridComboBoxColumn Header="Destination" 
-                                          ItemsSource="{Binding Cities}"
-                                          SelectedItemBinding="{Binding Destination}"
-                                          DisplayMemberPath="Name"
-                                          Width="*"/>
+                    <DataGridTemplateColumn Header="Start" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Start.Name}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding DataContext.Cities, 
+                                         RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                         DisplayMemberPath="Name"
+                                         SelectedItem="{Binding Start, UpdateSourceTrigger=PropertyChanged}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
+
+                    <DataGridTemplateColumn Header="Destination" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Destination.Name}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                        <DataGridTemplateColumn.CellEditingTemplate>
+                            <DataTemplate>
+                                <ComboBox ItemsSource="{Binding DataContext.Cities, 
+                                         RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                         DisplayMemberPath="Name"
+                                         SelectedItem="{Binding Destination, UpdateSourceTrigger=PropertyChanged}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn>
+
                     <DataGridTextColumn Header="Distance (km)" 
                                       Binding="{Binding Distance}" 
                                       Width="*"/>
