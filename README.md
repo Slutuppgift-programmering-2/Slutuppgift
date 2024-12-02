@@ -3,7 +3,7 @@ Uppgifter i Shortest Route Finder
 -	Läs in städer från filen cities.json. Kod finns i MainViewModel.
 -	Konverterar Longitud och Latitud till X och Y koordinater. Detta sker i samma metod i MainViewModel där vi läser in json filen.
 -	Skapat en ny View som heter CityListViewControl. Så att man kan visa alla städer, Longitud, och Latitud i listan (som har laddats in från filen cities.json).
--	Skapat en knapp för att spara listan till en json fil i Cities. Man kan även lägga till en ny stad med Longitud och Latitud koordinater.
+-	Skapat en Save knapp för att spara listan till en json fil i Cities. Man kan även lägga till en ny stad med Longitud och Latitud koordinater.
 -	Knappen finns i filen CityListViewControl och har ett klickevent i koden bakom. Koden för att spara finns i  CityViewModel.
 -	Skapat en Delete knapp i Cities. Knappen finns i ListViewControl och har ett klickevent bakom. Lade till det för att det skulle bli enkelt att ta bort en stad ur listan.
 -	Validering av Longitud och Latitud när städer sparas till filen. Koden finns i CityViewModel.
