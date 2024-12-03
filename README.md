@@ -43,6 +43,23 @@ Det var lite av mina tankar kring detta.
 * * Kortaste cykel: Söker efter den kortaste cykeln i grafen och markerar den.
 * * *  Statusmeddelanden: Visar resultat från olika operationer direkt i gränssnittet.
 
+---
+
+## Slutprojektresultat. Jonas och Joakim
+
+  - Måste krav, Godkänd
+  - Bra att ha, Har levererat enligt specifikation VG
+  
+  * Anmärkningar*
+  Några exempel på små ändringarna att tänka på.
+  - Önskat att det skulle ha lagts lite tid på att utforma bättre ViewModel-klasserna.
+	Beräkningsalgoritmer kunde ha separerats till egna klasser.
+	Ännu bättre, om dessa kunde ha separerats till ett bibliotek (dll). Enklare att testa (xUnit testa).
+	
+  - Notiferingarna till Grafen när namnet på start och/eller destination på router har ändrats.	
+  
+  Slutbetygg VG
+  Bra jobbat.
 
 
 
